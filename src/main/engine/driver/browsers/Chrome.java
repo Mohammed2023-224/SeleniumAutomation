@@ -1,6 +1,7 @@
 package engine.driver.browsers;
 
 import engine.driver.DriverOptions;
+import engine.reporters.Loggers;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -17,6 +18,7 @@ public class Chrome {
 
     // initiate chrome driver
     public WebDriver initiateDriver() {
+        Loggers.log.info("Start chrome driver");
         return new ChromeDriver(getDriverOptions());
     }
 
