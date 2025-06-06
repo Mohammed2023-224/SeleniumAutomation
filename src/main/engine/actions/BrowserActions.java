@@ -10,7 +10,7 @@ public class BrowserActions {
 
     public static void navigateTo(WebDriver driver, String url) {
         driver.navigate().to(url);
-        Loggers.log.info("Navigated to url: ", url);
+        Loggers.log.info("Navigated to url: {}", url);
     }
 
     public static void navigateBack(WebDriver driver) {
@@ -25,7 +25,7 @@ public class BrowserActions {
 
     public static void switchIframe(WebDriver driver, By frameLocator) {
         driver.switchTo().frame(driver.findElement(frameLocator));
-        Loggers.log.info("Switch to iframe located at: ", frameLocator);
+        Loggers.log.info("Switch to iframe located at: {}", frameLocator);
     }
 
     public static void switchParentFrame(WebDriver driver) {
@@ -38,7 +38,7 @@ public class BrowserActions {
         if (windowNumber >= 0 && windowNumber < windows.size()) {
             driver.switchTo().window(windows.get(windowNumber));
         }
-        Loggers.log.info("Switch to windows number: ", windowNumber);
+        Loggers.log.info("Switch to windows number: {}", windowNumber);
     }
 
     public static void switchToParentWindow(WebDriver driver) {
