@@ -10,7 +10,7 @@
     <selenium.version>4.33.0</selenium.version>
     <testng.version>7.11.0</testng.version>
     <log4j2API.version>3.0.0-beta2</log4j2API.version>
-    <log4j2Core.version>3.0.0-beta3</log4j2Core.version>
+    <log4j2Core.version>3.0.0-beta2</log4j2Core.version>
   </properties>
   <dependencies>
     <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
