@@ -1,6 +1,7 @@
 package engine.driver.browsers;
 
 import engine.driver.DriverOptions;
+import engine.reporters.Loggers;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -18,6 +19,7 @@ public class Edge {
 
     // initiate edge driver
     public WebDriver initiateDriver() {
+        Loggers.log.info("Start edge driver");
         return new EdgeDriver(getDriverOptions());
     }
 }

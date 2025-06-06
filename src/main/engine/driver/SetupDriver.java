@@ -12,7 +12,6 @@ public class SetupDriver {
     public WebDriver startDriver(String browser) {
         if (browser.equalsIgnoreCase("edge")) {
             driver = new Edge().initiateDriver();
-            Loggers.log.info("test");
         }
         if (browser.equalsIgnoreCase("chrome")) {
             driver = new Chrome().initiateDriver();
