@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration>
+    <Properties>
+       <Property name="consolePattern">%highlight{%d{HH:mm:ss} [%t] [%-5level]: %msg %throwable{short.fileName}
+           %throwable{short.methodName}}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green}</Property>
+        <Property name="filePath">reports/log4j/</Property>
+        <Property name="singleTestFilePath">reports/log4j/allTests/</Property>
+        <Property name="filePattern">%d{HH:mm:ss.SSS} %-5p [%t] %C{2} (%F:%L) - %m%n</Property>
+        <Property name="date">%d{HH:mm:ss.SSS}</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${consolePattern}"></PatternLayout>
+        </Console>
+
+        <RollingFile name="allTestsLogs" fileName="${filePath}MainLogger.log" filePattern="${filePath}MainLogger.log">
+            <PatternLayout>${filePattern}</PatternLayout>
+                <SizeBasedTriggeringPolicy>5MB</SizeBasedTriggeringPolicy>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${filePath}" maxDepth="2">
+                    <IfFileName glob="MainLogger.log" />
+                    <IfLastModified age="1m" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <RollingFile name="singleTestsLogs"
+                     fileName="${singleTestFilePath}currentTest.log"
+                     filePattern="${singleTestFilePath}currentTest-%d{yyyy-MM-dd-HH-mm-ss}.log">
+            <PatternLayout>${filePattern}</PatternLayout>
+                <SizeBasedTriggeringPolicy>5MB</SizeBasedTriggeringPolicy>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${filePath}" maxDepth="1">
+                    <IfFileName glob="MainLogger.log" />
+                    <IfLastModified age="1m" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="allTestsLogs"/>
+            <AppenderRef ref="singleTestsLogs"/>
+        </Root>
+
+    </Loggers>
+</Configuration>
