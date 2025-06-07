@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 public class ElementActions {
 
     public static void clickElement(WebDriver driver, By locator) {
+        Waits.waitToBeClickable(driver,locator);
         driver.findElement(locator).click();
         Loggers.log.info("click element located at: {} ",locator);
     }
@@ -15,6 +16,9 @@ public class ElementActions {
         driver.findElement(locator).sendKeys(text);
         Loggers.log.info("type {} in element located at: {} ",text,locator);
     }
+
+
+    // Check element actions
 
     public static Boolean checkIfElementExists(WebDriver driver, By locator) {
         Boolean flag=false;
