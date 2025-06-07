@@ -11,6 +11,7 @@
     <testng.version>7.11.0</testng.version>
     <log4j2API.version>3.0.0-beta2</log4j2API.version>
     <log4j2Core.version>3.0.0-beta2</log4j2Core.version>
+    <apache.poi.version>5.4.1</apache.poi.version>
   </properties>
   <dependencies>
     <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
@@ -40,6 +41,13 @@
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
       <version>${log4j2API.version}</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>${apache.poi.version}</version>
     </dependency>
   </dependencies>
 </project>
