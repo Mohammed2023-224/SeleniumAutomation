@@ -13,8 +13,16 @@ public class ElementActions {
     }
 
     public static void typeInElement(WebDriver driver, By locator,String text) {
+        Waits.waitToBeClickable(driver,locator);
         driver.findElement(locator).sendKeys(text);
         Loggers.log.info("type {} in element located at: {} ",text,locator);
+    }
+
+    public static String getText(WebDriver driver, By locator ) {
+        Waits.waitToBeClickable(driver,locator);
+        String text=driver.findElement(locator).getText();
+        Loggers.log.info("get text {} out of element located at {}",text,locator);
+        return text;
     }
 
 
