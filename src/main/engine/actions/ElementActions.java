@@ -2,8 +2,10 @@ package engine.actions;
 
 import engine.reporters.Loggers;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 public class ElementActions {
 
@@ -30,6 +32,30 @@ public class ElementActions {
         Waits.waitToBeClickable(driver, locator);
         Helpers.initiateJSExecutor(driver).executeScript("arguments[0].click();", driver.findElement(locator));
         Loggers.log.info("click element located at: {} using java script ", locator);
+    }
+
+    public static void scrollToElement(WebDriver driver, By locator) {
+        Waits.waitToExist(driver, locator);
+        Helpers.seleniumActions(driver).scrollToElement(driver.findElement(locator)).perform();
+        Loggers.log.info("scroll to element located at: {}", locator);
+    }
+
+    public static void doubleClickElement(WebDriver driver, By locator) {
+        Waits.waitToExist(driver, locator);
+        Helpers.seleniumActions(driver).doubleClick(driver.findElement(locator)).perform();
+        Loggers.log.info("double click element located at: {} ", locator);
+    }
+
+    public static void hoverOverElement(WebDriver driver, By locator) {
+        Waits.waitToExist(driver, locator);
+        Helpers.seleniumActions(driver).moveToElement(driver.findElement(locator)).perform();
+        Loggers.log.info("hover over element located at: {} ", locator);
+    }
+
+    public static void pressKeyboardKeys(WebDriver driver, By locator, Keys key) {
+        Waits.waitToExist(driver, locator);
+        Helpers.seleniumActions(driver).sendKeys(key);
+        Loggers.log.info("hover over element located at: {} ", locator);
     }
 
     public static WebElement getShadowElement(WebDriver driver, By shadowHost, String cssSelectorInsideShadowRoot) {
@@ -76,6 +102,19 @@ public class ElementActions {
             }
         } catch (Exception e) {
             Loggers.log.info("element clickable at {} is visible", locator);
+        }
+        return flag;
+    }
+
+    public static Boolean checkIfElementSelected(WebDriver driver, By locator) {
+        Boolean flag = false;
+        try {
+            if (driver.findElement(locator).isSelected() ) {
+                flag = true;
+                Loggers.log.info("Element is selected with locator: {}", locator);
+            }
+        } catch (Exception e) {
+            Loggers.log.info("element isn't selected at {} is visible", locator);
         }
         return flag;
     }
