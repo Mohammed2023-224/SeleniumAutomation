@@ -44,19 +44,6 @@ public class ElementActions {
         return flag;
     }
 
-    public static Boolean checkIfElementInvisible(WebDriver driver, By locator) {
-        Boolean flag=false;
-        try {
-            if(!driver.findElement(locator).isDisplayed()){
-                flag=true;
-                Loggers.log.info("Element is invisible with locator: {}",locator);
-            }
-        }
-        catch (Exception e){
-            Loggers.log.info("element located at {} is visible",locator);
-        }
-        return flag;
-    }
 
     public static Boolean checkIfElementClickable(WebDriver driver, By locator) {
         Boolean flag=false;
