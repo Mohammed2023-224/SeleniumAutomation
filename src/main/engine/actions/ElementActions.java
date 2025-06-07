@@ -3,6 +3,7 @@ package engine.actions;
 import engine.reporters.Loggers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class ElementActions {
 
@@ -31,6 +32,12 @@ public class ElementActions {
         Loggers.log.info("click element located at: {} using java script ", locator);
     }
 
+    public static WebElement getShadowElement(WebDriver driver, By shadowHost, String cssSelectorInsideShadowRoot) {
+        Loggers.log.info("get shadow element with cssSelector {} and host {}",cssSelectorInsideShadowRoot,shadowHost );
+        return (WebElement) Helpers.initiateJSExecutor(driver).executeScript(
+                "return arguments[0].shadowRoot.querySelector(arguments[1])",
+        driver.findElement(shadowHost), cssSelectorInsideShadowRoot);
+    }
 
     // Check element actions
     public static Boolean checkIfElementExists(WebDriver driver, By locator) {
