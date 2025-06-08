@@ -8,6 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
+import java.util.LinkedHashMap;
 
 
 public class ExcelReader {
@@ -15,7 +16,6 @@ public class ExcelReader {
     private static XSSFSheet sheet;
     private static XSSFRow row;
     private static XSSFCell cell;
-    static String path1 = "C:\\Users\\USER\\Desktop\\w.xlsx";
 
 
     public  String readSingleCell(String filePath,String sheetName, int rowNum,int colNum) {
@@ -28,6 +28,33 @@ public class ExcelReader {
         readExcel(filePath);
         changeSheet(sheetName);
         return getCellByColumnNameAndRowNum(rowNum,colName);
+    }
+
+    public  LinkedHashMap<String, String> readFullRowThroughCondition(String filePath, String sheetName, String colName, String condition) {
+        readExcel(filePath);
+        changeSheet(sheetName);
+        int numberOfRowsMeetingCondition=0;
+        int conditionColumnNumber=getColumnNumFromHeaderName(colName);
+        LinkedHashMap<String,String> linkedHashMap=new LinkedHashMap<>();
+
+        for(int i=1 ;i<getNumberOfRows();i++){
+            if(getCellByColumnNumAndRowNum(i,conditionColumnNumber).equalsIgnoreCase(condition)){
+                Loggers.log.info("Increase rows meeting condition by 1");
+                numberOfRowsMeetingCondition++;
+            }
+        }
+        Loggers.log.info("total number of rows meeting condition is {}", numberOfRowsMeetingCondition);
+        for (int i=1;i<getNumberOfRows();i++){
+            if(getCellByColumnNumAndRowNum(i,conditionColumnNumber).equalsIgnoreCase(condition)){
+                for (int j=0; j<getNumberOfColumnsByHeaders();j++){
+                    String currentKey=getCellByColumnNumAndRowNum(0,j);
+                    String currentValue=getCellByColumnNumAndRowNum(i,j);
+                    linkedHashMap.put(currentKey,currentValue);
+                    Loggers.log.info("Read data {} --> {}",currentKey,currentValue);
+                }
+            }
+        }
+        return linkedHashMap;
     }
 
 
@@ -80,34 +107,39 @@ public class ExcelReader {
 
 
     private static int getNumberOfColumnsByHeaders() {
-        int numOfRows=sheet.getRow(0).getLastCellNum();
-        Loggers.log.info("get number of columns: {}",numOfRows);
+        int numOfColumns=sheet.getRow(0).getLastCellNum();
+//        Loggers.log.info("get number of columns: {}",numOfColumns);
+        return numOfColumns;
+    }
+
+    private static int getNumberOfRows() {
+        int numOfRows= sheet.getPhysicalNumberOfRows();
         return numOfRows;
     }
 
     private static String getCellData(XSSFCell cel) {
         String data="";
         if((cel==null)) {
-            Loggers.log.info("cell is null");
+//            Loggers.log.info("cell is null");
            return "";
         }else {
             switch (cel.getCellType()) {
                 case STRING:
                     data = cel.getStringCellValue();
-                    Loggers.log.info("read string data: {}", data);
+//                    Loggers.log.info("read string data: {}", data);
                     return data;
                 case NUMERIC:
                 case FORMULA:
                     data = String.valueOf(cel.getNumericCellValue());
-                    Loggers.log.info(" convert number into string and read data: {}", data);
+//                    Loggers.log.info(" convert number into string and read data: {}", data);
                     return data;
                 case BLANK:
                 case _NONE:
-                    Loggers.log.info("cell is blank");
+//                    Loggers.log.info("cell is blank");
                     return "";
                 case BOOLEAN:
                     data = String.valueOf(cel.getBooleanCellValue());
-                    Loggers.log.info(" convert boolean into string and read data: {}", data);
+//                    Loggers.log.info(" convert boolean into string and read data: {}", data);
                     return data;
             }
         }
