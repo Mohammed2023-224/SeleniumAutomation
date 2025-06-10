@@ -32,7 +32,7 @@ public class ExcelReader {
         return getCellByColumnNameAndRowNum(rowNum,colName);
     }
 
-    public  Object[][] readFullRowThroughCondition(String filePath, String sheetName, String colName, String condition) {
+    public  Object[][] readRowAsLinkedHashMapThroughCondition(String filePath, String sheetName, String colName, String condition) {
         readExcel(filePath);
         changeSheet(sheetName);
         int numberOfRowsMeetingCondition=0;
