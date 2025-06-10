@@ -9,6 +9,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Objects;
 
 
 public class ExcelReader {
@@ -30,31 +32,33 @@ public class ExcelReader {
         return getCellByColumnNameAndRowNum(rowNum,colName);
     }
 
-    public  LinkedHashMap<String, String> readFullRowThroughCondition(String filePath, String sheetName, String colName, String condition) {
+    public  Object[][] readFullRowThroughCondition(String filePath, String sheetName, String colName, String condition) {
         readExcel(filePath);
         changeSheet(sheetName);
         int numberOfRowsMeetingCondition=0;
         int conditionColumnNumber=getColumnNumFromHeaderName(colName);
-        LinkedHashMap<String,String> linkedHashMap=new LinkedHashMap<>();
-
         for(int i=1 ;i<getNumberOfRows();i++){
             if(getCellByColumnNumAndRowNum(i,conditionColumnNumber).equalsIgnoreCase(condition)){
                 Loggers.log.info("Increase rows meeting condition by 1");
                 numberOfRowsMeetingCondition++;
             }
         }
+        Object[][] dataObj=new Object[numberOfRowsMeetingCondition][1];
+        int num=0;
         Loggers.log.info("total number of rows meeting condition is {}", numberOfRowsMeetingCondition);
         for (int i=1;i<getNumberOfRows();i++){
             if(getCellByColumnNumAndRowNum(i,conditionColumnNumber).equalsIgnoreCase(condition)){
+                LinkedHashMap<String,String> linkedHashMap=new LinkedHashMap<>();
                 for (int j=0; j<getNumberOfColumnsByHeaders();j++){
                     String currentKey=getCellByColumnNumAndRowNum(0,j);
                     String currentValue=getCellByColumnNumAndRowNum(i,j);
                     linkedHashMap.put(currentKey,currentValue);
-                    Loggers.log.info("Read data {} --> {}",currentKey,currentValue);
+                    Loggers.log.info("Read data Key: {} --> Value: {}",currentKey,currentValue);
                 }
+                dataObj[num++][0]=linkedHashMap;
             }
         }
-        return linkedHashMap;
+        return dataObj;
     }
 
 
