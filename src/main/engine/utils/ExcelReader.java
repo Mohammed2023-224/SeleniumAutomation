@@ -80,9 +80,6 @@ public class ExcelReader {
         }
     }
 
-
-
-
     private static String getCellByColumnNameAndRowNum(int rowNum, String colName) {
         int colNum = getColumnNumFromHeaderName(colName);
         String data=getCellData(sheet.getRow(rowNum).getCell(colNum));
@@ -155,5 +152,4 @@ public class ExcelReader {
         }
         return "unknown cell type";
     }
-
 }

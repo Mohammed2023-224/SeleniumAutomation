@@ -55,7 +55,7 @@ public class ElementActions {
     public static void pressKeyboardKeys(WebDriver driver, By locator, Keys key) {
         Waits.waitToExist(driver, locator);
         Helpers.seleniumActions(driver).sendKeys(key);
-        Loggers.log.info("hover over element located at: {} ", locator);
+        Loggers.log.info("press keyboard key: {} in element located at {}",key, locator);
     }
 
     public static WebElement getShadowElement(WebDriver driver, By shadowHost, String cssSelectorInsideShadowRoot) {
