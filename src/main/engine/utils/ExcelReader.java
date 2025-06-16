@@ -2,15 +2,15 @@ package engine.utils;
 
 import engine.reporters.Loggers;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 public class ExcelReader {
@@ -60,7 +60,6 @@ public class ExcelReader {
         }
         return dataObj;
     }
-
 
     private static void readExcel(String path) {
         try (
@@ -134,8 +133,15 @@ public class ExcelReader {
                     return data;
                 case NUMERIC:
                 case FORMULA:
-                    data = String.valueOf(cel.getNumericCellValue());
+                    if (DateUtil.isCellDateFormatted(cel)) {
+                        // Convert date to string
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+                        data= dateFormat.format(cel.getDateCellValue());
+                    }
+                        else{
+                            data = String.valueOf(cel.getNumericCellValue());
 //                    Loggers.log.info(" convert number into string and read data: {}", data);
+                        }
                     return data;
                 case BLANK:
                 case _NONE:
