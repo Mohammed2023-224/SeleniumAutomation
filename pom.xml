@@ -13,6 +13,15 @@
     <log4j2Core.version>3.0.0-beta2</log4j2Core.version>
     <apache.poi.version>5.4.1</apache.poi.version>
   </properties>
+  <build>
+  <plugins>
+  <plugin>
+    <groupId>io.qameta.allure</groupId>
+    <artifactId>allure-maven</artifactId>
+    <version>2.11.2</version> <!-- Ensure you use a stable version -->
+  </plugin>
+  </plugins>
+  </build>
   <dependencies>
     <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
     <dependency>
@@ -35,7 +44,12 @@
       <artifactId>log4j-core</artifactId>
       <version>${log4j2Core.version}</version>
     </dependency>
-
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjweaver</artifactId>
+      <version>1.9.7</version>
+      <scope>runtime</scope>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
@@ -46,13 +60,20 @@
     <dependency>
       <groupId>io.qameta.allure</groupId>
       <artifactId>allure-testng</artifactId>
-      <version>2.29.1</version>
+      <version>2.29.0</version>
     </dependency>
+
     <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-ooxml</artifactId>
       <version>${apache.poi.version}</version>
     </dependency>
+      <dependency>
+          <groupId>org.testng</groupId>
+          <artifactId>testng</artifactId>
+          <version>7.11.0</version>
+          <scope>compile</scope>
+      </dependency>
   </dependencies>
 </project>

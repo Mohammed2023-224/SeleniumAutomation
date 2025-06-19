@@ -25,24 +25,30 @@
             </DefaultRolloverStrategy>
         </RollingFile>
 
-        <RollingFile name="singleTestsLogs"
-                     fileName="${singleTestFilePath}currentTest.log"
-                     filePattern="${singleTestFilePath}currentTest-%d{yyyy-MM-dd-HH-mm-ss}.log">
-            <PatternLayout>${filePattern}</PatternLayout>
-                <SizeBasedTriggeringPolicy>5MB</SizeBasedTriggeringPolicy>
-            <DefaultRolloverStrategy>
-                <Delete basePath="${filePath}" maxDepth="1">
-                    <IfFileName glob="MainLogger.log" />
-                    <IfLastModified age="1m" />
-                </Delete>
-            </DefaultRolloverStrategy>
-        </RollingFile>
+        <Routing name="PerTestRouting">
+            <Routes pattern="${filePath}/perTest/${sys:testLogFileName}">
+                <Route key="${filePath}/perTest/${sys:testLogFileName}">
+                    <File name="PerTestLog"
+                          fileName="reports/log4j/perTest/${sys:testLogFileName}.log"
+                          append="false">
+                        <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+                    </File>
+                </Route>
+            </Routes>
+        </Routing>
+
     </Appenders>
     <Loggers>
-        <Root level="info">
-            <AppenderRef ref="console"/>
+
+        <Logger name="logs" level="info" additivity="false">
+            <AppenderRef ref="PerTestRouting"/>
             <AppenderRef ref="allTestsLogs"/>
-            <AppenderRef ref="singleTestsLogs"/>
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Root level="info" additivity="false">
+            <AppenderRef ref="PerTestRouting"/>
+            <AppenderRef ref="allTestsLogs"/>
+            <AppenderRef ref="console"/>
         </Root>
 
     </Loggers>

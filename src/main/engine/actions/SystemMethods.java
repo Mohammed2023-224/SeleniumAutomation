@@ -3,26 +3,28 @@ package engine.actions;
 import engine.reporters.Loggers;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class SystemMethods {
 
     public static void deleteDirectory(String path) {
         File directory = new File(path);
         try {
-            LoggerContext context = (LoggerContext) LogManager.getContext(false);
-            context.stop();
             FileUtils.deleteDirectory(directory);
-            context.start(); // Restart Log4j2 context
             Loggers.log.info("Deleted the directory {}", path);
         } catch (Exception e) {
-            Loggers.log.info("couldn't delete directory {}", path);
+            Loggers.log.info("Couldn't delete directory {}", path);
         }
     }
 
@@ -33,15 +35,13 @@ public class SystemMethods {
             return;
         }
         try {
-            LoggerContext context = (LoggerContext) LogManager.getContext(false);
-            context.stop();
-            FileUtils.delete(file);
-                context.start();
+            FileOutputStream fis = new FileOutputStream(path);
+            fis.close();
+            FileUtils.forceDelete(file);
             Loggers.log.info("Deleted the file: {}", path);
         } catch (Exception e) {
             Loggers.log.error("Couldn't delete file: {}. Error: {}", path, e.getMessage());
         }
-
     }
 
     public static void runFile(String path) {
@@ -52,32 +52,31 @@ public class SystemMethods {
                 ProcessBuilder processBuilder = new ProcessBuilder(file.getAbsolutePath());
                 Process process = processBuilder.start();
                 process.waitFor();
-                Loggers.log.info("File executed: {}",path);
+                Loggers.log.info("File executed: {}", path);
             } catch (IOException | InterruptedException e) {
-                Loggers.log.info("file isn't executed: {}",path);
+                Loggers.log.info("File isn't executed: {}", path);
             }
         } else {
-            Loggers.log.info("file {} isn't executable type",path);
+            Loggers.log.info("File {} isn't executable type", path);
         }
     }
 
-    public static boolean checkExistenceOfFile(String path){
+    public static boolean checkExistenceOfFile(String path) {
         File file = new File(path);
         Loggers.log.info("Check if file exists {}", file.exists());
         return file.exists();
     }
 
-
-    public static String readFileContent(String path){
-                Path pth = Paths.get(path);
-        String lines ="";
-                try {
-                     lines = String.valueOf(Files.readAllLines(pth));
-                } catch (IOException ex) {
-                    // handle exception...
-                }
-        Loggers.log.info("get file contents", lines);
-                return lines;
+    public static String readFileContent(String path) {
+        Path pth = Paths.get(path);
+        String lines = "";
+        try {
+            lines = String.valueOf(Files.readAllLines(pth));
+        } catch (IOException ex) {
+            Loggers.log.error("Error reading file: {}", ex.getMessage());
         }
+        Loggers.log.info("Get file contents: {}", lines);
+        return lines;
+    }
 
 }
