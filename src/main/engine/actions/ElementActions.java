@@ -5,39 +5,42 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 
 public class ElementActions {
 
     public static void clickElement(WebDriver driver, By locator) {
+        String logs="click element located at: {} "+ locator;
         Waits.waitToBeClickable(driver, locator);
         driver.findElement(locator).click();
-        Loggers.log.info("click element located at: {} ", locator);
+        Loggers.addInfoAndAllureStep(logs);
     }
 
     public static void typeInElement(WebDriver driver, By locator, String text) {
+        String logs="type {} in element located at: {} "+ text+ locator;
         Waits.waitToBeClickable(driver, locator);
         driver.findElement(locator).sendKeys(text);
-        Loggers.log.info("type {} in element located at: {} ", text, locator);
+        Loggers.addInfoAndAllureStep(logs);
     }
 
     public static String getText(WebDriver driver, By locator) {
         Waits.waitToBeClickable(driver, locator);
         String text = driver.findElement(locator).getText();
-        Loggers.log.info("get text {} out of element located at {}", text, locator);
+        String logs="get text {} out of element located at {}"+ text+ locator;
+        Loggers.addInfoAndAllureStep(logs);
         return text;
     }
 
     public static void clickUsingJavaScript(WebDriver driver, By locator) {
         Waits.waitToBeClickable(driver, locator);
         Helpers.initiateJSExecutor(driver).executeScript("arguments[0].click();", driver.findElement(locator));
-        Loggers.log.info("click element located at: {} using java script ", locator);
+        Loggers.addInfoAndAllureStep("click element located at: {} using java script "+ locator);
     }
 
     public static void scrollToElement(WebDriver driver, By locator) {
         Waits.waitToExist(driver, locator);
         Helpers.seleniumActions(driver).scrollToElement(driver.findElement(locator)).perform();
-        Loggers.log.info("scroll to element located at: {}", locator);
+        Loggers.addInfoAndAllureStep("scroll to element located at: {}"+ locator);
+
     }
 
     public static void doubleClickElement(WebDriver driver, By locator) {
