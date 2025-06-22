@@ -19,9 +19,9 @@ public class AllureListener {
             Allure.addAttachment(name,fis);
             Loggers.log.info("attached to report {}", filePath);
         } catch (FileNotFoundException e) {
-            Loggers.log.warn("File can't be attached to report: " + filePath);
+            Loggers.log.warn("File can't be attached to report: {}", filePath);
         } catch (IOException e) {
-            Loggers.log.warn("Error closing file stream for AllureListener: " + e.getMessage());
+            Loggers.log.warn("Error closing file stream for AllureListener: {}", filePath);
 }
     }
 
