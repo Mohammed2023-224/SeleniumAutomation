@@ -1,5 +1,6 @@
 package engine.utils;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import engine.reporters.Loggers;
 import java.io.File;
@@ -16,11 +17,11 @@ public class JSONReader {
         objectMapper = new ObjectMapper();
     }
 
-    public static <T>T deserializeJson(String file) {
+    public static <T>T deserializeJson(String file,Class<T> className) {
         Object object;
         try {
            object=objectMapper.readValue(new File(file)
-                    , Configuration.class);
+                    , className);
             Loggers.log.info("Deserialize file located at {}",file);
         } catch (
                 IOException e) {
