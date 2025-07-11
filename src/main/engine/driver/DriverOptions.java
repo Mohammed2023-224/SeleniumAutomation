@@ -8,14 +8,16 @@ public class DriverOptions {
     static ArrayList<String> opts=new ArrayList<>();
 
     public static ArrayList<String> defineDriverOptions(){
-        if("headless".equalsIgnoreCase("headless")){
+//        if("headless".equalsIgnoreCase("headless")){
 //            opts.add("--headless");
-            Loggers.log.info("Activate Headless mode");
-        }
-        if("maximized".equalsIgnoreCase("maximized")){
+//            Loggers.log.info("Activate Headless mode");
+//        }
+//        if("maximized".equalsIgnoreCase("maximized")){
 //            opts.add("--maximized");
-            Loggers.log.info("Start maximized");
-        }
+//            Loggers.log.info("Start maximized");
+//        }
+        opts.add("--disable-blink-features=AutomationControlled");
+        opts.add("--disable-popup-blocking");
         return opts;
     }
 

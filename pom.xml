@@ -12,6 +12,8 @@
     <log4j2API.version>3.0.0-beta2</log4j2API.version>
     <log4j2Core.version>3.0.0-beta2</log4j2Core.version>
     <apache.poi.version>5.4.1</apache.poi.version>
+    <jackson.version>2.15.2</jackson.version>
+    <lombok.version>1.18.38</lombok.version>
   </properties>
   <build>
   <plugins>
@@ -75,5 +77,17 @@
           <version>7.11.0</version>
           <scope>compile</scope>
       </dependency>
+    <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.38</version>
+    </dependency>
   </dependencies>
 </project>

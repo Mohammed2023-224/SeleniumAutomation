@@ -3,6 +3,8 @@ package engine.actions;
 import engine.constants.Constants;
 import engine.reporters.Loggers;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -18,22 +20,24 @@ public class Waits {
         Loggers.log.info("Add implicit wait by {} seconds", time);
     }
 
-    public static WebDriverWait explicitWaitLongTime(WebDriver driver){
+    private static WebDriverWait explicitWaitLongTime(WebDriver driver){
         WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(Constants.longWaitTime));
         Loggers.log.info("initialize explicit wait for {} sec" ,Constants.longWaitTime);
         return wait;
     }
 
-    public static WebDriverWait explicitWaitShortTime(WebDriver driver){
+    private static WebDriverWait explicitWaitShortTime(WebDriver driver){
         WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(Constants.longWaitTime));
         Loggers.log.info("initialize explicit wait for {} seconds" ,Constants.shortWaitTime);
         return wait;
     }
 
-    public static FluentWait fluentWait(WebDriver driver){
-        FluentWait wait=new FluentWait(driver);
-        return wait;
+    public static FluentWait<WebDriver> fluentWaitShortTime(WebDriver driver,int timeout,int polling){
+        return new FluentWait<>(driver).withTimeout(Duration.ofSeconds(timeout)).pollingEvery(Duration.ofSeconds(polling))
+                    .ignoring(TimeoutException.class).ignoring(StaleElementReferenceException.class);
     }
+
+
 
     public static void waitToBeVisible(WebDriver driver, By locator ){
         if(ElementActions.checkIfElementVisible(driver,locator)){

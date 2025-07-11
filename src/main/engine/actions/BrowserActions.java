@@ -52,7 +52,4 @@ public class BrowserActions {
             driver.switchTo().window(windows.get(0));
         Loggers.addInfoAndAllureStep(log);
     }
-
-
-
 }

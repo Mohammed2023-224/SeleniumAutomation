@@ -46,8 +46,8 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
         successfulTests.add(result.getName());
     }
 
-    public void onTestFailure(ITestResult result) {
-        WebDriver driver = (WebDriver) result.getTestContext().getAttribute("driver");
+    public void onTestFailure(ITestResult result ,ITestContext con) {
+        WebDriver driver = (WebDriver) con.getAttribute("driver");
         Loggers.log.info("Test failed: {}", result.getName());
         numberOfFailedTests++;
         failedTests.add(result.getName());
