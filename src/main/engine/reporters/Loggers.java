@@ -10,7 +10,7 @@ public class Loggers {
     static {
         Configurator.initialize(null,"src/main/resources/xml/log4j2.xml");
     }
-    public static  Logger log = (Logger) LogManager.getLogger("logs");
+    public static  Logger log = (Logger) LogManager.getRootLogger();
 
     public static void addInfoAndAllureStep(String logs){
         Allure.step(logs);

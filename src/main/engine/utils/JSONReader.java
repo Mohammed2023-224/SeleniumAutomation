@@ -30,7 +30,7 @@ public class JSONReader {
         return (T) object;
     }
 
-    public static <T> T getSingleData(Object data, Class<T> className) {
+    public static <T> T getJsonObject(Object data, Class<T> className) {
         if (data instanceof Map) {
             Loggers.log.info("Convert Json array into object");
             return objectMapper.convertValue(data, className);
@@ -38,7 +38,7 @@ public class JSONReader {
         return null;
     }
 
-    public static <T> List<T> getDataInList(Object data, Class<T> className) {
+    public static <T> List<T> getJsonArray(Object data, Class<T> className) {
         if (data instanceof List) {
             Loggers.log.info("Convert Json array into list");
             return ((List<?>) data).stream()

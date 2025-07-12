@@ -3,9 +3,6 @@ package engine.listeners;
 import engine.actions.SystemMethods;
 import engine.constants.Constants;
 import engine.reporters.Loggers;
-import io.qameta.allure.Allure;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.LoggerContext;
 import org.openqa.selenium.WebDriver;
 import org.testng.*;
 
@@ -25,6 +22,7 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
     ArrayList<String> failedTests = new ArrayList<>();
     ArrayList<String> skippedTests = new ArrayList<>();
 
+
     public void onTestStart(ITestResult result) {
         String timestamp = LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_SSS"));
@@ -34,8 +32,7 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
         fileName = fileName.replaceAll("[^a-zA-Z0-9\\-_]", "_");
         // Set system property for this test
         System.setProperty("testLogFileName", fileName);
-        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-        ctx.reconfigure();
+        ListenerHelper.reconfigureLogs();
         Loggers.log.info("Start test: {}", result.getName());
     }
 
@@ -65,11 +62,12 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
     public void onStart(ITestContext context) {
         SystemMethods.deleteDirectory("reports");
         SystemMethods.deleteDirectory("allure-results");
+
     }
 
     public void onFinish(ITestContext context) {
+        ListenerHelper.stopAppenderRootLog("PerTestRouting");
         Loggers.log.info("finished Execution");
-
     }
 
     @Override
@@ -85,6 +83,7 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
     }
 
     public void onExecutionFinish() {
+
         Loggers.log.info("Number of all tests: {}", numberOfSuccessTest + numberOfFailedTests + numberOfSkippedTests);
         Loggers.log.info("Number of successful tests: {}", numberOfSuccessTest);
         Loggers.log.info("Name of successful tests: {}", Arrays.deepToString(successfulTests.toArray()));
@@ -99,7 +98,6 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
     }
 
     public void onExecutionStart() {
-
     }
 
     @Override
