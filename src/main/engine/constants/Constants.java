@@ -17,5 +17,6 @@ public class Constants {
      public static String headlessMode=PropertyReader.readProp("headless");
      public static String maximizedMode=PropertyReader.readProp("maximized");
      public static String popupBlocker=PropertyReader.readProp("popup_blocker");
+     public static String browser=PropertyReader.readProp("Browser");
 
 }

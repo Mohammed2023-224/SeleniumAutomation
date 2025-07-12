@@ -10,11 +10,13 @@ public class SetupDriver {
     public WebDriver driver;
 
     public WebDriver startDriver(String browser) {
-        if (browser.equalsIgnoreCase("edge")) {
-            driver = new Edge().initiateDriver();
-        }
-        if (browser.equalsIgnoreCase("chrome")) {
-            driver = new Chrome().initiateDriver();
+        switch(browser.toLowerCase()){
+            case "edge":
+                driver = new Edge().initiateDriver();
+                break;
+            case "chrome":
+                driver = new Chrome().initiateDriver();
+                break;
         }
         return driver;
     }

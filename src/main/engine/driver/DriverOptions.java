@@ -10,15 +10,15 @@ public class DriverOptions {
     static ArrayList<String> opts=new ArrayList<>();
 
     public static ArrayList<String> defineDriverOptions(){
-        if(Constants.headlessMode.equals("true")){
+        if(Constants.headlessMode.equalsIgnoreCase("true")){
             opts.add("--headless");
             Loggers.log.info("Activate Headless mode");
         }
-        if(Constants.maximizedMode.equals("true")){
-            opts.add("--maximized");
+        if(Constants.maximizedMode.equalsIgnoreCase("true")){
+            opts.add("start-maximized");
             Loggers.log.info("Start maximized");
         }
-        if(Constants.popupBlocker.equals("true")){
+        if(Constants.popupBlocker.equalsIgnoreCase("true")){
             opts.add("--disable-popup-blocking");
             Loggers.log.info("disable popup blocking");
         }

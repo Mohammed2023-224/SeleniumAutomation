@@ -14,7 +14,10 @@
     <apache.poi.version>5.4.1</apache.poi.version>
     <jackson.version>2.15.2</jackson.version>
     <lombok.version>1.18.38</lombok.version>
+    <cucumberJava.version>7.24.0</cucumberJava.version>
+    <cucumberTestng.version>7.23.0</cucumberTestng.version>
   </properties>
+
   <build>
   <plugins>
   <plugin>
@@ -87,7 +90,24 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.38</version>
+      <version>${lombok.version}</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-testng -->
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-testng</artifactId>
+      <version>${cucumberTestng.version}</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-java</artifactId>
+      <version>${cucumberJava.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna</artifactId>
+      <version>5.13.0</version>
     </dependency>
   </dependencies>
 </project>
