@@ -7,6 +7,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class Chrome {
 
     // get driver options
@@ -22,4 +25,14 @@ public class Chrome {
         return new ChromeDriver(getDriverOptions());
     }
 
+
+    public WebDriver initiateRemoteDriver(String proxyURl) {
+        Loggers.log.info("Start chrome on remote driver");
+        try {
+            return new RemoteWebDriver(new URL(proxyURl), getDriverOptions());
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }

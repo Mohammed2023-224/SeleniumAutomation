@@ -1,5 +1,6 @@
 package engine.driver;
 
+import engine.constants.Constants;
 import engine.driver.browsers.Chrome;
 import engine.driver.browsers.Edge;
 import engine.reporters.Loggers;
@@ -16,6 +17,19 @@ public class SetupDriver {
                 break;
             case "chrome":
                 driver = new Chrome().initiateDriver();
+                break;
+        }
+        return driver;
+    }
+
+    public WebDriver startDriverRemotely(String browser) {
+        String proxyURL= Constants.proxyURL;
+        switch(browser.toLowerCase()){
+            case "edge":
+                driver = new Edge().initiateRemoteDriver(proxyURL);
+                break;
+            case "chrome":
+                driver = new Chrome().initiateRemoteDriver(proxyURL);
                 break;
         }
         return driver;

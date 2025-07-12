@@ -15,7 +15,11 @@ public class BaseTest {
 
     @BeforeClass
     public void initDriver(ITestContext con) {
-        driver = new SetupDriver().startDriver(Constants.browser);
+        if(Constants.executionType.equalsIgnoreCase("local")) {
+            driver = new SetupDriver().startDriver(Constants.browser);
+        } else if (Constants.executionType.equalsIgnoreCase("remote")) {
+            driver = new SetupDriver().startDriverRemotely(Constants.browser);
+        }
         con.setAttribute("driver",driver);
     }
 

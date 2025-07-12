@@ -18,5 +18,7 @@ public class Constants {
      public static String maximizedMode=PropertyReader.readProp("maximized");
      public static String popupBlocker=PropertyReader.readProp("popup_blocker");
      public static String browser=PropertyReader.readProp("Browser");
+     public static String proxyURL=PropertyReader.readProp("proxy");
+     public static String executionType=PropertyReader.readProp("execution");
 
 }
