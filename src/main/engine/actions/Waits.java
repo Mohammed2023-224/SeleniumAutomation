@@ -20,20 +20,24 @@ public class Waits {
         Loggers.log.info("Add implicit wait by {} seconds", time);
     }
 
-    private static WebDriverWait explicitWaitLongTime(WebDriver driver){
+    public static WebDriverWait explicitWaitLongTime(WebDriver driver){
         WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(Constants.longWaitTime));
-        Loggers.log.info("initialize explicit wait for {} sec" ,Constants.longWaitTime);
+        Loggers.log.info(" explicit wait for {} sec" ,Constants.longWaitTime);
         return wait;
     }
 
-    private static WebDriverWait explicitWaitShortTime(WebDriver driver){
-        WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(Constants.longWaitTime));
-        Loggers.log.info("initialize explicit wait for {} seconds" ,Constants.shortWaitTime);
+    public static WebDriverWait explicitWaitShortTime(WebDriver driver){
+        WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(Constants.shortWaitTime));
+        Loggers.log.info(" explicit wait for {} seconds" ,Constants.shortWaitTime);
         return wait;
     }
 
-    public static FluentWait<WebDriver> fluentWaitShortTime(WebDriver driver,int timeout,int polling){
-        return new FluentWait<>(driver).withTimeout(Duration.ofSeconds(timeout)).pollingEvery(Duration.ofSeconds(polling))
+    public static FluentWait<WebDriver> fluentWaitShortTime(WebDriver driver){
+        return new FluentWait<>(driver).withTimeout(Duration.ofSeconds(Constants.shortWaitTime)).pollingEvery(Duration.ofSeconds(1))
+                    .ignoring(TimeoutException.class).ignoring(StaleElementReferenceException.class);
+    }
+    public static FluentWait<WebDriver> fluentWaitLongTime(WebDriver driver){
+        return new FluentWait<>(driver).withTimeout(Duration.ofSeconds(Constants.longWaitTime)).pollingEvery(Duration.ofSeconds(1))
                     .ignoring(TimeoutException.class).ignoring(StaleElementReferenceException.class);
     }
 

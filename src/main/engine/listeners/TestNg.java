@@ -17,7 +17,7 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
     int numberOfSuccessTest = 0;
     int numberOfSkippedTests = 0;
     int counter=0;
-    int retryLimit= 3;
+    int retryLimit= 0;
     ArrayList<String> successfulTests = new ArrayList<>();
     ArrayList<String> failedTests = new ArrayList<>();
     ArrayList<String> skippedTests = new ArrayList<>();
