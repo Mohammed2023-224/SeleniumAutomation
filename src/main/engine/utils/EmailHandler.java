@@ -56,6 +56,7 @@ public class EmailHandler {
 
     private MessageSearchParams addMessageSearchParams(){
         msp  =new MessageSearchParams();
+        msp.withTimeout(100000);
         msp.withServer(serverID);
         return msp;
     }
