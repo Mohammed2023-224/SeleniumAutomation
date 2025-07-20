@@ -6,6 +6,7 @@ import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
@@ -14,41 +15,44 @@ import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePart;
+import engine.constants.Constants;
 import engine.reporters.Loggers;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import javax.activation.CommandMap;
+import javax.activation.MailcapCommandMap;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.io.*;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import static org.awaitility.Awaitility.await;
 
 public class GmailHandler {
     private   String applicationName ;
     private   JsonFactory jsonFactory ;
     private  List<String> scopes;
-    private  String credentialsFilePath="/credentials.json";
-    private  String tokensPath = "tokens";
+    private  String credentialsFilePath= Constants.gmailCredential;
+    private  String tokensPath = Constants.gmailToken;
     Gmail service = null;
+    private String currentUser="me";
+
     public GmailHandler(String appName){
-        this.scopes = Collections.singletonList(GmailScopes.GMAIL_READONLY);
+        this.scopes = Arrays.asList(GmailScopes.GMAIL_SEND,GmailScopes.GMAIL_READONLY,GmailScopes.GMAIL_COMPOSE,GmailScopes.GMAIL_MODIFY);
         this.jsonFactory=JacksonFactory.getDefaultInstance();
         this.applicationName=appName;
-
         try {
             this.service = getGmailService();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
     }
 
     private  Credential authorize()  {
@@ -58,23 +62,12 @@ public class GmailHandler {
             throw new RuntimeException(credentialsFilePath+" not found in resources folder.");
         }
         GoogleClientSecrets clientSecrets = null;
+        FileDataStoreFactory tokenStore = null;
+        GoogleAuthorizationCodeFlow flow = null;
+
         try {
             clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(in));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Set up token store directory
-        FileDataStoreFactory tokenStore = null;
-        try {
             tokenStore = new FileDataStoreFactory(new File(tokensPath));
-        } catch (IOException e) {
-            Loggers.log.warn("Couldn't store token");
-        }
-
-        // Build flow with stored tokens
-        GoogleAuthorizationCodeFlow flow = null;
-        try {
             flow = new GoogleAuthorizationCodeFlow.Builder(
                     GoogleNetHttpTransport.newTrustedTransport(),
                     jsonFactory,
@@ -84,15 +77,15 @@ public class GmailHandler {
                     .setAccessType("offline")
                     .build();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Loggers.log.error("Error with token file ", e );
         } catch (GeneralSecurityException e) {
-            Loggers.log.warn("gmail security issue");
+            Loggers.log.warn("gmail security issue ", e );
         }
 
         try {
             return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
         } catch (IOException e) {
-            Loggers.log.warn("Failed to authorize");
+            Loggers.log.warn("Failed to authorize {}", e);
             throw new RuntimeException();
 
         }
@@ -107,24 +100,28 @@ public class GmailHandler {
                 .setApplicationName(applicationName)
                 .build();
     }
-//    From a specific sender	"from:example@gmail.com"
-//    Subject contains certain words	"subject:invoice"
-//    Emails that have attachments	"has:attachment"
-//    Emails within a date range	"after:2023/01/01 before:2023/12/31"
-//    Unread emails	"is:unread"
-//    Emails with a certain label	"label:IMPORTANT"
-//    Combining filters	"from:abc@gmail.com is:unread"
-    private List<Message> returnMessages(int numberOfMessages, String inbox,String query){
+    /**
+     * * How to write queries
+    * From a specific sender	"from:example@gmail.com"
+   * Subject contains certain words	"subject:invoice"
+   * Emails that have attachments	"has:attachment"
+   * Emails within a date range	"after:2023/01/01 before:2023/12/31"
+    * Unread emails	"is:unread"
+    * in inbox       "in:inbox"
+    * Emails with a certain label	"label:IMPORTANT"
+    * Combining filters	"from:abc@gmail.com is:unread"
+     */
+    private List<Message> returnMessages(int numberOfMessages,String query){
         ListMessagesResponse response = null;
         try {
-            response = service.users().messages().list("me")
+            response = service.users().messages().list(currentUser)
                     .setMaxResults((long) numberOfMessages)
-                    .setQ("in:"+inbox)
                     .setQ(query)
                     .execute();
         } catch (IOException e) {
             Loggers.log.warn("Failed to fetch messages through API call");
         }
+        assert response != null;
         List<Message> messages = response.getMessages();
         if (messages == null || messages.isEmpty()) {
             Loggers.log.warn("No messages found.");
@@ -134,108 +131,127 @@ public class GmailHandler {
 
 
 
-    public List<Message> readMultipleEmails(int numberOfMessages, String inbox, String query){
-        List<Message> messages = returnMessages(numberOfMessages, inbox, query);
+    public List<Message> readMultipleEmails(int numberOfMessages,  String query){
+        List<Message> messages = returnMessages(numberOfMessages, query);
         List<Message> fullMessages = new ArrayList<>();
         for (Message message : messages) {
-            try {
-                Message fullMessage = service.users().messages().get("me", message.getId()).execute();
+                Message fullMessage = getMessage(message.getId());
                 fullMessages.add(fullMessage);
-            } catch (IOException e) {
-                Loggers.log.warn("Failed to fetch full message");
-            }
         }
         return fullMessages;
     }
 
-    public Message readMailByPosition(int numberOfMessages, String inbox, String query,int id){
+    public Message readMailByPosition(int numberOfMessages, String query,int id){
         int count =1;
-        List<Message> messages = returnMessages(numberOfMessages, inbox, query);
+        List<Message> messages = returnMessages(numberOfMessages, query);
         Message fullMessage = null;
         for (Message message : messages) {
             if(count==id) {
-                    try {
-                        fullMessage = service.users().messages().get("me", message.getId()).execute();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                fullMessage =getMessage(message.getId());
                     break;
                 }
                 count++;
         }
         return fullMessage;
     }
+
+    public Message waitForEmail(int timeoutSeconds,  String query) {
+        return await()
+                .atMost(timeoutSeconds, TimeUnit.SECONDS)
+                .pollInterval(5, TimeUnit.SECONDS)
+                .ignoreExceptions()
+                .until(() -> {
+                    List<Message> messages = returnMessages(1, query);
+                    if (messages != null && !messages.isEmpty()) {
+                        return service.users().messages().get(currentUser, messages.get(0).getId()).execute();
+                    }
+                    return null;
+                }, Objects::nonNull);
+    }
+
+
     public String readFullBody(Message message){
         Message fullMessage = null;
-        try {
-            fullMessage = service.users().messages().get("me", message.getId()).execute();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        fullMessage =getMessage(message.getId());
         MessagePart payload = fullMessage.getPayload();
         String body = extractMessageBody(payload);
-        return formatHtmlData(body);
+        return GmailHandlerUtils.formatHtmlData(body);
     }
+
+
 
     public String readFullSnippet(Message message){
         String snippet ="";
-        try {
-            snippet=service.users().messages().get("me", message.getId()).execute().getSnippet();
-        } catch (IOException e) {
-            Loggers.log.warn("Couldn't get email info");
-        }
+            snippet=getMessage(message.getId()).getSnippet();
         return snippet;
     }
 
     public List<String> readLinksFromEmail(Message message){
         List<String> links = new ArrayList<>();
-        try {
-            Message fullMessage = service.users().messages().get("me", message.getId()).execute();
-            MessagePart payload = fullMessage.getPayload();
-            // Get body data
-            String data = payload.getBody().getData();
-            if (data == null && payload.getParts() != null) {
-                for (MessagePart part : payload.getParts()) {
-                    if ("text/html".equalsIgnoreCase(part.getMimeType())) {
-                        data = part.getBody().getData();
-                        break;
-                    }
+        Message fullMessage = getMessage(message.getId());
+        MessagePart payload = fullMessage.getPayload();
+        // Get body data
+        String data = payload.getBody().getData();
+        if (data == null && payload.getParts() != null) {
+            for (MessagePart part : payload.getParts()) {
+                if ("text/html".equalsIgnoreCase(part.getMimeType())) {
+                    data = part.getBody().getData();
+                    break;
                 }
             }
-            if (data != null) {
-                String html = new String(Base64.getUrlDecoder().decode(data), StandardCharsets.UTF_8);
-                Document doc = Jsoup.parse(html);
-                Elements aTags = doc.select("a[href]");
-                for (Element a : aTags) {
-                    links.add(a.attr("href"));
-                }
+        }
+        if (data != null) {
+            String html =GmailHandlerUtils.decodeBase64(data);
+            Document doc = Jsoup.parse(html);
+            Elements aTags = doc.select("a[href]");
+            for (Element a : aTags) {
+                links.add(a.attr("href"));
             }
-
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to fetch message", e);
         }
         return links;
     }
 
+    public void sendEmail(String to, String subject, String bodyText) {
+        try {
+            String fromEmail = service.users().getProfile(currentUser).execute().getEmailAddress(); // ✅
+            MimeMessage mimeMessage = createEmail(to, fromEmail, subject, bodyText);
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            mimeMessage.writeTo(buffer);
+            byte[] rawMessageBytes = buffer.toByteArray();
+            String encodedEmail = Base64.getUrlEncoder().encodeToString(rawMessageBytes);
 
-    private String formatHtmlData(String data){
-      return   data .replaceAll("(?s)<style[^>]*>.*?</style>", "")
-              .replaceAll("<[^>]*>", "").
-                replaceAll("&nbsp;", " ")
-              .replaceAll("&nbsp;", " ")
-              .replaceAll("&amp;", "&")
-              .replaceAll("&lt;", "<")
-              .replaceAll("&gt;", ">")
-              .replaceAll("&quot;", "\"")
-              .replaceAll("(?m)^[ \t]*\r?\n", "").trim();
+            Message message = new Message();
+            message.setRaw(encodedEmail);
+
+            message = service.users().messages().send(currentUser, message).execute();
+            Loggers.log.info("Email sent successfully: {}", message.getId());
+        }catch (GoogleJsonResponseException e) {
+            int statusCode = e.getStatusCode();
+            String details = e.getDetails() != null ? e.getDetails().getMessage() : "No error details";
+            switch (statusCode) {
+                case 403:
+                    Loggers.log.error("Permission denied. Check Gmail scopes and API access: {}", details);
+                    break;
+                case 400:
+                    Loggers.log.error("Bad Request - possibly invalid email or message format: {}", details);
+                    break;
+                case 401:
+                    Loggers.log.error("Unauthorized - token may have expired or is invalid: {}", details);
+                    break;
+                default:
+                    Loggers.log.error("Google API error {}: {}", statusCode, details);
+            }
+        }catch (Exception e) {
+            Loggers.log.error("Failed to send email", e);
+        }
     }
+
 
     // Recursive method to extract body content from message parts
     private String extractMessageBody(MessagePart part) {
         if (part == null) return "";
         if (part.getBody() != null && part.getBody().getData() != null) {
-            byte[] bytes = Base64.getUrlDecoder().decode(part.getBody().getData());
-            return new String(bytes, StandardCharsets.UTF_8);
+            return GmailHandlerUtils.decodeBase64(part.getBody().getData());
         }
         if (part.getParts() != null) {
             for (MessagePart subPart : part.getParts()) {
@@ -247,5 +263,30 @@ public class GmailHandler {
     }
 
 
+    private MimeMessage createEmail(String to, String from, String subject, String bodyText)  {
+        final MailcapCommandMap mc = GmailHandlerUtils.getMailcapCommandMap();
+        CommandMap.setDefaultCommandMap(mc);
+        Properties props = new Properties();
+        Session session = Session.getDefaultInstance(props, null);
+        MimeMessage email = new MimeMessage(session);
+        try {
+            email.setFrom(new InternetAddress(from));
+            email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
+            email.setSubject(subject);
+            email.setText(bodyText);
+        }catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+        return email;
+    }
+
+
+    private Message getMessage(String messageID){
+        try {
+            return service.users().messages().get(currentUser, messageID).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

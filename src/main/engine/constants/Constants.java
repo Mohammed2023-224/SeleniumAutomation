@@ -20,5 +20,7 @@ public class Constants {
      public static String browser=PropertyReader.readProp("Browser");
      public static String proxyURL=PropertyReader.readProp("proxy");
      public static String executionType=PropertyReader.readProp("execution");
+     public static String gmailToken=PropertyReader.readProp("gmail_token_path");
+     public static String gmailCredential=PropertyReader.readProp("gmail_credentials");
 
 }
