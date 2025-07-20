@@ -1,7 +1,8 @@
 package engine.utils;
 
-import javax.activation.CommandMap;
-import javax.activation.MailcapCommandMap;
+import org.jsoup.Jsoup;
+import jakarta.activation.CommandMap;
+import jakarta.activation.MailcapCommandMap;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
@@ -20,14 +21,12 @@ public class GmailHandlerUtils {
         return   data .replaceAll("(?s)<style[^>]*>.*?</style>", "")
                 .replaceAll("<[^>]*>", "").
                 replaceAll("&nbsp;", " ")
-                .replaceAll("&nbsp;", " ")
                 .replaceAll("&amp;", "&")
                 .replaceAll("&lt;", "<")
                 .replaceAll("&gt;", ">")
                 .replaceAll("&quot;", "\"")
                 .replaceAll("(?m)^[ \t]*\r?\n", "").trim();
     }
-
     protected static String decodeBase64(String data) {
         return new String(Base64.getUrlDecoder().decode(data), StandardCharsets.UTF_8);
     }

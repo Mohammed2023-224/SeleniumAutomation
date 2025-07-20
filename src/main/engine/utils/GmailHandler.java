@@ -22,12 +22,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import javax.activation.CommandMap;
-import javax.activation.MailcapCommandMap;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import jakarta.activation.CommandMap;
+import jakarta.activation.MailcapCommandMap;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Session;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import java.io.*;
 import java.security.GeneralSecurityException;
 import java.util.*;
@@ -85,20 +85,25 @@ public class GmailHandler {
         try {
             return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
         } catch (IOException e) {
-            Loggers.log.warn("Failed to authorize {}", e);
-            throw new RuntimeException();
+            throw new RuntimeException("Failed to authorize {}", e);
 
         }
     }
 
-    private   Gmail getGmailService() throws Exception {
+    private   Gmail getGmailService()  {
         Credential credential = authorize();
-        return new Gmail.Builder(
-                GoogleNetHttpTransport.newTrustedTransport(),
-                jsonFactory,
-                credential)
-                .setApplicationName(applicationName)
-                .build();
+        try {
+            return new Gmail.Builder(
+                    GoogleNetHttpTransport.newTrustedTransport(),
+                    jsonFactory,
+                    credential)
+                    .setApplicationName(applicationName)
+                    .build();
+        } catch (GeneralSecurityException e) {
+            throw new RuntimeException("Failed to fetch API "+e);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to fetch API "+e);
+        }
     }
     /**
      * * How to write queries
@@ -134,6 +139,7 @@ public class GmailHandler {
     public List<Message> readMultipleEmails(int numberOfMessages,  String query){
         List<Message> messages = returnMessages(numberOfMessages, query);
         List<Message> fullMessages = new ArrayList<>();
+        if (messages == null || messages.isEmpty()) return Collections.emptyList();
         for (Message message : messages) {
                 Message fullMessage = getMessage(message.getId());
                 fullMessages.add(fullMessage);
@@ -145,6 +151,7 @@ public class GmailHandler {
         int count =1;
         List<Message> messages = returnMessages(numberOfMessages, query);
         Message fullMessage = null;
+        if (messages == null || messages.isEmpty()) return null;
         for (Message message : messages) {
             if(count==id) {
                 fullMessage =getMessage(message.getId());
@@ -211,10 +218,10 @@ public class GmailHandler {
         return links;
     }
 
-    public void sendEmail(String to, String subject, String bodyText) {
+    public void sendEmail(String to, String subject, String bodyText,String attcment) {
         try {
-            String fromEmail = service.users().getProfile(currentUser).execute().getEmailAddress(); // ✅
-            MimeMessage mimeMessage = createEmail(to, fromEmail, subject, bodyText);
+            String fromEmail = service.users().getProfile(currentUser).execute().getEmailAddress();
+            MimeMessage mimeMessage = createEmail(to, fromEmail, subject, bodyText,attcment);
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             mimeMessage.writeTo(buffer);
             byte[] rawMessageBytes = buffer.toByteArray();
@@ -263,7 +270,7 @@ public class GmailHandler {
     }
 
 
-    private MimeMessage createEmail(String to, String from, String subject, String bodyText)  {
+    private MimeMessage createEmail(String to, String from, String subject, String bodyText,String attachment)  {
         final MailcapCommandMap mc = GmailHandlerUtils.getMailcapCommandMap();
         CommandMap.setDefaultCommandMap(mc);
         Properties props = new Properties();
@@ -271,11 +278,12 @@ public class GmailHandler {
         MimeMessage email = new MimeMessage(session);
         try {
             email.setFrom(new InternetAddress(from));
-            email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
+            email.addRecipient(jakarta.mail.Message.RecipientType.TO, new InternetAddress(to));
             email.setSubject(subject);
             email.setText(bodyText);
+            email.setFileName(attachment);
         }catch (MessagingException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to create mail"+e);
         }
         return email;
     }
@@ -285,7 +293,7 @@ public class GmailHandler {
         try {
             return service.users().messages().get(currentUser, messageID).execute();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to get message "+ e);
         }
     }
 
