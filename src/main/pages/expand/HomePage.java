@@ -20,10 +20,8 @@ public class HomePage {
     public void navigateHomePage(){
         BrowserActions.navigateTo(driver, Constants.url);
         JavascriptExecutor js = (JavascriptExecutor) driver;
-
 // Remove elements by class or ID
         js.executeScript("document.querySelectorAll('.ad, .popup, .overlay, #ad-banner').forEach(el => el.remove());");
-
     }
 
     public void clickOnSubLink(String linkName){

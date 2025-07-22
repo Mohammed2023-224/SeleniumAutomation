@@ -10,19 +10,29 @@ public class ElementActions {
 
     public static void clickElement(WebDriver driver, By locator) {
         String logs = "click element located at:  " + locator;
+        scrollToElement(driver,locator);
         Waits.waitToBeClickable(driver, locator);
         driver.findElement(locator).click();
         Loggers.addInfoAndAllureStep(logs);
     }
 
     public static void typeInElement(WebDriver driver, By locator, String text) {
-        String logs = "type " + text + " in element located at:" + locator + "\"";
+        String logs = "type " + text + " in element located at:" + locator + "";
+        scrollToElement(driver,locator);
         Waits.waitToBeClickable(driver, locator);
         driver.findElement(locator).sendKeys(text);
         Loggers.addInfoAndAllureStep(logs);
     }
+    public static void clearField(WebDriver driver, By locator) {
+        String logs = "cleat field located at " + locator ;
+        scrollToElement(driver,locator);
+        Waits.waitToBeClickable(driver, locator);
+        driver.findElement(locator).clear();
+        Loggers.addInfoAndAllureStep(logs);
+    }
 
     public static String getText(WebDriver driver, By locator) {
+        scrollToElement(driver,locator);
         Waits.waitToBeClickable(driver, locator);
         String text = driver.findElement(locator).getText();
         String logs = "get text "+text +" out of element located at " + locator;

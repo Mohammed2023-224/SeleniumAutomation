@@ -22,6 +22,10 @@ public class DriverOptions {
             opts.add("--disable-popup-blocking");
             Loggers.log.info("disable popup blocking");
         }
+        opts.add("--disable-save-password-bubble");
+        opts.add("--disable-infobars");
+        opts.add("disable-autofill");
+        opts.add("--incognito");
         opts.add("--disable-blink-features=AutomationControlled");
         return opts;
     }

@@ -73,7 +73,7 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
     @Override
     public boolean retry(ITestResult iTestResult) {
         WebDriver mainDriver = (WebDriver) iTestResult.getTestContext().getAttribute("driver");
-        if (counter <= retryLimit) {
+        if (counter < retryLimit) {
             counter++;
             mainDriver.manage().deleteAllCookies();
             Loggers.log.info("ended retry number: {}", counter);
