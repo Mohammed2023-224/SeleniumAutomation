@@ -4,6 +4,7 @@ import engine.actions.ElementActions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.testng.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,5 +47,23 @@ public class DynamicTable extends HomePage {
             System.out.println("Values are different.");
             System.out.println(Double.valueOf(num1Str).compareTo(Double.valueOf(num2Str)));
         }
+    }
+
+    public void compareDynamicValues() {
+        ElementActions.clickElement(driver,By.name("example_length"));
+        ElementActions.selectOption(driver,By.name("example_length"),"10");
+        Assert.assertTrue(ElementActions.getText(driver,By.id("example_info")).
+                equalsIgnoreCase("Showing 1 to 10 of 10 entries"));
+        List<WebElement> ll = driver.findElements(By.xpath("//thead//tr//th"));
+        String index = "";
+        for (int i = 1; i <= ll.size(); i++) {
+            if (ElementActions.getText(driver, By.xpath("//thead//tr//th[" + i + "]"))
+                    .equalsIgnoreCase("Major")) {
+                index = String.valueOf(i);
+                break;
+            }
+        }
+        String cpuValue = ElementActions.getText(driver, tableData("Daniel Martinez", index));
+        System.out.println(cpuValue);
     }
 }

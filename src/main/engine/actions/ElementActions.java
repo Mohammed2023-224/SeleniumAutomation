@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 public class ElementActions {
 
@@ -13,6 +14,15 @@ public class ElementActions {
         scrollToElement(driver,locator);
         Waits.waitToBeClickable(driver, locator);
         driver.findElement(locator).click();
+        Loggers.addInfoAndAllureStep(logs);
+    }
+
+    public static void selectOption(WebDriver driver, By locator,String text) {
+        String logs = "Select "+text+" from selection located at:  " + locator;
+        scrollToElement(driver,locator);
+        Waits.waitToBeClickable(driver, locator);
+        Select select=new Select(driver.findElement(locator));
+        select.selectByValue(text);
         Loggers.addInfoAndAllureStep(logs);
     }
 
