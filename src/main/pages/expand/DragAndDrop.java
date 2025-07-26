@@ -8,9 +8,13 @@ import org.testng.Assert;
 public class DragAndDrop extends HomePage{
     private By columnA=By.id("column-a");
     private By columnB=By.id("column-b");
-    private By redCircle=By.id("column-b");
-    private By greenCircle=By.id("column-b");
-    private By blueCircle=By.id("column-b");
+    private By redCircle=By.className("red");
+    private By greenCircle=By.className("green");
+    private By blueCircle=By.className("blue");
+    private By target=By.id("target");
+    private By targetAssertion(String num){
+     return By.xpath("//div[@id='target']//div["+num+"]");
+    }
     public DragAndDrop(WebDriver driver) {
         super(driver);
     }
@@ -21,9 +25,13 @@ public class DragAndDrop extends HomePage{
     }
 
         public void circleDragging(){
-        ElementActions.dragAndDrop(driver,columnA,columnB);
-        Assert.assertTrue(ElementActions.getText(driver,columnA).equalsIgnoreCase("b"));
-    }
+        ElementActions.dragAndDrop(driver,greenCircle,target);
+        Assert.assertTrue(driver.findElement(targetAssertion("1")).getDomAttribute("class").equalsIgnoreCase("green"));
+        ElementActions.dragAndDrop(driver,redCircle,target);
+            Assert.assertTrue(driver.findElement(targetAssertion("2")).getDomAttribute("class").equalsIgnoreCase("red"));
+            ElementActions.dragAndDrop(driver,blueCircle,target);
+            Assert.assertTrue(driver.findElement(targetAssertion("3")).getDomAttribute("class").equalsIgnoreCase("blue"));
+        }
 
 
 
