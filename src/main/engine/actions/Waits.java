@@ -91,16 +91,10 @@ public class Waits {
     }
 
 
-    public static boolean waitForFileToBeDownloaded(WebDriver driver,String path){
+    public static void waitForFileToBeDownloaded(WebDriver driver,String path){
         File file = new File(path);
-        try{
             explicitWaitLongTime(driver).until(x ->file.exists() && file.canRead());
             Loggers.log.info("Waited for file [{}] to appear for [{}]",path,Constants.longWaitTime);
-        }
-        catch (Exception e){
-            Loggers.log.info("The file [{}] didn't appear after [{}] ",path,Constants.longWaitTime);
-        }
-        return file.exists();
     }
 
 }
