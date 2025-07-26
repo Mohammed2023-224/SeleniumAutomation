@@ -6,9 +6,14 @@ import org.openqa.selenium.interactions.Actions;
 
 public class Helpers {
     public static Actions acts;
+    static JavascriptExecutor js;
 
     public static JavascriptExecutor initiateJSExecutor(WebDriver driver) {
-        return (JavascriptExecutor) driver;
+        if(!(js ==null)){
+            return js;
+        }else {
+            return (JavascriptExecutor) driver;
+        }
     }
 
     public static Actions seleniumActions(WebDriver driver) {
