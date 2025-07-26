@@ -15,7 +15,8 @@ public class Chrome {
     // get driver options
     private ChromeOptions getDriverOptions() {
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments(DriverOptions.defineDriverOptions());
+        chromeOptions.addArguments(new DriverOptions().defineDriverOptions());
+        chromeOptions.setExperimentalOption("prefs",new DriverOptions().definePreferences());
         return chromeOptions;
     }
 

@@ -5,11 +5,15 @@ import engine.reporters.Loggers;
 import engine.utils.JSONReader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DriverOptions {
-    static ArrayList<String> opts=new ArrayList<>();
 
-    public static ArrayList<String> defineDriverOptions(){
+     ArrayList<String> opts=new ArrayList<>();
+    Map<String, Object> prefs = new HashMap<>();
+
+    public  ArrayList<String> defineDriverOptions(){
         if(Constants.headlessMode.equalsIgnoreCase("true")){
             opts.add("--headless");
             Loggers.log.info("Activate Headless mode");
@@ -27,7 +31,16 @@ public class DriverOptions {
         opts.add("disable-autofill");
         opts.add("--incognito");
         opts.add("--disable-blink-features=AutomationControlled");
+//        opts.add()
         return opts;
+    }
+
+    public  Map<String,Object> definePreferences(){
+//        prefs.put("download.default_directory", "C:\\Users\\USER\\Downloads"); // Make sure this path exists!
+//        prefs.put("profile.default_content_settings.popups", 0);
+//        prefs.put("download.prompt_for_download", false);
+//        prefs.put("plugins.always_open_pdf_externally", true);
+        return  prefs;
     }
 
 }
