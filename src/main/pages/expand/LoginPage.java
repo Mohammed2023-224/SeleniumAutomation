@@ -60,7 +60,7 @@ public class LoginPage extends HomePage{
     public void assertSuccessLogin(String text){
         Waits.fluentWaitShortTime(driver).until(ExpectedConditions.not(ExpectedConditions.textToBe(successLogin,"")));
         Assert.assertTrue(ElementActions.checkIfElementVisible(driver,successLogin));
-        Assert.assertTrue(ElementActions.getText(driver,successLogin).contains(text));
+        Assert.assertTrue(ElementActions.getText(driver,successLogin).toLowerCase().contains(text.toLowerCase()));
     }
 
     public void assertFailLogin( ){

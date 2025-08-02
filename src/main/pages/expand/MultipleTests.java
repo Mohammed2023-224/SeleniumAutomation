@@ -73,7 +73,8 @@ public class MultipleTests extends HomePage {
     }
 
         public void scroll () {
-            while (true) {
+        int num=0;
+            while (num<=5) {
                 Number heightObj = (Number) Helpers.initiateJSExecutor(driver).executeScript("return document.body.scrollHeight");
                 long lastHeight = heightObj != null ? heightObj.longValue() : 0;
                 AtomicLong newHeight = new AtomicLong();
@@ -87,27 +88,29 @@ public class MultipleTests extends HomePage {
                         return lastHeight != newHeight.get();
                     });
                 } catch (Exception e) {
-                    Loggers.log.warn("Reached the end of the page");
+                    Loggers.log.info("Reached the end of the page");
                 }
                 // Break if no new content is loaded
                 if (newHeight.get() == lastHeight) {
                     break;
                 }
+                num++;
             }
         }
 
         public void scrollInner () {
-        By scrollingEleemnt=By.xpath("//table//parent::div//parent::div");
-            while (true) {
-                Number heightObj = (Number) Helpers.initiateJSExecutor(driver).executeScript("return arguments[0].scrollHeight",driver.findElement(scrollingEleemnt));
+        By scrollingElement=By.xpath("//table//parent::div//parent::div");
+        int num=0;
+            while (num<5) {
+                Number heightObj = (Number) Helpers.initiateJSExecutor(driver).executeScript("return arguments[0].scrollHeight",driver.findElement(scrollingElement));
                 long lastHeight = heightObj != null ? heightObj.longValue() : 0;
                 AtomicLong newHeight = new AtomicLong();
                 // Scroll to bottom
-                Helpers.initiateJSExecutor(driver).executeScript("arguments[0].scrollTo(0, arguments[0].scrollHeight);",driver.findElement(scrollingEleemnt));
+                Helpers.initiateJSExecutor(driver).executeScript("arguments[0].scrollTo(0, arguments[0].scrollHeight);",driver.findElement(scrollingElement));
                 try {
                     Waits.explicitWaitShortTime(driver).until(x -> {
                         Number newHeightObj = (Number)
-                                Helpers.initiateJSExecutor(driver).executeScript("return arguments[0].scrollHeight",driver.findElement(scrollingEleemnt));
+                                Helpers.initiateJSExecutor(driver).executeScript("return arguments[0].scrollHeight",driver.findElement(scrollingElement));
                         newHeight.set(newHeightObj != null ? newHeightObj.longValue() : 0);
                         return lastHeight != newHeight.get();
                     });
@@ -118,6 +121,7 @@ public class MultipleTests extends HomePage {
                 if (newHeight.get() == lastHeight) {
                     break;
                 }
+                num++;
             }
         }
     }

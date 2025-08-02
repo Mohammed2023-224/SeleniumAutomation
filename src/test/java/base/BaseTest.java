@@ -47,7 +47,4 @@ public class BaseTest {
         driver.close();
         BrowserActions.switchToWindowByIndex(driver,0);
     }
-
 }
-
-

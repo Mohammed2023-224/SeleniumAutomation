@@ -26,7 +26,7 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
     ArrayList<String> successfulTests = new ArrayList<>();
     ArrayList<String> failedTests = new ArrayList<>();
     ArrayList<String> skippedTests = new ArrayList<>();
-    Set<String> skippingTests = new ReadExecutionFlow().readExecutionControl();
+    Set<String> runningTests = new ReadExecutionFlow().readExecutionControl();
     static {
         SystemMethods.deleteDirectory("reports");
         SystemMethods.deleteDirectory("allure-results");
@@ -117,7 +117,7 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
         if (testMethod == null) return; // Don't process config methods or null test methods
         String className = testClass != null ? testClass.getSimpleName() : testMethod.getDeclaringClass().getSimpleName();
         String testSignature = (className + "." + testMethod.getName()).trim().toLowerCase();
-        if (!skippingTests.contains(testSignature.toLowerCase())) {
+        if (!runningTests.contains(testSignature.toLowerCase())) {
             annotation.setEnabled(false);
             Loggers.log.info("⛔ Skipping: " + testSignature);
         } else {

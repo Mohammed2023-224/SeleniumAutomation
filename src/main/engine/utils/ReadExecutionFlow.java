@@ -10,9 +10,9 @@ public class ReadExecutionFlow {
 
     public Set<String> readExecutionControl(){
        Object [][] obj=
-               new ExcelReader().readRowAsLinkedHashMapThroughCondition(CONTROL_FILE,SHEET_NAME,"Run","TRUE");
+               new ExcelReader().readRowAsLinkedHashMapThroughCondition
+                       (CONTROL_FILE,SHEET_NAME,"Run","TRUE");
            Set<String> allowedTests = new HashSet<>();
-
         for (Object[] row : obj) {
             @SuppressWarnings("unchecked")
             LinkedHashMap<String, String> rowMap = (LinkedHashMap<String, String>) row[0];
@@ -22,5 +22,5 @@ public class ReadExecutionFlow {
         }
         return allowedTests;
     }
-    }
+}
 

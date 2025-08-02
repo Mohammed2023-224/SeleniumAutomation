@@ -2,6 +2,7 @@
 import base.BaseTest;
 import engine.actions.BrowserActions;
 import engine.actions.DevToolsActions;
+import engine.utils.Faker;
 import pages.expand.MultipleTests;
 import engine.constants.Constants;
 import engine.utils.ExcelReader;
@@ -52,15 +53,17 @@ public class ExpandTests extends BaseTest {
         loginPage.typePassword("tes");
         loginPage.clickLogin();
         loginPage.assertFailLogin();
+        String newUserName= Faker.userName;
+        String pass= Faker.pass;
         loginPage.clickRegisterLink();
-        loginPage.typeUserName(data.get("re user name"));
-        loginPage.typePassword(data.get("re pass"));
-        loginPage.typeConPassword(data.get("re con pass"));
+        loginPage.typeUserName(newUserName);
+        loginPage.typePassword(pass);
+        loginPage.typeConPassword(pass);
         loginPage.clickRegister();
-        loginPage.typeUserName(data.get("re user name"));
-        loginPage.typePassword(data.get("re pass"));
+        loginPage.typeUserName(newUserName);
+        loginPage.typePassword(pass);
         loginPage.clickLogin();
-        loginPage.assertSuccessLogin(data.get("re user name"));
+        loginPage.assertSuccessLogin(newUserName);
             }
 //forget password test doesn't send any emails
 
