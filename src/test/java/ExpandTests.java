@@ -4,9 +4,7 @@ import engine.actions.BrowserActions;
 import engine.actions.DevToolsActions;
 import pages.expand.MultipleTests;
 import engine.constants.Constants;
-import engine.listeners.AllureListener;
 import engine.utils.ExcelReader;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -14,9 +12,7 @@ import pages.expand.*;
 
 import java.util.LinkedHashMap;
 
-// Tests were made end to end approach constituting data driven testing ( not the best practice as
-// this add repeatable steps)
-public class Expandtests extends BaseTest {
+public class ExpandTests extends BaseTest {
 
     HomePage homePage;
     WebInputs webInputs;
@@ -203,11 +199,5 @@ return new ExcelReader().
     fileDownloader=new FileDownloader(driver);
     multipleTests=new MultipleTests(driver);
 }
-
-    @AfterMethod
-    private void attachLogs(){
-        AllureListener.saveTextLog(System.getProperty("testLogFileName")+".log",
-                Constants.reportsPath+System.getProperty("testLogFileName")+".log");
-    }
 
 }
