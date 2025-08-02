@@ -1,15 +1,17 @@
 package base;
 
+
+import engine.actions.BrowserActions;
+import engine.actions.Helpers;
 import engine.constants.Constants;
 import engine.driver.SetupDriver;
+import engine.listeners.AllureListener;
 import engine.listeners.TestNg;
-import io.cucumber.java.BeforeAll;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Listeners;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
+import org.testng.annotations.*;
+
+
 
 @Listeners(TestNg.class)
 public class BaseTest {
@@ -17,7 +19,7 @@ public class BaseTest {
 
     @Parameters("browser")
     @BeforeClass
-    public void initDriver(ITestContext con,  @Optional String browser) {
+    public void initDriver(ITestContext con, @Optional String browser) {
         browser=browser==null||browser.isEmpty()? Constants.browser:browser;
 
         if(Constants.executionType.equalsIgnoreCase("local")) {
@@ -28,13 +30,23 @@ public class BaseTest {
         con.setAttribute("driver",driver);
     }
 
-//    @AfterClass
-//    public void stopDriver() {
-//        this.driver.quit();
-//    }
+    @AfterClass
+    public void stopDriver() {
+        this.driver.quit();
+    }
 
+    @AfterMethod
+    public void attachLogs(){
+        AllureListener.saveTextLog(System.getProperty("testLogFileName")+".log",
+                Constants.reportsPath+System.getProperty("testLogFileName")+".log");
+    }
 
-
+    @AfterMethod
+    public void startNewTab(){
+        Helpers.initiateJSExecutor(driver).executeScript("window.open();");
+        driver.close();
+        BrowserActions.switchToWindowByIndex(driver,0);
+    }
 
 }
 

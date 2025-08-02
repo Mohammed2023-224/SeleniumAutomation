@@ -80,19 +80,61 @@ public class ExcelReader {
         }
     }
 
+//    private static String getCellByColumnNameAndRowNum(int rowNum, String colName) {
+//        int colNum = getColumnNumFromHeaderName(colName);
+//        String data=getCellData(sheet.getRow(rowNum).getCell(colNum));
+//        Loggers.log.info("read data {} from row {} and column {}", data,rowNum,colName);
+//        return data;
+//
+//    }
+
     private static String getCellByColumnNameAndRowNum(int rowNum, String colName) {
         int colNum = getColumnNumFromHeaderName(colName);
-        String data=getCellData(sheet.getRow(rowNum).getCell(colNum));
-        Loggers.log.info("read data {} from row {} and column {}", data,rowNum,colName);
-        return data;
 
+        // ✅ EDIT: Null-check for row
+        XSSFRow targetRow = sheet.getRow(rowNum);
+        if (targetRow == null) {
+            Loggers.log.error("Row {} not found in sheet {}", rowNum, sheet.getSheetName());
+            return "";
+        }
+
+        // ✅ EDIT: Null-check for cell
+        XSSFCell targetCell = targetRow.getCell(colNum);
+        if (targetCell == null) {
+            Loggers.log.error("Cell not found at row {}, column {}", rowNum, colNum);
+            return "";
+        }
+
+        String data = getCellData(targetCell);
+        Loggers.log.info("read data '{}' from row {} and column '{}'", data, rowNum, colName);
+        return data;
     }
 
     private static String getCellByColumnNumAndRowNum(int rowNum, int colNum) {
-        String data=getCellData(sheet.getRow(rowNum).getCell(colNum));
-        Loggers.log.info("read {} from row {} and column {}", data,rowNum,colNum);
+        // ✅ EDIT: Null-check for row
+        XSSFRow targetRow = sheet.getRow(rowNum);
+        if (targetRow == null) {
+            Loggers.log.error("Row {} not found in sheet {}", rowNum, sheet.getSheetName());
+            return "";
+        }
+
+        // ✅ EDIT: Null-check for cell
+        XSSFCell targetCell = targetRow.getCell(colNum);
+        if (targetCell == null) {
+            Loggers.log.error("Cell not found at row {}, column {}", rowNum, colNum);
+            return "";
+        }
+
+        String data = getCellData(targetCell);
+        Loggers.log.info("read '{}' from row {} and column {}", data, rowNum, colNum);
         return data;
     }
+
+//    private static String getCellByColumnNumAndRowNum(int rowNum, int colNum) {
+//        String data=getCellData(sheet.getRow(rowNum).getCell(colNum));
+//        Loggers.log.info("read {} from row {} and column {}", data,rowNum,colNum);
+//        return data;
+//    }
 
     private static int getColumnNumFromHeaderName(String columnName) {
         for (int i = 0; i < getNumberOfColumnsByHeaders(); i++) {
