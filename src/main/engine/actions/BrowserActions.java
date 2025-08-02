@@ -42,7 +42,7 @@ public class BrowserActions {
         if (windowNumber >= 0 && windowNumber < windows.size()) {
             driver.switchTo().window(windows.get(windowNumber));
         }
-        String log="Switch to windows number: {}"+ windowNumber;
+        String log="Switch to windows number: "+ windowNumber;
         Loggers.addInfoAndAllureStep(log);
     }
 
