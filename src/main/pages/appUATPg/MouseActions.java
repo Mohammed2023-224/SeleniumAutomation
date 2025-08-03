@@ -1,8 +1,8 @@
 package pages.appUATPg;
 
 import engine.actions.ElementActions;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.pagefactory.ByChained;
 import org.testng.Assert;
 
@@ -22,12 +22,13 @@ public class MouseActions {
     By assertion=new ByChained(dropSource,By.tagName("h3"));
 
     public void mouseActions(){
+        ElementActions.contextClickElement(driver,mouseArea);
+        Assert.assertTrue(ElementActions.getText(driver,mouseClickType).contains("Right-Click"));
         ElementActions.doubleClickElement(driver,mouseArea);
         Assert.assertTrue(ElementActions.getText(driver,mouseClickType).contains("Double-Click"));
         ElementActions.clickElement(driver,mouseArea);
         Assert.assertEquals(ElementActions.getText(driver,mouseClickType),"Click");
-        ElementActions.contextClickElement(driver,mouseArea);
-        Assert.assertTrue(ElementActions.getText(driver,mouseClickType).contains("Right-Click"));
+
     }
 
     public void hovering(){
