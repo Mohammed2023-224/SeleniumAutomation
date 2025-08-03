@@ -18,16 +18,17 @@ public class PopUpWindows {
 
     public void handlePopups(){
         ElementActions.clickElement(driver,firstWindow);
-        BrowserActions.switchToWindowByIndex(driver,1);
+        BrowserActions.switchToWindowByTitle(driver,"Frame2 (ID=frame2)");
         ElementActions.clickElement(driver,firstWindowAssertionButton);
         Assert.assertTrue(ElementActions.getText(driver,firstWindowAssertionButton).contains("Clicked"));
         driver.close();
-        BrowserActions.switchToWindowByIndex(driver,0);
+        BrowserActions.switchToWindowByTitle(driver,"Multiple Windows");
         ElementActions.clickElement(driver,secondWindow);
-        BrowserActions.switchToWindowByIndex(driver,1);
+        BrowserActions.switchToWindowByTitle(driver,"Frame4 (ID=frame4)");
         ElementActions.clickElement(driver,secondWindowAssertionButton);
         Assert.assertTrue(ElementActions.getText(driver,secondWindowAssertionButton).contains("Clicked"));
         driver.close();
-        BrowserActions.switchToWindowByIndex(driver,0);
+        BrowserActions.switchToWindowByTitle(driver,"Multiple Windows");
+
     }
 }
