@@ -7,6 +7,8 @@ import engine.utils.ReadExecutionFlow;
 import org.openqa.selenium.WebDriver;
 import org.testng.*;
 import org.testng.annotations.ITestAnnotation;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -31,12 +33,12 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
         SystemMethods.deleteDirectory("reports");
         SystemMethods.deleteDirectory("allure-results");
     }
-
+    @Parameters("browser")
     public void onTestStart(ITestResult result) {
         String timestamp = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_SSS"));
+                .format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
         String name = result.getMethod().getMethodName();
-        String fileName = name + "-" + timestamp;
+        String fileName = name +"-"+ timestamp;
         // Clean up for Windows (remove illegal characters)
         fileName = fileName.replaceAll("[^a-zA-Z0-9\\-_]", "_");
         // Set system property for this test

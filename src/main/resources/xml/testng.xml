@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Practice Suite" >
+<suite name="Practice Suite" parallel="tests" thread-count="2">
     <listeners>
-        <listener class-name="engine.listeners.TestNg"></listener>
+        <listener class-name="engine.listeners.TestNg"/>
     </listeners>
     <test name="edge tests">
         <parameter name="browser" value="edge"/>
         <classes>
+            <class name="AutomationPlaygroundTests"/>
             <class name="ExpandTests"/>
         </classes>
     </test> <!-- Test -->
     <test name="chrome tests ">
         <parameter name="browser" value="chrome"/>
         <classes>
+            <class name="AutomationPlaygroundTests"/>
             <class name="ExpandTests"/>
         </classes>
     </test> <!-- Test -->

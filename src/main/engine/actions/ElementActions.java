@@ -1,11 +1,9 @@
 package engine.actions;
 
 import engine.reporters.Loggers;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
 public class ElementActions {
@@ -25,6 +23,16 @@ public class ElementActions {
         Select select=new Select(driver.findElement(locator));
         select.selectByValue(text);
         Loggers.addInfoAndAllureStep(logs);
+    }
+    public static void selectDDLOptionText(WebDriver driver, By locator,String option){
+        Waits.explicitWaitShortTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locator));
+        Waits.explicitWaitShortTime(driver).until(x -> {
+            Select dynamicSelect = new Select(driver.findElement(locator));
+            return !dynamicSelect.getOptions().isEmpty();
+        });
+        Select select=new Select(driver.findElement(locator));
+        select.selectByVisibleText(option);
+        Loggers.log.info("Select option with text [{}] from locator [{}]",option,locator);
     }
 
     public static void dragAndDrop(WebDriver driver, By locator,By position) {
@@ -66,7 +74,9 @@ public class ElementActions {
     }
 
     public static void scrollToElement(WebDriver driver, By locator) {
+        System.out.println("brore wait");
         Waits.waitToExist(driver, locator);
+        System.out.println("brore scroll");
         new Helpers().seleniumActions(driver).scrollToElement(driver.findElement(locator)).perform();
         Loggers.addInfoAndAllureStep("scroll to element located at:" + locator);
 
@@ -100,6 +110,66 @@ public class ElementActions {
                 driver.findElement(shadowHost), cssSelectorInsideShadowRoot);
     }
 
+    public static void dragAndDropByMouse(WebDriver driver, By locatorSource, By locatorTarget){
+        Waits.explicitWaitLongTime(driver).until(ExpectedConditions.elementToBeClickable(locatorSource));
+        Waits.explicitWaitShortTime(driver).until(ExpectedConditions.elementToBeClickable(locatorTarget));
+        new Actions(driver).scrollToElement(driver.findElement(locatorSource))
+                .clickAndHold(driver.findElement(locatorSource))
+                .scrollToElement(driver.findElement(locatorTarget))
+                .moveToElement(driver.findElement(locatorTarget))
+                .release(driver.findElement(locatorTarget)).build().perform();
+        Loggers.log.info(" drag element from [{}] to [{}] by mouse",locatorSource,locatorTarget);
+    }
+
+    public static void dragAndDropByLocation(WebDriver driver, By locatorSource ,int horizontal, int vertical){
+        Waits.explicitWaitShortTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locatorSource));
+        new Actions(driver).dragAndDropBy(driver.findElement(locatorSource),horizontal,vertical).perform();
+        Loggers.log.info(" drag element from [{}]",locatorSource);
+    }
+    public static String getElementPropertyJSExecutor(WebDriver driver, By locator, String property){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        String value= (String) js.executeScript("return arguments[0][arguments[1]];", driver.findElement(locator), property);
+        Loggers.log.info("Get the property [{}] value : [{}]", property,value);
+        return value;
+    }
+
+    public static String getElementAttribute(WebDriver driver, By locator, String property){
+        String attributeValue=driver.findElement(locator).getDomAttribute(property);
+        Loggers.log.info("Get the attribute of [{}] value : [{}]", property,attributeValue);
+        return attributeValue;
+    }
+    public static String getElementAttribute( WebElement locator, String property){
+        String attributeValue=locator.getDomAttribute(property);
+        Loggers.log.info("Get the attribute of web element [{}] value : [{}]", property,attributeValue);
+        return attributeValue;
+    }
+    public static void switchToFrameByLocator(WebDriver driver, By locator){
+        driver.switchTo().frame(driver.findElement(locator));
+        Loggers.log.info("switch to frame by locator: [{}]",locator);
+    }
+    public static void contextClickElement(WebDriver driver, By locator){
+        Waits.explicitWaitShortTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locator));
+        Waits.explicitWaitShortTime(driver).until(ExpectedConditions.elementToBeClickable(locator));
+        new Actions(driver).contextClick(driver.findElement(locator)).perform();
+        Loggers.log.info(" right Clicking element: [{}]",locator);
+    }
+    public static void switchToParentFrame(WebDriver driver){
+        driver.switchTo().parentFrame();
+        Loggers.log.info("switch to parent frame");
+    }
+    public static String getCssValue(WebDriver driver, By locator,String property){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        String value= (String) js.executeScript("return window.getComputedStyle(arguments[0]).getPropertyValue(arguments[1]);", driver.findElement(locator), property);
+        Loggers.log.info("Get the css value [{}] value : [{}]", property,value);
+        return value;
+    }
+    public static String getPseudoElementContent(WebDriver driver, By locator,String pseudoElement ){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        String value= (String) js.executeScript("return window.getComputedStyle(arguments[0], arguments[1]).getPropertyValue('content');"
+                , driver.findElement(locator),pseudoElement);
+        Loggers.log.info("Get the pseudo element content : [{}] from element [{}] ", value,locator);
+        return value.replace("\"","");
+    }
     // Check element actions
     public static Boolean checkIfElementExists(WebDriver driver, By locator) {
         Boolean flag = false;

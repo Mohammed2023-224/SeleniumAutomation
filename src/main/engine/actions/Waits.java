@@ -19,7 +19,10 @@ public class Waits {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(time));
         Loggers.log.info("Add implicit wait by {} seconds", time);
     }
-
+    public static void waitForAlert(WebDriver driver,int time){
+        explicitWaitShortTime(driver).until(ExpectedConditions.alertIsPresent());
+        Loggers.log.info("Waited for alert to be present for [{}]",time);
+    }
     public static WebDriverWait explicitWaitLongTime(WebDriver driver){
         WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(Constants.longWaitTime));
         Loggers.log.info(" explicit wait for {} sec" ,Constants.longWaitTime);

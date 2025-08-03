@@ -25,9 +25,7 @@ public class HomePage {
     }
 
     public void clickOnSubLink(String linkName){
-        System.out.println("before scroll");
         ElementActions.scrollToElement(driver,link(linkName));
-        System.out.println("before click");
         ElementActions.clickUsingJavaScript(driver,link(linkName));
     }
 

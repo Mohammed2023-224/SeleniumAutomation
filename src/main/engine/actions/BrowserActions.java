@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BrowserActions {
     public static void navigateTo(WebDriver driver, String url) {
@@ -12,7 +13,6 @@ public class BrowserActions {
         driver.navigate().to(url);
         Loggers.addInfoAndAllureStep(logs);
     }
-
     public static void navigateBack(WebDriver driver) {
         String logs="Navigated to last page";
         driver.navigate().back();
@@ -51,5 +51,10 @@ public class BrowserActions {
         ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
             driver.switchTo().window(windows.get(0));
         Loggers.addInfoAndAllureStep(log);
+    }
+
+    public static void acceptAlert(WebDriver driver){
+        driver.switchTo().alert().accept();
+        Loggers.log.info("Accept url");
     }
 }

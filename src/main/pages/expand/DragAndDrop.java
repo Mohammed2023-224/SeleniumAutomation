@@ -1,6 +1,7 @@
 package pages.expand;
 
 import engine.actions.ElementActions;
+import engine.actions.Waits;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
@@ -26,6 +27,8 @@ public class DragAndDrop extends HomePage{
 
         public void circleDragging(){
         ElementActions.dragAndDrop(driver,greenCircle,target);
+            System.out.println("after drag");
+            Waits.waitToBeVisible(driver,targetAssertion("1"));
         Assert.assertTrue(driver.findElement(targetAssertion("1")).getDomAttribute("class").equalsIgnoreCase("green"));
         ElementActions.dragAndDrop(driver,redCircle,target);
             Assert.assertTrue(driver.findElement(targetAssertion("2")).getDomAttribute("class").equalsIgnoreCase("red"));
