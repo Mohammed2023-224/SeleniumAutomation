@@ -17,7 +17,7 @@ AdvancedUI advancedUI;
 
     @Test()
     public void waitActionsTest() {
-        int minWait=2; int maxWait=6;
+        int minWait=2; int maxWait=4;
         homePage.clickPage("Wait Conditions");
     waitActionsPage.typeMinWait(String.valueOf(minWait));
     waitActionsPage.typeMaxWait(String.valueOf(maxWait));

@@ -45,11 +45,14 @@ private final By minWaitTime= By.id("min_wait");
 
     @Step("Type min wait [{wait}]")
     public void typeMinWait(String wait){
+        ElementActions.clearField(driver,minWaitTime);
         ElementActions.typeInElement(driver,minWaitTime,wait);
     }
 
     @Step("Type max wait [{wait}]")
     public void typeMaxWait(String wait){
+        ElementActions.clearField(driver,maxWaitTime);
+
         ElementActions.typeInElement(driver,maxWaitTime,wait);
     }
 
@@ -73,7 +76,7 @@ private final By minWaitTime= By.id("min_wait");
         ElementActions.clickElement(driver,visibleTrigger);
         Waits.waitToBeVisible(driver, visibilityTarget);
         ElementActions.clickElement(driver, visibilityTarget);
-        Waits.waitToBeInvisible(driver,visibilityAssertionTarget);
+        Waits.waitToBeVisible(driver,visibilityAssertionTarget);
         Assert.assertTrue(ElementActions.getText(driver,visibilityAssertionTarget)
                 .contains("Can you see me?"));
     }
@@ -114,7 +117,8 @@ private final By minWaitTime= By.id("min_wait");
         ElementActions.clickElement(driver, frameTrigger);
         Waits.explicitWaitLongTime(driver).until
                 (ExpectedConditions.frameToBeAvailableAndSwitchToIt(frame));
-        ElementActions.clickElement(driver, frameButtonTarget);
+        System.out.println("test");
+        ElementActions.clickUsingJavaScript(driver, frameButtonTarget);
         Assert.assertTrue(ElementActions.getText(driver, frameButtonTarget)
                 .contains("Clicked"));
     }
