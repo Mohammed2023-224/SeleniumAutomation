@@ -1,6 +1,7 @@
 package pages.appUATPg;
 
 import engine.actions.ElementActions;
+import engine.actions.Waits;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -30,11 +31,16 @@ public void handleKeyboard(){
     ElementActions.typeInElement(driver,typingArea,"5");
     Assert.assertTrue(ElementActions.getText(driver,currentKey).contains("5"));
     Assert.assertTrue(ElementActions.getText(driver,keyCode).contains("Digit5"));
-    ElementActions.typeInElement(driver,typingArea," ");
+    ElementActions.clearField(driver,typingArea);
+    ElementActions.typeInElement(driver,typingArea,"  ");
+    Waits.waitElementToContainText(driver,keyCode,"Space");
     Assert.assertTrue(ElementActions.getText(driver,currentKey).contains(""));
     Assert.assertTrue(ElementActions.getText(driver,keyCode).contains("Space"));
-    ElementActions.pressKeyboardKeys(driver,typingArea, Keys.ARROW_UP);
+    ElementActions.clearField(driver,typingArea);
+    ElementActions.pressKeyboardKeys(driver,typingArea,Keys.ARROW_UP);
+    Waits.waitToBeVisible(driver,currentKey);
     Assert.assertTrue(ElementActions.getText(driver,currentKey).contains("ArrowUp"));
+    Waits.waitToBeVisible(driver,currentKey);
     Assert.assertTrue(ElementActions.getText(driver,keyCode).contains("ArrowUp"));
 }
 
