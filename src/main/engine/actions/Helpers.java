@@ -5,10 +5,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 
 public class Helpers {
-    public static Actions acts;
+    public  Actions acts;
     static JavascriptExecutor js;
 
-    public static JavascriptExecutor initiateJSExecutor(WebDriver driver) {
+    public  JavascriptExecutor initiateJSExecutor(WebDriver driver) {
         if(!(js ==null)){
             return js;
         }else {
@@ -16,7 +16,7 @@ public class Helpers {
         }
     }
 
-    public static Actions seleniumActions(WebDriver driver) {
+    public  Actions seleniumActions(WebDriver driver) {
         if (acts == null) {
             acts = new Actions(driver);
         }

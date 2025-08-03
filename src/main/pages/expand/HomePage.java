@@ -8,7 +8,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 public class HomePage {
-        public WebDriver driver;
+         WebDriver driver;
 
         private By link(String linkName){
             return By.xpath("//a[text()='"+linkName+"']");
@@ -25,8 +25,9 @@ public class HomePage {
     }
 
     public void clickOnSubLink(String linkName){
+        System.out.println("before scroll");
         ElementActions.scrollToElement(driver,link(linkName));
-
+        System.out.println("before click");
         ElementActions.clickUsingJavaScript(driver,link(linkName));
     }
 

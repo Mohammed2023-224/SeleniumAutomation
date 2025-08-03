@@ -3,12 +3,11 @@ import base.BaseTest;
 import engine.actions.BrowserActions;
 import engine.actions.DevToolsActions;
 import engine.utils.Faker;
+import org.testng.ITestContext;
+import org.testng.annotations.*;
 import pages.expand.MultipleTests;
 import engine.constants.Constants;
 import engine.utils.ExcelReader;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 import pages.expand.*;
 
 import java.util.LinkedHashMap;
@@ -112,8 +111,12 @@ public class ExpandTests extends BaseTest {
     @Test
     public void dragCircleTest() {
         homePage.navigateHomePage();
+        System.out.println("testes");
         homePage.clickOnSubLink("Drag and Drop Circles");
+        System.out.println("testes");
         dragAndDrop.circleDragging();
+        System.out.println("testes");
+
     }
 
     @Test
@@ -192,7 +195,7 @@ return new ExcelReader().
 
 
 @BeforeMethod
-    private void initClasses(){
+    protected void initClasses(){
     homePage=new HomePage(driver);
     webInputs=new WebInputs(driver);
     loginPage=new LoginPage(driver);

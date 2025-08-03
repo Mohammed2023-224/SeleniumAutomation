@@ -46,7 +46,7 @@
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
       <version>${testng.version}</version>
-      <scope>test</scope>
+      <scope>scope</scope>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
@@ -80,12 +80,7 @@
       <artifactId>poi-ooxml</artifactId>
       <version>${apache.poi.version}</version>
     </dependency>
-      <dependency>
-          <groupId>org.testng</groupId>
-          <artifactId>testng</artifactId>
-          <version>7.11.0</version>
-          <scope>compile</scope>
-      </dependency>
+
     <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>

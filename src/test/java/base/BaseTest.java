@@ -19,7 +19,7 @@ public class BaseTest {
 
     @Parameters("browser")
     @BeforeClass
-    public void initDriver(ITestContext con, @Optional String browser) {
+    protected void InitDriver(ITestContext con, @Optional String browser) {
         browser=browser==null||browser.isEmpty()? Constants.browser:browser;
 
         if(Constants.executionType.equalsIgnoreCase("local")) {
@@ -31,19 +31,19 @@ public class BaseTest {
     }
 
     @AfterClass
-    public void stopDriver() {
-        this.driver.quit();
+    protected void tearDriver() {
+        driver.quit();
     }
 
     @AfterMethod
-    public void attachLogs(){
+    protected void attachLogs(){
         AllureListener.saveTextLog(System.getProperty("testLogFileName")+".log",
                 Constants.reportsPath+System.getProperty("testLogFileName")+".log");
     }
 
     @AfterMethod
-    public void startNewTab(){
-        Helpers.initiateJSExecutor(driver).executeScript("window.open();");
+    protected void startNewTab(){
+        new Helpers().initiateJSExecutor(driver).executeScript("window.open();");
         driver.close();
         BrowserActions.switchToWindowByIndex(driver,0);
     }
