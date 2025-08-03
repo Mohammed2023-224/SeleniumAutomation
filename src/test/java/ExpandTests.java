@@ -111,11 +111,8 @@ public class ExpandTests extends BaseTest {
     @Test
     public void dragCircleTest() {
         homePage.navigateHomePage();
-        System.out.println("testes");
         homePage.clickOnSubLink("Drag and Drop Circles");
-        System.out.println("testes");
         dragAndDrop.circleDragging();
-        System.out.println("testes");
 
     }
 
@@ -194,7 +191,7 @@ return new ExcelReader().
     }
 
 
-@BeforeMethod
+@BeforeClass
     protected void initClasses(){
     homePage=new HomePage(driver);
     webInputs=new WebInputs(driver);
