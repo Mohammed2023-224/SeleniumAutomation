@@ -46,6 +46,30 @@ public class BrowserActions {
         Loggers.addInfoAndAllureStep(log);
     }
 
+    public static void switchToWindowByTitle(WebDriver driver, String title) {
+        ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
+        for(String t: windows){
+            driver.switchTo().window(t);
+            if(driver.getTitle().equalsIgnoreCase(title)){
+                break;
+            }
+        }
+        String log="Switch to windows titled: "+ title;
+        Loggers.addInfoAndAllureStep(log);
+    }
+
+    public static void switchToWindowByURL(WebDriver driver, String url) {
+        ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
+        for(String u: windows){
+            driver.switchTo().window(u);
+            if(driver.getCurrentUrl().equalsIgnoreCase(url)){
+                break;
+            }
+        }
+        String log="Switch to windows titled: "+ url;
+        Loggers.addInfoAndAllureStep(log);
+    }
+
     public static void switchToParentWindow(WebDriver driver) {
         String log="Switch to main window";
         ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
