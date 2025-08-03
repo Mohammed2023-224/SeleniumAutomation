@@ -59,7 +59,6 @@ public class ElementActions {
     }
 
     public static String getText(WebDriver driver, By locator) {
-        scrollToElement(driver,locator);
         Waits.waitToBeClickable(driver, locator);
         String text = driver.findElement(locator).getText();
         String logs = "get text "+text +" out of element located at " + locator;
@@ -68,44 +67,44 @@ public class ElementActions {
     }
 
     public static void clickUsingJavaScript(WebDriver driver, By locator) {
-        Waits.waitToBeClickable(driver, locator);
-        new Helpers().initiateJSExecutor(driver).executeScript("arguments[0].click();", driver.findElement(locator));
+        Helpers.initiateJSExecutor(driver).executeScript("arguments[0].click();", driver.findElement(locator));
         Loggers.addInfoAndAllureStep("click element located at: "+locator+" using java script ");
     }
 
     public static void scrollToElement(WebDriver driver, By locator) {
-        System.out.println("brore wait");
         Waits.waitToExist(driver, locator);
-        System.out.println("brore scroll");
-        new Helpers().seleniumActions(driver).scrollToElement(driver.findElement(locator)).perform();
+         Helpers.seleniumActions(driver).scrollToElement(driver.findElement(locator)).perform();
         Loggers.addInfoAndAllureStep("scroll to element located at:" + locator);
 
     }
 
     public static void doubleClickElement(WebDriver driver, By locator) {
         Waits.waitToExist(driver, locator);
-        new Helpers().seleniumActions(driver).doubleClick(driver.findElement(locator)).perform();
+        Helpers.seleniumActions(driver).doubleClick(driver.findElement(locator)).perform();
         Loggers.addInfoAndAllureStep("double click element located at:  "+ locator);
 
     }
 
     public static void hoverOverElement(WebDriver driver, By locator) {
         Waits.waitToExist(driver, locator);
-        new Helpers().seleniumActions(driver).moveToElement(driver.findElement(locator)).perform();
+        Helpers.seleniumActions(driver).moveToElement(driver.findElement(locator)).perform();
         Loggers.addInfoAndAllureStep("hover over element located at: "+ locator);
 
     }
 
     public static void pressKeyboardKeys(WebDriver driver, By locator, Keys key) {
         Waits.waitToExist(driver, locator);
-        new Helpers().seleniumActions(driver).sendKeys(key);
+        driver.findElement(locator).sendKeys(key);
         Loggers.addInfoAndAllureStep("press keyboard key: "+ key+" in element located at "+ locator);
-
+    }
+    public static void pressKeyboardKeys(WebDriver driver, Keys key) {
+        Helpers.seleniumActions(driver).sendKeys(key).perform();
+        Loggers.addInfoAndAllureStep("press keyboard key: "+ key);
     }
 
     public static WebElement getShadowElement(WebDriver driver, By shadowHost, String cssSelectorInsideShadowRoot) {
         Loggers.log.info("get shadow element with cssSelector {} and host {}", cssSelectorInsideShadowRoot, shadowHost);
-        return (WebElement) new Helpers().initiateJSExecutor(driver).executeScript(
+        return (WebElement) Helpers.initiateJSExecutor(driver).executeScript(
                 "return arguments[0].shadowRoot.querySelector(arguments[1])",
                 driver.findElement(shadowHost), cssSelectorInsideShadowRoot);
     }
