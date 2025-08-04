@@ -22,13 +22,13 @@ public class Chrome {
 
     // initiate chrome driver
     public WebDriver initiateDriver() {
-        Loggers.log.info("Start chrome driver");
+        Loggers.getInstance().log.info("Start chrome driver");
         return new ChromeDriver(getDriverOptions());
     }
 
 
     public WebDriver initiateRemoteDriver(String proxyURl) {
-        Loggers.log.info("Start chrome on remote driver");
+        Loggers.getInstance().log.info("Start chrome on remote driver");
         try {
             return new RemoteWebDriver(new URL(proxyURl), getDriverOptions());
         } catch (MalformedURLException e) {

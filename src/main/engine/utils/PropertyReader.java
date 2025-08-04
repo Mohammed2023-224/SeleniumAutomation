@@ -25,7 +25,7 @@ public class PropertyReader {
                 fr = new FileReader(f);
                 prop.load(fr);
             } catch (FileNotFoundException e) {
-                Loggers.log.error("Can't find file {}", f);
+                Loggers.getInstance().log.error("Can't find file {}", f);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

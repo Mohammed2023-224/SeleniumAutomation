@@ -22,25 +22,25 @@ public class SystemMethods {
         File directory = new File(path);
         try {
             FileUtils.deleteDirectory(directory);
-            Loggers.log.info("Deleted the directory {}", path);
+            Loggers.getInstance().log.info("Deleted the directory {}", path);
         } catch (Exception e) {
-            Loggers.log.info("Couldn't delete directory {}", path);
+            Loggers.getInstance().log.info("Couldn't delete directory {}", path);
         }
     }
 
     public static void deleteFile(String path) {
         File file = new File(path);
         if (!file.exists()) {
-            Loggers.log.warn("File does not exist: {}", path);
+            Loggers.getInstance().log.warn("File does not exist: {}", path);
             return;
         }
         try {
             FileOutputStream fis = new FileOutputStream(path);
             fis.close();
             FileUtils.forceDelete(file);
-            Loggers.log.info("Deleted the file: {}", path);
+            Loggers.getInstance().log.info("Deleted the file: {}", path);
         } catch (Exception e) {
-            Loggers.log.error("Couldn't delete file: {}. Error: {}", path, e.getMessage());
+            Loggers.getInstance().log.error("Couldn't delete file: {}. Error: {}", path, e.getMessage());
         }
     }
 
@@ -52,18 +52,18 @@ public class SystemMethods {
                 ProcessBuilder processBuilder = new ProcessBuilder(file.getAbsolutePath());
                 Process process = processBuilder.start();
                 process.waitFor();
-                Loggers.log.info("File executed: {}", path);
+                Loggers.getInstance().log.info("File executed: {}", path);
             } catch (IOException | InterruptedException e) {
-                Loggers.log.info("File isn't executed: {}", path);
+                Loggers.getInstance().log.info("File isn't executed: {}", path);
             }
         } else {
-            Loggers.log.info("File {} isn't executable type", path);
+            Loggers.getInstance().log.info("File {} isn't executable type", path);
         }
     }
 
     public static boolean checkExistenceOfFile(String path) {
         File file = new File(path);
-        Loggers.log.info("Check if file exists {}", file.exists());
+        Loggers.getInstance().log.info("Check if file exists {}", file.exists());
         return file.exists();
     }
 
@@ -73,9 +73,9 @@ public class SystemMethods {
         try {
             lines = String.valueOf(Files.readAllLines(pth));
         } catch (IOException ex) {
-            Loggers.log.error("Error reading file: {}", ex.getMessage());
+            Loggers.getInstance().log.error("Error reading file: {}", ex.getMessage());
         }
-        Loggers.log.info("Get file contents: {}", lines);
+        Loggers.getInstance().log.info("Get file contents: {}", lines);
         return lines;
     }
 

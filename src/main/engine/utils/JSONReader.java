@@ -22,7 +22,7 @@ public class JSONReader {
         try {
            object=objectMapper.readValue(new File(file)
                     , className);
-            Loggers.log.info("Deserialize file located at {}",file);
+            Loggers.getInstance().log.info("Deserialize file located at {}",file);
         } catch (
                 IOException e) {
             throw new RuntimeException(e);
@@ -32,7 +32,7 @@ public class JSONReader {
 
     public static <T> T getJsonObject(Object data, Class<T> className) {
         if (data instanceof Map) {
-            Loggers.log.info("Convert Json array into object");
+            Loggers.getInstance().log.info("Convert Json array into object");
             return objectMapper.convertValue(data, className);
         }
         return null;
@@ -40,7 +40,7 @@ public class JSONReader {
 
     public static <T> List<T> getJsonArray(Object data, Class<T> className) {
         if (data instanceof List) {
-            Loggers.log.info("Convert Json array into list");
+            Loggers.getInstance().log.info("Convert Json array into list");
             return ((List<?>) data).stream()
                     .map(obj -> objectMapper.convertValue(obj, className))
                     .collect(Collectors.toList());

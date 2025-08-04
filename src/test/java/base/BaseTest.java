@@ -8,6 +8,7 @@ import engine.driver.SetupDriver;
 import engine.listeners.AllureListener;
 import engine.listeners.TestNg;
 import engine.reporters.Loggers;
+import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.*;
@@ -40,17 +41,20 @@ public class BaseTest {
 
     @AfterMethod
     protected void attachLogs() {
-        AllureListener.saveTextLog(System.getProperty("testLogFileName") + ".log",
-                Constants.reportsPath + System.getProperty("testLogFileName") + ".log");
+//        AllureListener.saveTextLog(System.getProperty("testLogFileName") + ".log",
+//                Constants.reportsPath + System.getProperty("testLogFileName") + ".log");
+        String logFileName = ThreadContext.get("logFileName");
+        if (logFileName != null) {
+            AllureListener.saveTextLog(logFileName + ".log",
+                    Constants.reportsPath + logFileName + ".log");
+        }
     }
 //TODO needs enhancement
     @AfterMethod
     protected void startNewTab() {
         Helpers.initiateJSExecutor(driver).executeScript("window.open();");
         List<String> handles = new ArrayList<>(driver.getWindowHandles());
-
         String validTab = null;
-
         for (String handle : handles) {
             try {
                 driver.switchTo().window(handle);
@@ -62,13 +66,13 @@ public class BaseTest {
                 if ( isBlank) {
                     validTab = handle;
                 } else if (isDownloadPopup) {
-                    Loggers.log.info("download tab cant be closed");
+                    Loggers.getInstance().log.info("download tab cant be closed");
                 } else {
                     driver.close();
                 }
 
             } catch (Exception e) {
-                Loggers.log.info("Error handling tab: " + e.getMessage());
+                Loggers.getInstance().log.info("Error handling tab: " + e.getMessage());
             }
         }
         driver.switchTo().window(validTab);

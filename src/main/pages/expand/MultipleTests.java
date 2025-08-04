@@ -88,7 +88,7 @@ public class MultipleTests extends HomePage {
                         return lastHeight != newHeight.get();
                     });
                 } catch (Exception e) {
-                    Loggers.log.info("Reached the end of the page");
+                    Loggers.getInstance().log.info("Reached the end of the page");
                 }
                 // Break if no new content is loaded
                 if (newHeight.get() == lastHeight) {
@@ -115,7 +115,7 @@ public class MultipleTests extends HomePage {
                         return lastHeight != newHeight.get();
                     });
                 } catch (Exception e) {
-                    Loggers.log.warn("Reached the end of the page");
+                    Loggers.getInstance().log.warn("Reached the end of the page");
                 }
                 // Break if no new content is loaded
                 if (newHeight.get() == lastHeight) {
