@@ -37,7 +37,7 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
     }
     public void onTestStart(ITestResult result) {
         String browserName = getBrowserName((WebDriver) result.getTestContext().getAttribute("driver")); // You'll define this method
-        System.setProperty("testLogFileName", browserName + "_" + result.getMethod().getMethodName());
+//        System.setProperty("testLogFileName", browserName + "_" + result.getMethod().getMethodName());
         String timestamp = LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy_MM_dd-HH_mm_ss"));
         String name = result.getMethod().getMethodName();

@@ -8,7 +8,6 @@ import engine.driver.SetupDriver;
 import engine.listeners.AllureListener;
 import engine.listeners.TestNg;
 import engine.reporters.Loggers;
-import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.*;
@@ -41,13 +40,8 @@ public class BaseTest {
 
     @AfterMethod
     protected void attachLogs() {
-//        AllureListener.saveTextLog(System.getProperty("testLogFileName") + ".log",
-//                Constants.reportsPath + System.getProperty("testLogFileName") + ".log");
-        String logFileName = ThreadContext.get("logFileName");
-        if (logFileName != null) {
-            AllureListener.saveTextLog(logFileName + ".log",
-                    Constants.reportsPath + logFileName + ".log");
-        }
+        AllureListener.saveTextLog(System.getProperty("testLogFileName") + ".log",
+                Constants.reportsPath + System.getProperty("testLogFileName") + ".log");
     }
 //TODO needs enhancement
     @AfterMethod
