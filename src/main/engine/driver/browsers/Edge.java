@@ -24,11 +24,11 @@ public class Edge {
 
     // initiate edge driver
     public WebDriver initiateDriver() {
-        Loggers.getInstance().log.info("Start edge driver");
+     Loggers.log.info("Start edge driver");
         return new EdgeDriver(getDriverOptions());
     }
     public WebDriver initiateRemoteDriver(String proxyURl) {
-        Loggers.getInstance().log.info("Start edge on remote driver");
+     Loggers.log.info("Start edge on remote driver");
         try {
             return new RemoteWebDriver(new URL(proxyURl), getDriverOptions());
         } catch (MalformedURLException e) {

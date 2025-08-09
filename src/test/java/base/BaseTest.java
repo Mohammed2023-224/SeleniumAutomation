@@ -60,13 +60,13 @@ public class BaseTest {
                 if ( isBlank) {
                     validTab = handle;
                 } else if (isDownloadPopup) {
-                    Loggers.getInstance().log.info("download tab cant be closed");
+                 Loggers.log.info("download tab cant be closed");
                 } else {
                     driver.close();
                 }
 
             } catch (Exception e) {
-                Loggers.getInstance().log.info("Error handling tab: " + e.getMessage());
+             Loggers.log.info("Error handling tab: " + e.getMessage());
             }
         }
         driver.switchTo().window(validTab);

@@ -16,15 +16,15 @@ public class DriverOptions {
     public  ArrayList<String> defineDriverOptions(){
         if(Constants.headlessMode.equalsIgnoreCase("true")){
             opts.add("--headless");
-            Loggers.getInstance().log.info("Activate Headless mode");
+         Loggers.log.info("Activate Headless mode");
         }
         if(Constants.maximizedMode.equalsIgnoreCase("true")){
             opts.add("start-maximized");
-            Loggers.getInstance().log.info("Start maximized");
+         Loggers.log.info("Start maximized");
         }
         if(Constants.popupBlocker.equalsIgnoreCase("true")){
             opts.add("--disable-popup-blocking");
-            Loggers.getInstance().log.info("disable popup blocking");
+         Loggers.log.info("disable popup blocking");
         }
         opts.add("--disable-save-password-bubble");
         opts.add("--disable-infobars");

@@ -17,16 +17,16 @@ public class AllureListener {
     public static void saveTextLog(String name, String filePath) {
         try (FileInputStream fis = new FileInputStream(filePath)) {
             Allure.addAttachment(name,fis);
-            Loggers.getInstance().log.info("attached to report {}", filePath);
+         Loggers.log.info("attached to report {}", filePath);
         } catch (FileNotFoundException e) {
-            Loggers.getInstance().log.warn("File can't be attached to report: {}", filePath);
+         Loggers.log.warn("File can't be attached to report: {}", filePath);
         } catch (IOException e) {
-            Loggers.getInstance().log.warn("Error closing file stream for AllureListener: {}", filePath);
+         Loggers.log.warn("Error closing file stream for AllureListener: {}", filePath);
 }
     }
 
     public static void  saveScreensShot(WebDriver driver, String text){
-        Loggers.getInstance().log.info("Taking screenshot and saving to allure report");
+     Loggers.log.info("Taking screenshot and saving to allure report");
         io.qameta.allure.Allure.addAttachment(text, new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
     }
 

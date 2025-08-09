@@ -11,11 +11,11 @@
 
     <Appenders>
         <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout pattern="${consolePattern}"></PatternLayout>
+            <PatternLayout pattern="${consolePattern}"/>
         </Console>
 
         <RollingFile name="allTestsLogs" fileName="${filePath}MainLogger.log" filePattern="${filePath}MainLogger.log">
-            <PatternLayout>${filePattern}</PatternLayout>
+            <PatternLayout pattern="${filePattern}"/>
                 <SizeBasedTriggeringPolicy>5MB</SizeBasedTriggeringPolicy>
             <DefaultRolloverStrategy>
                 <Delete basePath="${filePath}" maxDepth="2">
