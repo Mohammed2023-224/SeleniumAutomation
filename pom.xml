@@ -141,9 +141,14 @@
       <version>v1-rev110-1.25.0</version>
     </dependency>
     <dependency>
+      <groupId>com.google.http-client</groupId>
+      <artifactId>google-http-client-jackson2</artifactId>
+      <version>1.40.1</version>
+    </dependency>
+    <dependency>
       <groupId>com.google.api-client</groupId>
       <artifactId>google-api-client</artifactId>
-      <version>1.31.1</version>
+      <version>1.31.5</version>
     </dependency>
     <dependency>
       <groupId>com.google.oauth-client</groupId>
@@ -151,11 +156,11 @@
       <version>1.31.1</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.eclipse.angus/angus-mail -->
-    <dependency>
-      <groupId>org.eclipse.angus</groupId>
-      <artifactId>angus-mail</artifactId>
-      <version>2.0.3</version>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.eclipse.angus</groupId>-->
+<!--      <artifactId>angus-mail</artifactId>-->
+<!--      <version>2.0.3</version>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
@@ -167,17 +172,20 @@
       <artifactId>awaitility</artifactId>
       <version>${awaitility.version}</version>
     </dependency>
-    <!-- jakarta.mail -->
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>javax.mail-api</artifactId>
+      <version>1.6.2</version>
+    </dependency>
     <dependency>
       <groupId>com.sun.mail</groupId>
-      <artifactId>jakarta.mail</artifactId>
-      <version>${jakarta.version}</version>
+      <artifactId>javax.mail</artifactId>
+      <version>1.6.2</version>
     </dependency>
-    <!-- jakarta.activation -->
     <dependency>
-      <groupId>com.sun.activation</groupId>
-      <artifactId>jakarta.activation</artifactId>
-      <version>${jakarta.version}</version>
+      <groupId>javax.activation</groupId>
+      <artifactId>activation</artifactId>
+      <version>1.1.1</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/com.github.javafaker/javafaker -->
     <dependency>

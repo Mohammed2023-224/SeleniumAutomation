@@ -22,12 +22,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import jakarta.activation.CommandMap;
-import jakarta.activation.MailcapCommandMap;
-import jakarta.mail.MessagingException;
-import jakarta.mail.Session;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
+import javax.activation.CommandMap;
+import javax.activation.MailcapCommandMap;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.io.*;
 import java.security.GeneralSecurityException;
 import java.util.*;
@@ -278,10 +278,10 @@ public class GmailHandler {
         MimeMessage email = new MimeMessage(session);
         try {
             email.setFrom(new InternetAddress(from));
-            email.addRecipient(jakarta.mail.Message.RecipientType.TO, new InternetAddress(to));
+            email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
             email.setSubject(subject);
             email.setText(bodyText);
-            email.setFileName(attachment);
+//            email.setFileName(attachment);
         }catch (MessagingException e) {
             throw new RuntimeException("Failed to create mail"+e);
         }
