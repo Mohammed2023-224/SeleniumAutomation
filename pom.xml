@@ -17,8 +17,8 @@
     <cucumberJava.version>7.24.0</cucumberJava.version>
     <cucumberTestng.version>7.23.0</cucumberTestng.version>
     <aspectJ.version>1.9.7</aspectJ.version>
-    <allure.version>2.29.0</allure.version>
-    <allureMavenPlugin.version>2.11.2</allureMavenPlugin.version>
+    <allure.version>2.29.1</allure.version>
+<!--    <allureMavenPlugin.version>2.11.2</allureMavenPlugin.version>-->
     <mavenSureFirePlugin.version>3.2.5</mavenSureFirePlugin.version>
     <faker.version>1.0.2</faker.version>
     <jakarta.version>2.0.1</jakarta.version>
@@ -28,11 +28,11 @@
 
   <build>
   <plugins>
-  <plugin>
-    <groupId>io.qameta.allure</groupId>
-    <artifactId>allure-maven</artifactId>
-    <version>${allureMavenPlugin.version}</version>
-  </plugin>
+<!--  <plugin>-->
+<!--    <groupId>io.qameta.allure</groupId>-->
+<!--    <artifactId>allure-maven</artifactId>-->
+<!--    <version>${allureMavenPlugin.version}</version>-->
+<!--  </plugin>-->
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-surefire-plugin</artifactId>

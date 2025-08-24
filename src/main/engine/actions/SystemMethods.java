@@ -7,9 +7,7 @@ import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -46,12 +44,20 @@ public class SystemMethods {
 
     public static void runFile(String path) {
         File file = new File(path);
-        file.setExecutable(true);
         if (file.canExecute()) {
             try {
-                ProcessBuilder processBuilder = new ProcessBuilder(file.getAbsolutePath());
+                ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c", file.getAbsolutePath());
+                processBuilder.redirectErrorStream(true);
                 Process process = processBuilder.start();
-                process.waitFor();
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(process.getInputStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        Loggers.log.info(line);
+                    }
+                }
+
+                int exitCode = process.waitFor();
              Loggers.log.info("File executed: {}", path);
             } catch (IOException | InterruptedException e) {
              Loggers.log.info("File isn't executed: {}", path);

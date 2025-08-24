@@ -11,6 +11,8 @@ public class Constants {
      public static int longWaitTime=Integer.parseInt(PropertyReader.readProp("longWaitTime"));
      public static String openAllure=PropertyReader.readProp("openAllureAfterTest");
      public static  String allureFile=PropertyReader.readProp("allure_bat_file_path");
+     public static  String generateAllureReport=PropertyReader.readProp("allure_generation_path");
+     public static String compressReport=PropertyReader.readProp("allure_compression_path");
      public static  String reportsPath=PropertyReader.readProp("report_logs_path");
      public static  String testDataPath=PropertyReader.readProp("test_data_path");
      public static String url=PropertyReader.readProp("mainurl");
@@ -23,5 +25,6 @@ public class Constants {
      public static String gmailToken=PropertyReader.readProp("gmail_token_path");
      public static String gmailCredential=PropertyReader.readProp("gmail_credentials");
      public static String testPlayGroundMainPage=PropertyReader.readProp("testAutomationPlayGroundLink");
+     public static String generateAndSendReport=PropertyReader.readProp("generateAndSendReport");
 
 }

@@ -3,6 +3,7 @@ package engine.listeners;
 import engine.actions.SystemMethods;
 import engine.constants.Constants;
 import engine.reporters.Loggers;
+import engine.utils.GmailHandler;
 import engine.utils.ReadExecutionFlow;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
@@ -105,6 +106,11 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
         if (Constants.openAllure.equalsIgnoreCase("true")) {
          Loggers.log.info("start allure report pls don't stop the execution");
             SystemMethods.runFile(Constants.allureFile);
+        }
+        if(Constants.generateAndSendReport.equalsIgnoreCase("true")){
+            SystemMethods.runFile(Constants.generateAllureReport);
+            GmailHandler gmailHandler=new GmailHandler("test");
+            gmailHandler.sendEmail("shadowmoon57199@gmail.com","etst","test","allure-report/index.html");
         }
     }
 

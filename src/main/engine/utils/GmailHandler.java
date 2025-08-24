@@ -25,9 +25,12 @@ import org.jsoup.select.Elements;
 import javax.activation.CommandMap;
 import javax.activation.MailcapCommandMap;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.io.*;
 import java.security.GeneralSecurityException;
 import java.util.*;
@@ -218,15 +221,14 @@ public class GmailHandler {
         return links;
     }
 
-    public void sendEmail(String to, String subject, String bodyText,String attcment) {
+    public void sendEmail(String to, String subject, String bodyText,String attachment) {
         try {
             String fromEmail = service.users().getProfile(currentUser).execute().getEmailAddress();
-            MimeMessage mimeMessage = createEmail(to, fromEmail, subject, bodyText,attcment);
+            MimeMessage mimeMessage = createEmail(to, fromEmail, subject, bodyText,attachment);
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             mimeMessage.writeTo(buffer);
             byte[] rawMessageBytes = buffer.toByteArray();
             String encodedEmail = Base64.getUrlEncoder().encodeToString(rawMessageBytes);
-
             Message message = new Message();
             message.setRaw(encodedEmail);
 
@@ -270,25 +272,33 @@ public class GmailHandler {
     }
 
 
-    private MimeMessage createEmail(String to, String from, String subject, String bodyText,String attachment)  {
+    private MimeMessage createEmail(String to, String from, String subject, String bodyText,String attachment) {
         final MailcapCommandMap mc = GmailHandlerUtils.getMailcapCommandMap();
         CommandMap.setDefaultCommandMap(mc);
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
         MimeMessage email = new MimeMessage(session);
+        MimeBodyPart textPart = new MimeBodyPart();
+        // Body part for attachment
+        MimeBodyPart attachmentPart = new MimeBodyPart();
+        // Combine parts
+        Multipart multipart = new MimeMultipart();
         try {
             email.setFrom(new InternetAddress(from));
             email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
             email.setSubject(subject);
-            email.setText(bodyText);
-//            email.setFileName(attachment);
-        }catch (MessagingException e) {
-            throw new RuntimeException("Failed to create mail"+e);
+            textPart.setText(bodyText);
+            attachmentPart.attachFile(attachment);
+            multipart.addBodyPart(textPart);
+            multipart.addBodyPart(attachmentPart);
+            email.setContent(multipart);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Failed to create mail" + e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return email;
     }
-
-
     private Message getMessage(String messageID){
         try {
             return service.users().messages().get(currentUser, messageID).execute();
