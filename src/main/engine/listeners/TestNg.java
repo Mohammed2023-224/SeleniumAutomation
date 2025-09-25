@@ -22,14 +22,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class TestNg extends AllureListener implements ITestListener, IRetryAnalyzer,IHookable , IExecutionListener ,IAnnotationTransformer {
-//    int numberOfFailedTests = 0;
-//    int numberOfSuccessTest = 0;
-//    int numberOfSkippedTests = 0;
+
     int counter = 0;
-    int retryLimit = 0;
-//    ArrayList<String> successfulTests = new ArrayList<>();
-//    ArrayList<String> failedTests = new ArrayList<>();
-//    ArrayList<String> skippedTests = new ArrayList<>();
+    int retryLimit = Constants.retryCount;
     Set<String> runningTests = new ReadExecutionFlow().readExecutionControl();
 
     private static final List<String> successfulTests = Collections.synchronizedList(new ArrayList<>());

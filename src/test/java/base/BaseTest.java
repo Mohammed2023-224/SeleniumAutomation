@@ -43,7 +43,6 @@ public class BaseTest {
         AllureListener.saveTextLog(System.getProperty("testLogFileName") + ".log",
                 Constants.reportsPath + System.getProperty("testLogFileName") + ".log");
     }
-//TODO needs enhancement
     @AfterMethod
     protected void startNewTab() {
         Helpers.initiateJSExecutor(driver).executeScript("window.open();");
@@ -60,7 +59,7 @@ public class BaseTest {
                 if ( isBlank) {
                     validTab = handle;
                 } else if (isEdgeDownloader) {
-                 Loggers.log.info("download tab cant be closed");
+                 Loggers.log.info("edge download tab can't be closed");
                 } else {
                     driver.close();
                 }

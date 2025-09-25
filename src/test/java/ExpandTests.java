@@ -165,7 +165,7 @@ public class ExpandTests extends BaseTest {
 
     @Test
     public void alerts() {
-        homePage.navigateHomePage();
+         homePage.navigateHomePage();
         homePage.clickOnSubLink("JavaScript Dialogs");
         multipleTests.alerts();
     }
