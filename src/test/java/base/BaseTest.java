@@ -55,11 +55,11 @@ public class BaseTest {
                 String title = driver.getTitle();
                 String url = driver.getCurrentUrl();
 
-                boolean isDownloadPopup = title.toLowerCase().contains("download") || url.toLowerCase().contains("download");
+                boolean isEdgeDownloader = title.toLowerCase().contains("edge://");
                 boolean isBlank = url.equals("about:blank");
                 if ( isBlank) {
                     validTab = handle;
-                } else if (isDownloadPopup) {
+                } else if (isEdgeDownloader) {
                  Loggers.log.info("download tab cant be closed");
                 } else {
                     driver.close();

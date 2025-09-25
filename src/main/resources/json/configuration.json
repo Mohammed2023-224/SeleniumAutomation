@@ -1,6 +1,6 @@
 {
   "Configs": {
-    "Headless": "false",
+    "Headless": "true",
     "Maximized": "true",
     "Popups": "true"
     }

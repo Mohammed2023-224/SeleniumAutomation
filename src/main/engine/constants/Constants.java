@@ -1,6 +1,9 @@
 package engine.constants;
 
+import engine.utils.JSONReader;
 import engine.utils.PropertyReader;
+
+import java.util.Map;
 
 public class Constants {
      static {

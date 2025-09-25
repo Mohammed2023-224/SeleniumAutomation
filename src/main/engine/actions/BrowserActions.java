@@ -5,7 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class BrowserActions {
     public static void navigateTo(WebDriver driver, String url) {

@@ -32,7 +32,7 @@ public class ElementActions {
         });
         Select select=new Select(driver.findElement(locator));
         select.selectByVisibleText(option);
-     Loggers.log.info("Select option with text [{}] from locator [{}]",option,locator);
+     Loggers.log.info("Select option with text {} from locator {}",option,locator);
     }
 
     public static void dragAndDrop(WebDriver driver, By locator,By position) {
@@ -117,40 +117,40 @@ public class ElementActions {
                 .scrollToElement(driver.findElement(locatorTarget))
                 .moveToElement(driver.findElement(locatorTarget))
                 .release(driver.findElement(locatorTarget)).build().perform();
-     Loggers.log.info(" drag element from [{}] to [{}] by mouse",locatorSource,locatorTarget);
+     Loggers.log.info(" drag element from {} to {} by mouse",locatorSource,locatorTarget);
     }
 
     public static void dragAndDropByLocation(WebDriver driver, By locatorSource ,int horizontal, int vertical){
         Waits.explicitWaitShortTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locatorSource));
         new Actions(driver).dragAndDropBy(driver.findElement(locatorSource),horizontal,vertical).perform();
-     Loggers.log.info(" drag element from [{}]",locatorSource);
+     Loggers.log.info(" drag element from {}",locatorSource);
     }
     public static String getElementPropertyJSExecutor(WebDriver driver, By locator, String property){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         String value= (String) js.executeScript("return arguments[0][arguments[1]];", driver.findElement(locator), property);
-     Loggers.log.info("Get the property [{}] value : [{}]", property,value);
+     Loggers.log.info("Get the property {} value : {}", property,value);
         return value;
     }
 
     public static String getElementAttribute(WebDriver driver, By locator, String property){
         String attributeValue=driver.findElement(locator).getDomAttribute(property);
-     Loggers.log.info("Get the attribute of [{}] value : [{}]", property,attributeValue);
+     Loggers.log.info("Get the attribute of {} value : {}", property,attributeValue);
         return attributeValue;
     }
     public static String getElementAttribute( WebElement locator, String property){
         String attributeValue=locator.getDomAttribute(property);
-     Loggers.log.info("Get the attribute of web element [{}] value : [{}]", property,attributeValue);
+     Loggers.log.info("Get the attribute of web element {} value : {}", property,attributeValue);
         return attributeValue;
     }
     public static void switchToFrameByLocator(WebDriver driver, By locator){
         driver.switchTo().frame(driver.findElement(locator));
-     Loggers.log.info("switch to frame by locator: [{}]",locator);
+     Loggers.log.info("switch to frame by locator: {}",locator);
     }
     public static void contextClickElement(WebDriver driver, By locator){
         Waits.explicitWaitShortTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locator));
         Waits.explicitWaitShortTime(driver).until(ExpectedConditions.elementToBeClickable(locator));
         new Actions(driver).contextClick(driver.findElement(locator)).perform();
-     Loggers.log.info(" right Clicking element: [{}]",locator);
+     Loggers.log.info(" right Clicking element: {}",locator);
     }
     public static void switchToParentFrame(WebDriver driver){
         driver.switchTo().parentFrame();
@@ -159,14 +159,14 @@ public class ElementActions {
     public static String getCssValue(WebDriver driver, By locator,String property){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         String value= (String) js.executeScript("return window.getComputedStyle(arguments[0]).getPropertyValue(arguments[1]);", driver.findElement(locator), property);
-     Loggers.log.info("Get the css value [{}] value : [{}]", property,value);
+     Loggers.log.info("Get the css value {} value : {}", property,value);
         return value;
     }
     public static String getPseudoElementContent(WebDriver driver, By locator,String pseudoElement ){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         String value= (String) js.executeScript("return window.getComputedStyle(arguments[0], arguments[1]).getPropertyValue('content');"
                 , driver.findElement(locator),pseudoElement);
-     Loggers.log.info("Get the pseudo element content : [{}] from element [{}] ", value,locator);
+     Loggers.log.info("Get the pseudo element content : {} from element {} ", value,locator);
         return value.replace("\"","");
     }
     // Check element actions
