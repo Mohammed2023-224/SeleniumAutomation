@@ -30,6 +30,12 @@ public class Constants {
      public static String gmailCredential=PropertyReader.readProp("gmail_credentials");
      public static String testPlayGroundMainPage=PropertyReader.readProp("testAutomationPlayGroundLink");
      public static String generateAndSendReport=PropertyReader.readProp("generateAndSendReport");
-     public static String downloadsPath=PropertyReader.readProp("downloaded_files_Path");
+     public static String emailRecipient=PropertyReader.readProp("Email_to");
+     public static String emailCopied=PropertyReader.readProp("Email_CC");
+     public static String emailSubject=PropertyReader.readProp("Email_subject");
+     public static String emailAttachmentPath=PropertyReader.readProp("Email_attachment_path");
+     public static String emailBody=PropertyReader.readProp("Email_body");
+    public static String downloadsPath= PropertyReader.readProp("downloaded_files_Path");
+
 
 }

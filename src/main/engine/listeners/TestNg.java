@@ -101,7 +101,8 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
         if(Constants.generateAndSendReport.equalsIgnoreCase("true")){
             SystemMethods.runFile(Constants.generateAllureReport);
             GmailHandler gmailHandler=new GmailHandler("test");
-            gmailHandler.sendEmail("shadowmoon57199@gmail.com","","etst","test","allure-report/index.html");
+            gmailHandler.sendEmail(Constants.emailRecipient,Constants.emailCopied,Constants.emailSubject
+                    ,Constants.emailBody,Constants.emailAttachmentPath);
         }
         if (Constants.openAllure.equalsIgnoreCase("true")) {
          Loggers.log.info("start allure report pls don't stop the execution");
