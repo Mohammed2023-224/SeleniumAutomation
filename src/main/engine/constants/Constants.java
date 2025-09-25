@@ -30,5 +30,6 @@ public class Constants {
      public static String gmailCredential=PropertyReader.readProp("gmail_credentials");
      public static String testPlayGroundMainPage=PropertyReader.readProp("testAutomationPlayGroundLink");
      public static String generateAndSendReport=PropertyReader.readProp("generateAndSendReport");
+     public static String downloadsPath=PropertyReader.readProp("downloaded_files_Path");
 
 }

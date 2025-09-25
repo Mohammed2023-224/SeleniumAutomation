@@ -48,7 +48,7 @@ public class DriverOptions {
     }
 
     public  Map<String,Object> definePreferences(){
-        prefs.put("download.default_directory", "C:\\Users\\USER\\Downloads"); // Make sure this path exists!
+        prefs.put("download.default_directory", Constants.downloadsPath); // Make sure this path exists!
         prefs.put("profile.default_content_settings.popups", 0);
         prefs.put("download.prompt_for_download", false);
         prefs.put("download.directory_upgrade", true);

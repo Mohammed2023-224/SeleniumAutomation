@@ -98,15 +98,16 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
      Loggers.log.info("Name of failed tests: {}", Arrays.deepToString(failedTests.toArray()));
      Loggers.log.info("Number of skipped tests: {}", numberOfSkippedTests.get());
      Loggers.log.info("Name of skipped tests: {}", Arrays.deepToString(skippedTests.toArray()));
+        if(Constants.generateAndSendReport.equalsIgnoreCase("true")){
+            SystemMethods.runFile(Constants.generateAllureReport);
+            GmailHandler gmailHandler=new GmailHandler("test");
+            gmailHandler.sendEmail("shadowmoon57199@gmail.com","","etst","test","allure-report/index.html");
+        }
         if (Constants.openAllure.equalsIgnoreCase("true")) {
          Loggers.log.info("start allure report pls don't stop the execution");
             SystemMethods.runFile(Constants.allureFile);
         }
-        if(Constants.generateAndSendReport.equalsIgnoreCase("true")){
-            SystemMethods.runFile(Constants.generateAllureReport);
-            GmailHandler gmailHandler=new GmailHandler("test");
-            gmailHandler.sendEmail("shadowmoon57199@gmail.com","etst","test","allure-report/index.html");
-        }
+
     }
 
     public void onExecutionStart() {
