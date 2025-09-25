@@ -221,10 +221,10 @@ public class GmailHandler {
         return links;
     }
 
-    public void sendEmail(String to, String subject, String bodyText,String attachment) {
+    public void sendEmail(String to,String cc, String subject, String bodyText,String attachment) {
         try {
             String fromEmail = service.users().getProfile(currentUser).execute().getEmailAddress();
-            MimeMessage mimeMessage = createEmail(to, fromEmail, subject, bodyText,attachment);
+            MimeMessage mimeMessage = createEmail(to,cc, fromEmail, subject, bodyText,attachment);
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             mimeMessage.writeTo(buffer);
             byte[] rawMessageBytes = buffer.toByteArray();
@@ -272,7 +272,7 @@ public class GmailHandler {
     }
 
 
-    private MimeMessage createEmail(String to, String from, String subject, String bodyText,String attachment) {
+    private MimeMessage createEmail(String to,String cc, String from, String subject, String bodyText,String attachment) {
         final MailcapCommandMap mc = GmailHandlerUtils.getMailcapCommandMap();
         CommandMap.setDefaultCommandMap(mc);
         Properties props = new Properties();
@@ -286,6 +286,7 @@ public class GmailHandler {
         try {
             email.setFrom(new InternetAddress(from));
             email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
+            email.addRecipients(javax.mail.Message.RecipientType.CC,cc);
             email.setSubject(subject);
             textPart.setText(bodyText);
             attachmentPart.attachFile(attachment);
