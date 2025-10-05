@@ -52,6 +52,7 @@ public class ExpandTests extends BaseTest {
         loginPage.typePassword("tes");
         loginPage.clickLogin();
         loginPage.assertFailLogin();
+        //Should be divided into 2 test cases
         String newUserName= Faker.userName;
         String pass= Faker.pass;
         loginPage.clickRegisterLink();
