@@ -194,4 +194,27 @@
       <version>${faker.version}</version>
     </dependency>
   </dependencies>
+
+
+
+
+    <!-- Used to change structure -->
+<!--
+    <build>
+        <sourceDirectory>folder1</sourceDirectory>
+        <testSourceDirectory>folder2</testSourceDirectory>
+
+        <resources>
+            <resource>
+                <directory>folder1-resources</directory>
+            </resource>
+        </resources>
+
+        <testResources>
+            <testResource>
+                <directory>folder2-resources</directory>
+            </testResource>
+        </testResources>
+    </build>
+    -->
 </project>
