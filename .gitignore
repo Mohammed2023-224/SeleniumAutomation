@@ -33,6 +33,7 @@ main/resources/META-INF.maven/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+allure-results/
 
 ### VS Code ###
 .vscode/
