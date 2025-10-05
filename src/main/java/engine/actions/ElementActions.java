@@ -123,23 +123,23 @@ public class ElementActions {
     public static void dragAndDropByLocation(WebDriver driver, By locatorSource ,int horizontal, int vertical){
         Waits.explicitWaitShortTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locatorSource));
         new Actions(driver).dragAndDropBy(driver.findElement(locatorSource),horizontal,vertical).perform();
-     Loggers.log.info(" drag element from {}",locatorSource);
+     Loggers.log.info(" drag element from {} to {} , {} ",locatorSource,horizontal,vertical);
     }
     public static String getElementPropertyJSExecutor(WebDriver driver, By locator, String property){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         String value= (String) js.executeScript("return arguments[0][arguments[1]];", driver.findElement(locator), property);
-     Loggers.log.info("Get the property {} value : {}", property,value);
+     Loggers.log.info("Get the property of {} with value : {}", property,value);
         return value;
     }
 
     public static String getElementAttribute(WebDriver driver, By locator, String property){
         String attributeValue=driver.findElement(locator).getDomAttribute(property);
-     Loggers.log.info("Get the attribute of {} value : {}", property,attributeValue);
+     Loggers.log.info("Get the attribute of {} with value : {}", property,attributeValue);
         return attributeValue;
     }
     public static String getElementAttribute( WebElement locator, String property){
         String attributeValue=locator.getDomAttribute(property);
-     Loggers.log.info("Get the attribute of web element {} value : {}", property,attributeValue);
+     Loggers.log.info("Get the attribute of web element {} with value : {}", property,attributeValue);
         return attributeValue;
     }
     public static void switchToFrameByLocator(WebDriver driver, By locator){
@@ -175,7 +175,7 @@ public class ElementActions {
         try {
             if (driver.findElements(locator).size() > 0) {
                 flag = true;
-             Loggers.log.info("Element exists with locator: {}", locator);
+             Loggers.log.info("Element located at {} exists", locator);
             }
         } catch (Exception e) {
          Loggers.log.info("element located at {} doesn't exist", locator);
@@ -188,10 +188,10 @@ public class ElementActions {
         try {
             if (driver.findElement(locator).isDisplayed()) {
                 flag = true;
-             Loggers.log.info("Element is visible with locator: {}", locator);
+             Loggers.log.info("Element located at: {} is visible", locator);
             }
         } catch (Exception e) {
-         Loggers.log.info("element located at {} isn't visible", locator);
+         Loggers.log.info("Element located at {} isn't visible", locator);
         }
         return flag;
     }
@@ -202,10 +202,10 @@ public class ElementActions {
         try {
             if (driver.findElement(locator).isEnabled() && driver.findElement(locator).isDisplayed()) {
                 flag = true;
-             Loggers.log.info("Element is clickable with locator: {}", locator);
+             Loggers.log.info("Element located at: {} is clickable", locator);
             }
         } catch (Exception e) {
-         Loggers.log.info("element clickable at {} is visible", locator);
+         Loggers.log.info("Element located at {} isn't clickable", locator);
         }
         return flag;
     }
@@ -215,10 +215,10 @@ public class ElementActions {
         try {
             if (driver.findElement(locator).isSelected()) {
                 flag = true;
-             Loggers.log.info("Element is selected with locator: {}", locator);
+             Loggers.log.info("Element located at {} is selected", locator);
             }
         } catch (Exception e) {
-         Loggers.log.info("element isn't selected at {} is visible", locator);
+         Loggers.log.info("Element located at {} isn't selected", locator);
         }
         return flag;
     }
