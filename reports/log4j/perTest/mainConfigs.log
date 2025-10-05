@@ -1,0 +1,76 @@
+19:35:40.907 [main] INFO   - Deleted the directory reports
+19:35:40.920 [main] INFO   - Deleted the directory allure-results
+19:35:41.584 [main] INFO   - Workbook loaded from path: src/test/resources/ExecutionFlow.xlsx
+19:35:41.585 [main] INFO   - found  sheet control
+19:35:41.592 [main] INFO   - Getting the header column number: 4
+19:35:41.593 [main] INFO   - read 'false' from row 1 and column 4
+19:35:41.593 [main] INFO   - read 'false' from row 2 and column 4
+19:35:41.594 [main] INFO   - read 'false' from row 3 and column 4
+19:35:41.595 [main] INFO   - read 'false' from row 4 and column 4
+19:35:41.596 [main] INFO   - read 'false' from row 5 and column 4
+19:35:41.596 [main] INFO   - read 'false' from row 6 and column 4
+19:35:41.597 [main] INFO   - read 'false' from row 7 and column 4
+19:35:41.598 [main] INFO   - read 'false' from row 8 and column 4
+19:35:41.598 [main] INFO   - read 'false' from row 9 and column 4
+19:35:41.599 [main] INFO   - read 'false' from row 10 and column 4
+19:35:41.600 [main] INFO   - read 'false' from row 11 and column 4
+19:35:41.600 [main] INFO   - read 'false' from row 12 and column 4
+19:35:41.601 [main] INFO   - read 'false' from row 13 and column 4
+19:35:41.601 [main] INFO   - read 'false' from row 14 and column 4
+19:35:41.602 [main] INFO   - read 'false' from row 15 and column 4
+19:35:41.602 [main] INFO   - read 'false' from row 16 and column 4
+19:35:41.602 [main] INFO   - read 'false' from row 17 and column 4
+19:35:41.603 [main] INFO   - read 'false' from row 18 and column 4
+19:35:41.603 [main] INFO   - read 'false' from row 19 and column 4
+19:35:41.604 [main] INFO   - read 'false' from row 20 and column 4
+19:35:41.604 [main] INFO   - read 'false' from row 21 and column 4
+19:35:41.605 [main] INFO   - read 'false' from row 22 and column 4
+19:35:41.605 [main] INFO   - read 'false' from row 23 and column 4
+19:35:41.605 [main] INFO   - read 'false' from row 24 and column 4
+19:35:41.606 [main] INFO   - read 'true' from row 25 and column 4
+19:35:41.606 [main] INFO   - Increase rows meeting condition by 1
+19:35:41.606 [main] INFO   - total number of rows meeting condition is 1
+19:35:41.607 [main] INFO   - read 'false' from row 1 and column 4
+19:35:41.607 [main] INFO   - read 'false' from row 2 and column 4
+19:35:41.607 [main] INFO   - read 'false' from row 3 and column 4
+19:35:41.608 [main] INFO   - read 'false' from row 4 and column 4
+19:35:41.608 [main] INFO   - read 'false' from row 5 and column 4
+19:35:41.608 [main] INFO   - read 'false' from row 6 and column 4
+19:35:41.609 [main] INFO   - read 'false' from row 7 and column 4
+19:35:41.609 [main] INFO   - read 'false' from row 8 and column 4
+19:35:41.609 [main] INFO   - read 'false' from row 9 and column 4
+19:35:41.610 [main] INFO   - read 'false' from row 10 and column 4
+19:35:41.610 [main] INFO   - read 'false' from row 11 and column 4
+19:35:41.610 [main] INFO   - read 'false' from row 12 and column 4
+19:35:41.611 [main] INFO   - read 'false' from row 13 and column 4
+19:35:41.611 [main] INFO   - read 'false' from row 14 and column 4
+19:35:41.611 [main] INFO   - read 'false' from row 15 and column 4
+19:35:41.612 [main] INFO   - read 'false' from row 16 and column 4
+19:35:41.612 [main] INFO   - read 'false' from row 17 and column 4
+19:35:41.613 [main] INFO   - read 'false' from row 18 and column 4
+19:35:41.613 [main] INFO   - read 'false' from row 19 and column 4
+19:35:41.613 [main] INFO   - read 'false' from row 20 and column 4
+19:35:41.613 [main] INFO   - read 'false' from row 21 and column 4
+19:35:41.614 [main] INFO   - read 'false' from row 22 and column 4
+19:35:41.614 [main] INFO   - read 'false' from row 23 and column 4
+19:35:41.614 [main] INFO   - read 'false' from row 24 and column 4
+19:35:41.615 [main] INFO   - read 'true' from row 25 and column 4
+19:35:41.615 [main] INFO   - read 'ID' from row 0 and column 0
+19:35:41.623 [main] INFO   - read '25.0' from row 25 and column 0
+19:35:41.624 [main] INFO   - Read data Key: ID --> Value: 25.0
+19:35:41.624 [main] INFO   - read 'scenario' from row 0 and column 1
+19:35:41.625 [main] INFO   - read 'firsttest' from row 25 and column 1
+19:35:41.625 [main] INFO   - Read data Key: scenario --> Value: firsttest
+19:35:41.626 [main] INFO   - read 'class name' from row 0 and column 2
+19:35:41.626 [main] INFO   - read 'TestLogger' from row 25 and column 2
+19:35:41.626 [main] INFO   - Read data Key: class name --> Value: TestLogger
+19:35:41.627 [main] INFO   - read 'Method name' from row 0 and column 3
+19:35:41.627 [main] INFO   - read 'firsttest' from row 25 and column 3
+19:35:41.627 [main] INFO   - Read data Key: Method name --> Value: firsttest
+19:35:41.627 [main] INFO   - read 'Run' from row 0 and column 4
+19:35:41.628 [main] INFO   - read 'true' from row 25 and column 4
+19:35:41.628 [main] INFO   - Read data Key: Run --> Value: true
+19:35:41.676 [main] INFO   - Start chrome driver
+19:35:41.701 [main] INFO   - Activate Headless mode
+19:35:41.702 [main] INFO   - Start maximized
+19:35:41.702 [main] INFO   - disable popup blocking

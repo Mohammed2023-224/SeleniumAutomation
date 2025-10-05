@@ -1,0 +1,77 @@
+19:35:40.907 INFO  [main] actions.SystemMethods (SystemMethods.java:23) - Deleted the directory reports
+19:35:40.920 INFO  [main] actions.SystemMethods (SystemMethods.java:23) - Deleted the directory allure-results
+19:35:41.584 INFO  [main] utils.ExcelReader (ExcelReader.java:68) - Workbook loaded from path: src/test/resources/ExecutionFlow.xlsx
+19:35:41.585 INFO  [main] utils.ExcelReader (ExcelReader.java:77) - found  sheet control
+19:35:41.592 INFO  [main] utils.ExcelReader (ExcelReader.java:142) - Getting the header column number: 4
+19:35:41.593 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 1 and column 4
+19:35:41.593 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 2 and column 4
+19:35:41.594 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 3 and column 4
+19:35:41.595 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 4 and column 4
+19:35:41.596 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 5 and column 4
+19:35:41.596 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 6 and column 4
+19:35:41.597 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 7 and column 4
+19:35:41.598 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 8 and column 4
+19:35:41.598 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 9 and column 4
+19:35:41.599 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 10 and column 4
+19:35:41.600 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 11 and column 4
+19:35:41.600 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 12 and column 4
+19:35:41.601 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 13 and column 4
+19:35:41.601 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 14 and column 4
+19:35:41.602 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 15 and column 4
+19:35:41.602 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 16 and column 4
+19:35:41.602 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 17 and column 4
+19:35:41.603 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 18 and column 4
+19:35:41.603 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 19 and column 4
+19:35:41.604 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 20 and column 4
+19:35:41.604 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 21 and column 4
+19:35:41.605 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 22 and column 4
+19:35:41.605 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 23 and column 4
+19:35:41.605 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 24 and column 4
+19:35:41.606 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'true' from row 25 and column 4
+19:35:41.606 INFO  [main] utils.ExcelReader (ExcelReader.java:42) - Increase rows meeting condition by 1
+19:35:41.606 INFO  [main] utils.ExcelReader (ExcelReader.java:48) - total number of rows meeting condition is 1
+19:35:41.607 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 1 and column 4
+19:35:41.607 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 2 and column 4
+19:35:41.607 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 3 and column 4
+19:35:41.608 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 4 and column 4
+19:35:41.608 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 5 and column 4
+19:35:41.608 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 6 and column 4
+19:35:41.609 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 7 and column 4
+19:35:41.609 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 8 and column 4
+19:35:41.609 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 9 and column 4
+19:35:41.610 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 10 and column 4
+19:35:41.610 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 11 and column 4
+19:35:41.610 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 12 and column 4
+19:35:41.611 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 13 and column 4
+19:35:41.611 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 14 and column 4
+19:35:41.611 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 15 and column 4
+19:35:41.612 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 16 and column 4
+19:35:41.612 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 17 and column 4
+19:35:41.613 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 18 and column 4
+19:35:41.613 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 19 and column 4
+19:35:41.613 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 20 and column 4
+19:35:41.613 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 21 and column 4
+19:35:41.614 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 22 and column 4
+19:35:41.614 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 23 and column 4
+19:35:41.614 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'false' from row 24 and column 4
+19:35:41.615 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'true' from row 25 and column 4
+19:35:41.615 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'ID' from row 0 and column 0
+19:35:41.623 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read '25.0' from row 25 and column 0
+19:35:41.624 INFO  [main] utils.ExcelReader (ExcelReader.java:56) - Read data Key: ID --> Value: 25.0
+19:35:41.624 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'scenario' from row 0 and column 1
+19:35:41.625 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'firsttest' from row 25 and column 1
+19:35:41.625 INFO  [main] utils.ExcelReader (ExcelReader.java:56) - Read data Key: scenario --> Value: firsttest
+19:35:41.626 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'class name' from row 0 and column 2
+19:35:41.626 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'TestLogger' from row 25 and column 2
+19:35:41.626 INFO  [main] utils.ExcelReader (ExcelReader.java:56) - Read data Key: class name --> Value: TestLogger
+19:35:41.627 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'Method name' from row 0 and column 3
+19:35:41.627 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'firsttest' from row 25 and column 3
+19:35:41.627 INFO  [main] utils.ExcelReader (ExcelReader.java:56) - Read data Key: Method name --> Value: firsttest
+19:35:41.627 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'Run' from row 0 and column 4
+19:35:41.628 INFO  [main] utils.ExcelReader (ExcelReader.java:129) - read 'true' from row 25 and column 4
+19:35:41.628 INFO  [main] utils.ExcelReader (ExcelReader.java:56) - Read data Key: Run --> Value: true
+19:35:41.676 INFO  [main] browsers.Chrome (Chrome.java:25) - Start chrome driver
+19:35:41.701 INFO  [main] driver.DriverOptions (DriverOptions.java:20) - Activate Headless mode
+19:35:41.702 INFO  [main] driver.DriverOptions (DriverOptions.java:24) - Start maximized
+19:35:41.702 INFO  [main] driver.DriverOptions (DriverOptions.java:28) - disable popup blocking
+19:35:44.761 INFO  [main] listeners.TestNg (TestNg.java:49) - Start test: alert
