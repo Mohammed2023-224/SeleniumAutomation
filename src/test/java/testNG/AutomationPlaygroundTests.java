@@ -1,4 +1,6 @@
-import base.BaseTest;
+package testNG;
+
+import testNG.base.BaseTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

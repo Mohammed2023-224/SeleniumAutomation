@@ -35,7 +35,7 @@ build/
 !**/src/test/**/build/
 allure-results/
 reports/
-allure-report
+allure-report/
 ### VS Code ###
 .vscode/
 

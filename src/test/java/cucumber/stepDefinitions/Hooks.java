@@ -1,4 +1,4 @@
-package stepDefinitions;
+package cucumber.stepDefinitions;
 
 import engine.constants.Constants;
 import engine.driver.SetupDriver;
