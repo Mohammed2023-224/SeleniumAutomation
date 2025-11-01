@@ -9,25 +9,14 @@ import pages.expand.*;
 public class LoginSteps {
 
     HomePage homePage;
-//    WebInputs webInputs=new WebInputs(driver);
     LoginPage loginPage;
-//    OneTimePass oneTimePass=new OneTimePass(driver);
-//    DynamicTable dynamicTable=new DynamicTable(driver);
-//    DragAndDrop dragAndDrop=new DragAndDrop(driver);
-//    FileDownloader fileDownloader=new FileDownloader(driver);
-//    MultipleTests multipleTests=new MultipleTests(driver);;
+
 
     @Before
     public void InitDriver() {
          homePage=new HomePage(DriverFactory.getDriver());
-//        WebInputs webInputs=new WebInputs(DriverFactory.getDriver());
         loginPage=new LoginPage(DriverFactory.getDriver());
-//        LoginPage loginPage=new LoginPage(DriverFactory.getDriver());
-//        OneTimePass oneTimePass=new OneTimePass(DriverFactory.getDriver());
-//        DynamicTable dynamicTable=new DynamicTable(DriverFactory.getDriver());
-//        DragAndDrop dragAndDrop=new DragAndDrop(DriverFactory.getDriver());
-//        FileDownloader fileDownloader=new FileDownloader(DriverFactory.getDriver());
-//        MultipleTests multipleTests=new MultipleTests(DriverFactory.getDriver());;
+
 
     }
 
@@ -55,6 +44,5 @@ public class LoginSteps {
         else {
             loginPage.assertSuccessLogin();
         }
-
     }
 }
