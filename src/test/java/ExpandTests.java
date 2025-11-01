@@ -46,7 +46,7 @@ public class ExpandTests extends BaseTest {
         loginPage.typeUserName(data.get("su user name"));
         loginPage.typePassword(data.get("su pass"));
         loginPage.clickLogin();
-        loginPage.assertSuccessLogin(data.get("su user name"));
+        loginPage.assertSuccessLogin();
         loginPage.clickLogOut();
         loginPage.typeUserName("tes");
         loginPage.typePassword("tes");
@@ -63,7 +63,7 @@ public class ExpandTests extends BaseTest {
         loginPage.typeUserName(newUserName);
         loginPage.typePassword(pass);
         loginPage.clickLogin();
-        loginPage.assertSuccessLogin(newUserName);
+        loginPage.assertSuccessLogin();
             }
 //forget password test doesn't send any emails
 

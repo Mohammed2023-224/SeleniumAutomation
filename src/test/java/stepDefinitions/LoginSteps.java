@@ -9,9 +9,8 @@ import pages.expand.*;
 public class LoginSteps {
 
     HomePage homePage;
-//    HomePage homePage=new HomePage(driver);
 //    WebInputs webInputs=new WebInputs(driver);
-//    LoginPage loginPage=new LoginPage(driver);
+    LoginPage loginPage;
 //    OneTimePass oneTimePass=new OneTimePass(driver);
 //    DynamicTable dynamicTable=new DynamicTable(driver);
 //    DragAndDrop dragAndDrop=new DragAndDrop(driver);
@@ -21,33 +20,41 @@ public class LoginSteps {
     @Before
     public void InitDriver() {
          homePage=new HomePage(DriverFactory.getDriver());
-        WebInputs webInputs=new WebInputs(DriverFactory.getDriver());
-        LoginPage loginPage=new LoginPage(DriverFactory.getDriver());
-        OneTimePass oneTimePass=new OneTimePass(DriverFactory.getDriver());
-        DynamicTable dynamicTable=new DynamicTable(DriverFactory.getDriver());
-        DragAndDrop dragAndDrop=new DragAndDrop(DriverFactory.getDriver());
-        FileDownloader fileDownloader=new FileDownloader(DriverFactory.getDriver());
-        MultipleTests multipleTests=new MultipleTests(DriverFactory.getDriver());;
+//        WebInputs webInputs=new WebInputs(DriverFactory.getDriver());
+        loginPage=new LoginPage(DriverFactory.getDriver());
+//        LoginPage loginPage=new LoginPage(DriverFactory.getDriver());
+//        OneTimePass oneTimePass=new OneTimePass(DriverFactory.getDriver());
+//        DynamicTable dynamicTable=new DynamicTable(DriverFactory.getDriver());
+//        DragAndDrop dragAndDrop=new DragAndDrop(DriverFactory.getDriver());
+//        FileDownloader fileDownloader=new FileDownloader(DriverFactory.getDriver());
+//        MultipleTests multipleTests=new MultipleTests(DriverFactory.getDriver());;
 
     }
 
     @Given("user is on login page")
     public void user_is_on_login_page() {
         homePage.navigateHomePage();
+        homePage.clickOnSubLink("Test Login Page");
     }
     @When("user enters {string} and {string}")
     public void user_enters_user1_and_pass1(String username, String password) {
-        System.out.println("data");
+        loginPage.typeUserName(username);
+        loginPage.typePassword(password);
 
     }
-    @When("user clicks on loging page")
-    public void user_clicks_on_loging_page() {
-        System.out.println("login");
+    @When("user clicks on loging button")
+    public void user_clicks_on_loging_button() {
+        loginPage.clickLogin();
 
     }
-    @Then("Error appears that credentials is wrong")
-    public void error_appears_that_credentials_is_wrong() {
-        System.out.println("invalid");
+    @Then("Assert {string} login")
+    public void assertLogin(String assertion) {
+        if( assertion.equalsIgnoreCase("fail")){
+            loginPage.assertFailLogin();
+        }
+        else {
+            loginPage.assertSuccessLogin();
+        }
 
     }
 }
