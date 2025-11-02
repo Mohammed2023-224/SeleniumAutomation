@@ -16,7 +16,7 @@ public class DriverOptions {
 
     public  ArrayList<String> defineDriverOptions(){
         if(Constants.headlessMode.equalsIgnoreCase("true")){
-            opts.add("--headless");
+            opts.add("--headless=new");
          Loggers.log.info("Activate Headless mode");
         }
         if(Constants.maximizedMode.equalsIgnoreCase("true")){

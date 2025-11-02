@@ -23,6 +23,10 @@
     <faker.version>1.0.2</faker.version>
     <jakarta.version>2.0.1</jakarta.version>
     <awaitility.version>4.2.0</awaitility.version>
+      <testng.xml>src/main/resources/xml/testng.xml</testng.xml>
+      <javax.version>1.6.2</javax.version>
+      <javaxActivation.version>1.1.1</javaxActivation.version>
+      <googleAPIClient.version>1.31.5</googleAPIClient.version>
 
   </properties>
 
@@ -39,7 +43,7 @@
       <version>${mavenSureFirePlugin.version}</version>
       <configuration>
         <suiteXmlFiles>
-          <suiteXmlFile>src/main/resources/xml/testng.xml</suiteXmlFile>
+            <suiteXmlFile>${testng.xml}</suiteXmlFile>
         </suiteXmlFiles>
       </configuration>
     </plugin>
@@ -121,7 +125,7 @@
       <dependency>
           <groupId>io.qameta.allure</groupId>
           <artifactId>allure-cucumber7-jvm</artifactId>
-          <version>2.29.1</version>
+          <version>${allure.version}</version>
       </dependency>
     <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
     <dependency>
@@ -154,7 +158,7 @@
     <dependency>
       <groupId>com.google.api-client</groupId>
       <artifactId>google-api-client</artifactId>
-      <version>1.31.5</version>
+      <version>${googleAPIClient.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.oauth-client</groupId>
@@ -181,17 +185,17 @@
     <dependency>
       <groupId>javax.mail</groupId>
       <artifactId>javax.mail-api</artifactId>
-      <version>1.6.2</version>
+      <version>${javax.version}</version>
     </dependency>
     <dependency>
       <groupId>com.sun.mail</groupId>
       <artifactId>javax.mail</artifactId>
-      <version>1.6.2</version>
+      <version>${javax.version}</version>
     </dependency>
     <dependency>
       <groupId>javax.activation</groupId>
       <artifactId>activation</artifactId>
-      <version>1.1.1</version>
+      <version>${javaxActivation.version}</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/com.github.javafaker/javafaker -->
     <dependency>

@@ -5,6 +5,7 @@ import engine.reporters.Loggers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -26,6 +27,7 @@ public class MultipleTests extends HomePage {
         Waits.waitToBeVisible(driver,selection);
         ElementActions.clickElement(driver,selection);
         ElementActions.clickElement(driver,submitButton);
+        Waits.waitElementToContainText(driver,assertion,country);
         Assert.assertTrue(ElementActions.getText(driver,assertion).contains(country));
     }
 

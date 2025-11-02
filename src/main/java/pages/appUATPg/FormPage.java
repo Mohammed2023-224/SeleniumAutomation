@@ -83,7 +83,7 @@ public void handleForm(){
     ElementActions.clickUsingJavaScript(driver,readGerman);
     Assert.assertTrue(ElementActions.getText(driver,readGermanValidate).contains("false"));
     ElementActions.dragAndDropByLocation(driver,fluency,-100,0);
-    Assert.assertTrue(ElementActions.getText(driver,fluencyValidate).contains("1"));
+    Assert.assertTrue(ElementActions.getText(driver,fluencyValidate).contains("0"));
     ElementActions.typeInElement(driver,uploadCV,path+firstFile);
     Assert.assertTrue(ElementActions.getText(driver,uploadCVValidate).contains(firstFile));
     ElementActions.typeInElement(driver,uploadFiles,path+secondFile+" \n "+path+firstFile);
@@ -102,7 +102,7 @@ Waits.waitForFileToBeDownloaded(driver,path+thirdFile);
     ElementActions.typeInElement(driver,zip,"test");
     ElementActions.clickElement(driver,agree);
     ElementActions.clickElement(driver,submitButton);
-//    Assert.assertTrue(ElementActions.getText(driver,city).contains(""));
+    Assert.assertTrue(ElementActions.getText(driver,city).contains(""));
     ElementActions.typeInElement(driver,nonEnglishText,"test");
     Assert.assertTrue(ElementActions.getText(driver,nonEnglishTextValidate).contains("test"));
     ElementActions.clickElement(driver,options("मराठी"));

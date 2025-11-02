@@ -12,6 +12,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.*;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,15 +47,17 @@ public class BaseTest {
     @AfterMethod
     protected void startNewTab() {
         Helpers.initiateJSExecutor(driver).executeScript("window.open();");
+        String currentHandle = driver.getWindowHandle();
         List<String> handles = new ArrayList<>(driver.getWindowHandles());
+        System.out.println(handles);
         String validTab = null;
         for (String handle : handles) {
             try {
                 driver.switchTo().window(handle);
-                String title = driver.getTitle();
+//                String title = driver.getTitle();
                 String url = driver.getCurrentUrl();
 
-                boolean isEdgeDownloader = title.toLowerCase().contains("edge://");
+                boolean isEdgeDownloader = url.toLowerCase().contains("edge://");
                 boolean isBlank = url.equals("about:blank");
                 if ( isBlank) {
                     validTab = handle;
