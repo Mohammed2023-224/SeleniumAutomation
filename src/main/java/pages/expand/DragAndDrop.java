@@ -28,26 +28,29 @@ public class DragAndDrop extends HomePage{
     }
 
         public void circleDragging() {
-            for (int i = 0; i < 3; i++) {
+        int c=1;
+            for (int i = 1; i < 3; i++) {
                 try {
                     ElementActions.dragAndDrop(driver, greenCircle, target);
-                    Waits.waitToBeVisible(driver, targetAssertion("1"));
+                    Waits.waitToBeVisible(driver, targetAssertion(String.valueOf(i)));
                     Waits.fluentWaitShortTime(driver).until(ExpectedConditions.domAttributeToBe(
-                            driver.findElement(targetAssertion("1")), "class", "green"));
+                            driver.findElement(targetAssertion(String.valueOf(i))), "class", "green"));
+                    c=i;
+                    break;
                 } catch (Exception e) {
                         Loggers.log.warn("Drag-and-drop failed, retrying...");
                 }
             }
-                System.out.println(ElementActions.getElementAttribute(driver, targetAssertion("1"), "class"));
-                Assert.assertTrue(driver.findElement(targetAssertion("1")).getDomAttribute("class").equalsIgnoreCase("green"));
+                System.out.println(ElementActions.getElementAttribute(driver, targetAssertion(String.valueOf(c)), "class"));
+                Assert.assertTrue(driver.findElement(targetAssertion(String.valueOf(c))).getDomAttribute("class").equalsIgnoreCase("green"));
                 ElementActions.dragAndDrop(driver, redCircle, target);
                 Waits.fluentWaitShortTime(driver).until(ExpectedConditions.domAttributeToBe(
-                        driver.findElement(targetAssertion("2")), "class", "red"));
-                Assert.assertTrue(driver.findElement(targetAssertion("2")).getDomAttribute("class").equalsIgnoreCase("red"));
+                        driver.findElement(targetAssertion(String.valueOf(c+1))), "class", "red"));
+                Assert.assertTrue(driver.findElement(targetAssertion(String.valueOf(c+1))).getDomAttribute("class").equalsIgnoreCase("red"));
                 ElementActions.dragAndDrop(driver, blueCircle, target);
                 Waits.fluentWaitShortTime(driver).until(ExpectedConditions.domAttributeToBe(
-                        driver.findElement(targetAssertion("3")), "class", "blue"));
-                Assert.assertTrue(driver.findElement(targetAssertion("3")).getDomAttribute("class").equalsIgnoreCase("blue"));
+                        driver.findElement(targetAssertion(String.valueOf(c+2))), "class", "blue"));
+                Assert.assertTrue(driver.findElement(targetAssertion(String.valueOf(c+2))).getDomAttribute("class").equalsIgnoreCase("blue"));
 
         }}
 
