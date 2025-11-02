@@ -17,6 +17,7 @@ public class DriverOptions {
     public  ArrayList<String> defineDriverOptions(){
         if(Constants.headlessMode.equalsIgnoreCase("true")){
             opts.add("--headless=new");
+            opts.add("--window-size=1920,1080");
          Loggers.log.info("Activate Headless mode");
         }
         if(Constants.maximizedMode.equalsIgnoreCase("true")){
@@ -38,6 +39,13 @@ public class DriverOptions {
         opts.add("--no-first-run");
         opts.add("--disable-notifications");
         opts.add("--disable-infobars");
+        opts.add("--blink-settings=imagesEnabled=false"); // disables image ads
+        opts.add("--disable-popup-blocking");
+        opts.add("--disable-features=InterestCohortAPI,SameSiteByDefaultCookies,CookiesWithoutSameSiteMustBeSecure");
+        opts.add("--disable-extensions");
+        opts.add("--disable-notifications");
+        opts.add("--no-default-browser-check");
+        opts.add("--disable-features=PreloadMediaEngagementData,MediaRouter");
 
 // Still experimental and may not always work:
         opts.add("--disable-features=DownloadBubble");

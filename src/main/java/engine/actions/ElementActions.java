@@ -6,6 +6,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
+import java.time.Duration;
+
 public class ElementActions {
 
     public static void clickElement(WebDriver driver, By locator) {
@@ -35,11 +37,66 @@ public class ElementActions {
      Loggers.log.info("Select option with text "+option+" from locator "+locator);
     }
 
+    public static void JSDragAndDrop(WebDriver driver, By locator,By position) {
+        String logs = "drag "+locator+" to  " + position;
+        String script = """
+        function triggerDragAndDrop(selectorDrag, selectorDrop) {
+          const drag = arguments[0], drop = arguments[1];
+          const dataTransfer = new DataTransfer();
+          drag.dispatchEvent(new DragEvent('dragstart', {dataTransfer}));
+          drop.dispatchEvent(new DragEvent('drop', {dataTransfer}));
+          drag.dispatchEvent(new DragEvent('dragend', {dataTransfer}));
+        }
+        triggerDragAndDrop(arguments[0], arguments[1]);
+    """;
+        ((JavascriptExecutor) driver).executeScript(script, driver.findElement(locator), driver.findElement(position));
+       Loggers.addInfoAndAllureStep(logs);
+    }
+
+    public static void JSDragAndDropAsHTML(WebDriver driver, By locator,By position) {
+        String logs = "drag "+locator+" to  " + position;
+        String script = """
+        const src = arguments[0];
+       const dest = arguments[1];
+       const dataTransfer = new DataTransfer();
+       const fireEvent = (type, elem) => {
+           const event = new DragEvent(type, {
+               bubbles: true,
+               cancelable: true,
+               dataTransfer: dataTransfer
+           });
+           elem.dispatchEvent(event);
+       };
+       fireEvent('dragstart', src);
+       fireEvent('dragenter', dest);
+       fireEvent('dragover', dest);
+       fireEvent('drop', dest);
+       fireEvent('dragend', src);
+    """;
+        ((JavascriptExecutor) driver).executeScript(script, driver.findElement(locator), driver.findElement(position));
+       Loggers.addInfoAndAllureStep(logs);
+    }
     public static void dragAndDrop(WebDriver driver, By locator,By position) {
         String logs = "drag "+locator+" to  " + position;
         scrollToElement(driver,locator);
         Waits.waitToBeClickable(driver, locator);
         new Actions(driver).dragAndDrop(driver.findElement(locator),driver.findElement(position) ).perform();
+       Loggers.addInfoAndAllureStep(logs);
+    }
+
+    public static void manualDragAndDrop(WebDriver driver, By locator,By position) {
+        String logs = "drag "+locator+" to  " + position;
+        scrollToElement(driver,locator);
+        Waits.waitToBeClickable(driver, locator);
+        new  Actions(driver).moveToElement(driver.findElement(locator))
+                .pause(Duration.ofMillis(200))
+                .clickAndHold(driver.findElement(locator))
+                .pause(Duration.ofMillis(300))
+                .moveToElement(driver.findElement(position))
+                .pause(Duration.ofMillis(300))
+                .release(driver.findElement(position))
+                .build()
+                .perform();
        Loggers.addInfoAndAllureStep(logs);
     }
 
@@ -72,7 +129,7 @@ public class ElementActions {
     }
 
     public static void scrollToElement(WebDriver driver, By locator) {
-        Waits.waitToExist(driver, locator);
+        Waits.waitToBeVisible(driver, locator);
          Helpers.seleniumActions(driver).scrollToElement(driver.findElement(locator)).perform();
        Loggers.addInfoAndAllureStep("scroll to element located at:" + locator);
 
