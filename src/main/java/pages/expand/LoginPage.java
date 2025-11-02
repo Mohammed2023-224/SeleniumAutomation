@@ -37,6 +37,12 @@ public class LoginPage extends HomePage{
         ElementActions.typeInElement(driver,conPass,num);
     }
 
+    public void loginCycle(String userName, String pass,String assertion){
+        typeUserName(userName);
+        typePassword(pass);
+        clickLogin();
+        assertLoginStatus(assertion);
+    }
     public void clickLogOut(){
         ElementActions.scrollToElement(driver,logoutLink);
         ElementActions.clickUsingJavaScript(driver,logoutLink);
@@ -57,14 +63,17 @@ public class LoginPage extends HomePage{
     }
 
 
-    public void assertSuccessLogin(){
-        Waits.fluentWaitShortTime(driver).until(ExpectedConditions.not(ExpectedConditions.textToBe(successLogin,"")));
-        Assert.assertTrue(ElementActions.checkIfElementVisible(driver,successLogin));
-//        Assert.assertTrue(ElementActions.getText(driver,successLogin).toLowerCase().contains(text.toLowerCase()));
+    public void assertLoginStatus(String assertionType){
+        if(assertionType.equalsIgnoreCase("pass")) {
+            Waits.fluentWaitShortTime(driver).until(ExpectedConditions.not(ExpectedConditions.textToBe(successLogin, "")));
+            Assert.assertTrue(ElementActions.checkIfElementVisible(driver, successLogin));
+            clickLogOut();
+        }
+        else {
+            Waits.waitToBeVisible(driver,failLogin);
+            Assert.assertTrue(ElementActions.checkIfElementVisible(driver,failLogin));
+        }
     }
 
-    public void assertFailLogin( ){
-        Waits.waitToBeVisible(driver,failLogin);
-        Assert.assertTrue(ElementActions.checkIfElementVisible(driver,failLogin));
-    }
+
 }

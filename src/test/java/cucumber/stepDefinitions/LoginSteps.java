@@ -39,10 +39,10 @@ public class LoginSteps {
     @Then("Assert {string} login")
     public void assertLogin(String assertion) {
         if( assertion.equalsIgnoreCase("fail")){
-            loginPage.assertFailLogin();
+            loginPage.assertLoginStatus("fail");
         }
         else {
-            loginPage.assertSuccessLogin();
+            loginPage.assertLoginStatus("pass");
         }
     }
 }

@@ -40,30 +40,24 @@ public class ExpandTests extends BaseTest {
 
 //login and register test
         @Test(dataProvider = "loginData")
-    public void loginTest(LinkedHashMap<String,String> data){
-        homePage.navigateHomePage();
-        homePage.clickOnSubLink(data.get("link name"));
-        loginPage.typeUserName(data.get("su user name"));
-        loginPage.typePassword(data.get("su pass"));
-        loginPage.clickLogin();
-        loginPage.assertSuccessLogin();
-        loginPage.clickLogOut();
-        loginPage.typeUserName("tes");
-        loginPage.typePassword("tes");
-        loginPage.clickLogin();
-        loginPage.assertFailLogin();
-        //Should be divided into 2 test cases
+    public void loginTest(LinkedHashMap<String,String> data) {
+            homePage.navigateHomePage();
+            homePage.clickOnSubLink("Test Login Page");
+            loginPage.loginCycle(data.get("user name"),data.get("pass"),data.get("Assertion"));
+        }
+
+        @Test
+    public void registerTest(){
         String newUserName= Faker.userName;
         String pass= Faker.pass;
-        loginPage.clickRegisterLink();
+        homePage.navigateHomePage();
+        homePage.clickOnSubLink("Test Register Page");
         loginPage.typeUserName(newUserName);
         loginPage.typePassword(pass);
         loginPage.typeConPassword(pass);
         loginPage.clickRegister();
-        loginPage.typeUserName(newUserName);
-        loginPage.typePassword(pass);
-        loginPage.clickLogin();
-        loginPage.assertSuccessLogin();
+        loginPage.loginCycle(newUserName,pass,"pass");
+
             }
 //forget password test doesn't send any emails
 
