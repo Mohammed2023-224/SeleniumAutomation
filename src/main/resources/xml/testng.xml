@@ -9,7 +9,6 @@
         <classes>
             <class name="testNG.AutomationPlaygroundTests"/>
             <class name="testNG.ExpandTests"/>
-            <class name="cucumber.stepDefinitions.TestRunner"/>
         </classes>
     </test> <!-- Test -->
     <test name="chrome tests ">
@@ -17,7 +16,6 @@
         <classes>
             <class name="testNG.AutomationPlaygroundTests"/>
             <class name="testNG.ExpandTests"/>
-            <class name="cucumber.stepDefinitions.TestRunner"/>
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->
