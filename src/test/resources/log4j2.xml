@@ -39,8 +39,6 @@
 
     </Appenders>
     <Loggers>
-
-
         <Root level="info" additivity="false">
             <AppenderRef ref="PerTestRouting"/>
             <AppenderRef ref="allTestsLogs"/>

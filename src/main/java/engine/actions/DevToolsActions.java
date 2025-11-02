@@ -3,9 +3,9 @@ package engine.actions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v137.network.Network;
-import org.openqa.selenium.devtools.v137.network.model.Headers;
-import org.openqa.selenium.devtools.v137.page.Page;
+import org.openqa.selenium.devtools.v141.network.Network;
+import org.openqa.selenium.devtools.v141.network.model.Headers;
+import org.openqa.selenium.devtools.v141.page.Page;
 
 import java.util.Base64;
 import java.util.HashMap;
@@ -36,7 +36,7 @@ public class DevToolsActions {
         Map<String, Object> headers = new HashMap<>();
         String basicAuth = Base64.getEncoder().encodeToString("admin:admin".getBytes());
         headers.put("Authorization", "Basic " + basicAuth);
-        devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
+        devTools.send(Network.enable(Optional.empty(),Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
         devTools.send(Network.setExtraHTTPHeaders(new Headers(headers)));
     }
 }

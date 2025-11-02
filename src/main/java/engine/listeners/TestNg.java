@@ -132,6 +132,7 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
         if (!runningTests.contains(testSignature.toLowerCase())) {
             annotation.setEnabled(false);
          Loggers.log.info("⛔ Skipping: " + testSignature);
+         numberOfSkippedTests.incrementAndGet();
         } else {
          Loggers.log.info("✅ Executing: " + testSignature);
         }
