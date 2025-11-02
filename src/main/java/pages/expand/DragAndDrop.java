@@ -27,7 +27,6 @@ public class DragAndDrop extends HomePage{
 
         public void circleDragging(){
         ElementActions.dragAndDrop(driver,greenCircle,target);
-            System.out.println("after drag");
             Waits.waitToBeVisible(driver,targetAssertion("1"));
         Assert.assertTrue(driver.findElement(targetAssertion("1")).getDomAttribute("class").equalsIgnoreCase("green"));
         ElementActions.dragAndDrop(driver,redCircle,target);

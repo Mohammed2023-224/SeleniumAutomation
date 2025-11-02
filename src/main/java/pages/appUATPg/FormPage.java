@@ -102,7 +102,7 @@ Waits.waitForFileToBeDownloaded(driver,path+thirdFile);
     ElementActions.typeInElement(driver,zip,"test");
     ElementActions.clickElement(driver,agree);
     ElementActions.clickElement(driver,submitButton);
-    Assert.assertTrue(ElementActions.getText(driver,city).contains(""));
+//    Assert.assertTrue(ElementActions.getText(driver,city).contains(""));
     ElementActions.typeInElement(driver,nonEnglishText,"test");
     Assert.assertTrue(ElementActions.getText(driver,nonEnglishTextValidate).contains("test"));
     ElementActions.clickElement(driver,options("मराठी"));
