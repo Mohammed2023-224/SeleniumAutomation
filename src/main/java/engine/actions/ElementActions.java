@@ -32,7 +32,7 @@ public class ElementActions {
         });
         Select select=new Select(driver.findElement(locator));
         select.selectByVisibleText(option);
-     Loggers.log.info("Select option with text {} from locator {}",option,locator);
+     Loggers.log.info("Select option with text "+option+" from locator "+locator);
     }
 
     public static void dragAndDrop(WebDriver driver, By locator,By position) {
@@ -44,14 +44,14 @@ public class ElementActions {
     }
 
     public static void typeInElement(WebDriver driver, By locator, String text) {
-        String logs = "type " + text + " in element located at:" + locator + "";
+        String logs = "type " + text + " in element located at:" + locator;
         scrollToElement(driver,locator);
         Waits.waitToBeClickable(driver, locator);
         driver.findElement(locator).sendKeys(text);
        Loggers.addInfoAndAllureStep(logs);
     }
     public static void clearField(WebDriver driver, By locator) {
-        String logs = "cleat field located at " + locator ;
+        String logs = "clear field located at " + locator ;
         scrollToElement(driver,locator);
         Waits.waitToBeClickable(driver, locator);
         driver.findElement(locator).clear();
@@ -103,7 +103,7 @@ public class ElementActions {
     }
 
     public static WebElement getShadowElement(WebDriver driver, By shadowHost, String cssSelectorInsideShadowRoot) {
-     Loggers.log.info("get shadow element with cssSelector {} and host {}", cssSelectorInsideShadowRoot, shadowHost);
+     Loggers.log.info("get shadow element with cssSelector "+cssSelectorInsideShadowRoot+" and host ", shadowHost);
         return (WebElement) Helpers.initiateJSExecutor(driver).executeScript(
                 "return arguments[0].shadowRoot.querySelector(arguments[1])",
                 driver.findElement(shadowHost), cssSelectorInsideShadowRoot);
@@ -117,40 +117,40 @@ public class ElementActions {
                 .scrollToElement(driver.findElement(locatorTarget))
                 .moveToElement(driver.findElement(locatorTarget))
                 .release(driver.findElement(locatorTarget)).build().perform();
-     Loggers.log.info(" drag element from {} to {} by mouse",locatorSource,locatorTarget);
+     Loggers.log.info(" drag element from "+locatorSource+" to "+locatorTarget+" by mouse");
     }
 
     public static void dragAndDropByLocation(WebDriver driver, By locatorSource ,int horizontal, int vertical){
         Waits.explicitWaitShortTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locatorSource));
         new Actions(driver).dragAndDropBy(driver.findElement(locatorSource),horizontal,vertical).perform();
-     Loggers.log.info(" drag element from {} to {} , {} ",locatorSource,horizontal,vertical);
+     Loggers.log.info(" drag element from "+locatorSource+" to "+horizontal+" , " +vertical);
     }
     public static String getElementPropertyJSExecutor(WebDriver driver, By locator, String property){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         String value= (String) js.executeScript("return arguments[0][arguments[1]];", driver.findElement(locator), property);
-     Loggers.log.info("Get the property of {} with value : {}", property,value);
+     Loggers.log.info("Get the property of "+property+" with value : ",value);
         return value;
     }
 
     public static String getElementAttribute(WebDriver driver, By locator, String property){
         String attributeValue=driver.findElement(locator).getDomAttribute(property);
-     Loggers.log.info("Get the attribute of {} with value : {}", property,attributeValue);
+     Loggers.log.info("Get the attribute of "+property+" with value : " ,attributeValue);
         return attributeValue;
     }
     public static String getElementAttribute( WebElement locator, String property){
         String attributeValue=locator.getDomAttribute(property);
-     Loggers.log.info("Get the attribute of web element {} with value : {}", property,attributeValue);
+     Loggers.log.info("Get the attribute of web element "+property+" with value : ",attributeValue);
         return attributeValue;
     }
     public static void switchToFrameByLocator(WebDriver driver, By locator){
         driver.switchTo().frame(driver.findElement(locator));
-     Loggers.log.info("switch to frame by locator: {}",locator);
+     Loggers.log.info("switch to frame by locator: ",locator);
     }
     public static void contextClickElement(WebDriver driver, By locator){
         Waits.explicitWaitShortTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locator));
         Waits.explicitWaitShortTime(driver).until(ExpectedConditions.elementToBeClickable(locator));
         new Actions(driver).contextClick(driver.findElement(locator)).perform();
-     Loggers.log.info(" right Clicking element: {}",locator);
+     Loggers.log.info(" right Clicking element: ",locator);
     }
     public static void switchToParentFrame(WebDriver driver){
         driver.switchTo().parentFrame();
@@ -159,14 +159,14 @@ public class ElementActions {
     public static String getCssValue(WebDriver driver, By locator,String property){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         String value= (String) js.executeScript("return window.getComputedStyle(arguments[0]).getPropertyValue(arguments[1]);", driver.findElement(locator), property);
-     Loggers.log.info("Get the css value {} value : {}", property,value);
+     Loggers.log.info("Get the css value "+property+" value : ",value);
         return value;
     }
     public static String getPseudoElementContent(WebDriver driver, By locator,String pseudoElement ){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         String value= (String) js.executeScript("return window.getComputedStyle(arguments[0], arguments[1]).getPropertyValue('content');"
                 , driver.findElement(locator),pseudoElement);
-     Loggers.log.info("Get the pseudo element content : {} from element {} ", value,locator);
+     Loggers.log.info("Get the pseudo element content : "+value+" from element  ",locator);
         return value.replace("\"","");
     }
     // Check element actions
@@ -175,10 +175,10 @@ public class ElementActions {
         try {
             if (driver.findElements(locator).size() > 0) {
                 flag = true;
-             Loggers.log.info("Element located at {} exists", locator);
+             Loggers.log.info("Element located at "+locator+" exists");
             }
         } catch (Exception e) {
-         Loggers.log.info("element located at {} doesn't exist", locator);
+         Loggers.log.info("Element located at "+locator+" doesn't exist");
         }
         return flag;
     }
@@ -188,10 +188,10 @@ public class ElementActions {
         try {
             if (driver.findElement(locator).isDisplayed()) {
                 flag = true;
-             Loggers.log.info("Element located at: {} is visible", locator);
+             Loggers.log.info("Element located at: "+locator+" is visible");
             }
         } catch (Exception e) {
-         Loggers.log.info("Element located at {} isn't visible", locator);
+         Loggers.log.info("Element located at "+locator+" isn't visible");
         }
         return flag;
     }
@@ -202,10 +202,10 @@ public class ElementActions {
         try {
             if (driver.findElement(locator).isEnabled() && driver.findElement(locator).isDisplayed()) {
                 flag = true;
-             Loggers.log.info("Element located at: {} is clickable", locator);
+             Loggers.log.info("Element located at: "+locator+" is clickable");
             }
         } catch (Exception e) {
-         Loggers.log.info("Element located at {} isn't clickable", locator);
+         Loggers.log.info("Element located at "+locator+" isn't clickable");
         }
         return flag;
     }
