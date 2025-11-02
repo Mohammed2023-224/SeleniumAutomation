@@ -211,7 +211,7 @@ public class ElementActions {
     }
 
     public static Boolean checkIfElementSelected(WebDriver driver, By locator) {
-        Boolean flag = false;
+        boolean flag = false;
         try {
             if (driver.findElement(locator).isSelected()) {
                 flag = true;

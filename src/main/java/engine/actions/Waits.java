@@ -69,11 +69,11 @@ public class Waits {
 
     public static void waitToBeClickable(WebDriver driver, By locator  ){
         if(ElementActions.checkIfElementClickable(driver,locator)){
-         Loggers.log.info("element located at {} is clickable", locator);
+         Loggers.log.info("Element located at "+locator+" is clickable");
         }
         else {
             explicitWaitLongTime(driver).until(ExpectedConditions.elementToBeClickable(locator));
-         Loggers.log.info("wait for element located at {} to be clickable for {}", locator,Constants.longWaitTime);
+         Loggers.log.info("wait for element located at "+locator+" to be clickable for "+Constants.longWaitTime);
         }
     }
 

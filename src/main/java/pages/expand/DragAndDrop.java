@@ -14,7 +14,7 @@ public class DragAndDrop extends HomePage{
     private By blueCircle=By.className("blue");
     private By target=By.id("target");
     private By targetAssertion(String num){
-     return By.xpath("//div[@id='target']//div["+num+"]");
+     return By.xpath("(//div[@id='target']//div)["+num+"]");
     }
     public DragAndDrop(WebDriver driver) {
         super(driver);
