@@ -6,6 +6,8 @@ import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.v141.network.Network;
 import org.openqa.selenium.devtools.v141.network.model.Headers;
 import org.openqa.selenium.devtools.v141.page.Page;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.util.Base64;
 import java.util.HashMap;
@@ -18,7 +20,11 @@ public class DevToolsActions {
 
     public DevToolsActions(WebDriver driver){
         this.driver=driver;
-         devTools = ((ChromeDriver) driver).getDevTools();
+        if(driver instanceof ChromeDriver ) {
+            devTools = ((ChromeDriver) driver).getDevTools();
+        } else if (driver instanceof EdgeDriver) {
+            devTools = ((EdgeDriver) driver).getDevTools();
+        }
     }
 
     public DevToolsActions  createSession(){
