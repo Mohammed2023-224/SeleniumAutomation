@@ -176,13 +176,13 @@ public class ExpandTests extends BaseTest {
     @DataProvider(name = "webInputsData")
     private Object[][]  webInputsData(){
 return new ExcelReader().
-        readRowAsLinkedHashMapThroughCondition(Constants.testDataPath+"w.xlsx","Web Inputs","run","true");
+        readRowAsLinkedHashMapThroughCondition(Constants.testDataPath+"data.xlsx","Web Inputs","run","true");
     }
 
     @DataProvider(name = "loginData")
     private Object[][]  loginData(){
 return new ExcelReader().
-        readRowAsLinkedHashMapThroughCondition(Constants.testDataPath+"w.xlsx","Login Page","run","true");
+        readRowAsLinkedHashMapThroughCondition(Constants.testDataPath+"data.xlsx","Login Page","run","true");
     }
 
 
