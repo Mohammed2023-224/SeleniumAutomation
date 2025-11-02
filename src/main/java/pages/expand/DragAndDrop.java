@@ -4,6 +4,7 @@ import engine.actions.ElementActions;
 import engine.actions.Waits;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 
 public class DragAndDrop extends HomePage{
@@ -28,10 +29,17 @@ public class DragAndDrop extends HomePage{
         public void circleDragging(){
         ElementActions.dragAndDrop(driver,greenCircle,target);
             Waits.waitToBeVisible(driver,targetAssertion("1"));
+            Waits.fluentWaitShortTime(driver).until(ExpectedConditions.domAttributeToBe(
+                    driver.findElement(targetAssertion("1")),"class","green"));
+            System.out.println(ElementActions.getElementAttribute(driver,targetAssertion("1"),"class"));
         Assert.assertTrue(driver.findElement(targetAssertion("1")).getDomAttribute("class").equalsIgnoreCase("green"));
         ElementActions.dragAndDrop(driver,redCircle,target);
+            Waits.fluentWaitShortTime(driver).until(ExpectedConditions.domAttributeToBe(
+                    driver.findElement(targetAssertion("2")),"class","red"));
             Assert.assertTrue(driver.findElement(targetAssertion("2")).getDomAttribute("class").equalsIgnoreCase("red"));
             ElementActions.dragAndDrop(driver,blueCircle,target);
+            Waits.fluentWaitShortTime(driver).until(ExpectedConditions.domAttributeToBe(
+                    driver.findElement(targetAssertion("3")),"class","blue"));
             Assert.assertTrue(driver.findElement(targetAssertion("3")).getDomAttribute("class").equalsIgnoreCase("blue"));
         }
 

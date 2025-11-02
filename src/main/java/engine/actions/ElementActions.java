@@ -171,9 +171,9 @@ public class ElementActions {
     }
     // Check element actions
     public static Boolean checkIfElementExists(WebDriver driver, By locator) {
-        Boolean flag = false;
+        boolean flag = false;
         try {
-            if (driver.findElements(locator).size() > 0) {
+            if (!driver.findElements(locator).isEmpty()) {
                 flag = true;
              Loggers.log.info("Element located at "+locator+" exists");
             }

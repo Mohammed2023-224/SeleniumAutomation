@@ -48,11 +48,11 @@ public class Waits {
 
     public static void waitToBeVisible(WebDriver driver, By locator ){
         if(ElementActions.checkIfElementVisible(driver,locator)){
-         Loggers.log.info("element located at {} is visible", locator);
+         Loggers.log.info("Element located at "+locator+" is visible");
         }
         else {
             explicitWaitLongTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locator));
-         Loggers.log.info("wait for element located at {} to be visible for {}", locator,Constants.longWaitTime);
+         Loggers.log.info("wait for element located at "+locator+" to be visible for {}",Constants.longWaitTime);
         }
     }
 
