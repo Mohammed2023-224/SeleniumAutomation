@@ -32,7 +32,7 @@ public class MultipleTests extends HomePage {
     }
 
     public void alert(){
-        new DevToolsActions(driver).createSession().handleBasicAuth();
+        new DevToolsActions(driver).createSession().handleBasicAuth("admin","admin");
     }
 
     public void shadowDom(){
