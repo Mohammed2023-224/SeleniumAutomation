@@ -1,5 +1,6 @@
 package engine.actions;
 
+import engine.reporters.Loggers;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.devtools.DevTools;
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 public class DevToolsActions {
     private WebDriver driver;
-    DevTools devTools;
+    private DevTools devTools;
 
     public DevToolsActions(WebDriver driver){
         this.driver=driver;
@@ -25,10 +26,14 @@ public class DevToolsActions {
         } else if (driver instanceof EdgeDriver) {
             devTools = ((EdgeDriver) driver).getDevTools();
         }
+        else {
+            Loggers.log.error("Couldn't initiate devtools actions");
+        }
     }
 
     public DevToolsActions  createSession(){
         devTools.createSession();
+        Loggers.log.info("Create devtools session");
         return this;
     }
 
@@ -36,13 +41,18 @@ public class DevToolsActions {
         devTools.send(Page.setDownloadBehavior(
                 Page.SetDownloadBehaviorBehavior.ALLOW,  //
                 Optional.of(filePath)));
+        Loggers.log.info("set file Download Path at: "+ filePath);
+
     }
 
-    public void handleBasicAuth() {
+    public void handleBasicAuth(String username,String password) {
         Map<String, Object> headers = new HashMap<>();
-        String basicAuth = Base64.getEncoder().encodeToString("admin:admin".getBytes());
+        String credentials = String.format("%s:%s", username, password);
+        String basicAuth = Base64.getEncoder().encodeToString(credentials.getBytes());
         headers.put("Authorization", "Basic " + basicAuth);
         devTools.send(Network.enable(Optional.empty(),Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
         devTools.send(Network.setExtraHTTPHeaders(new Headers(headers)));
+        Loggers.log.info("add basic auth headers through dev tools as user name: "+ username+" password: "+ password);
+
     }
 }
