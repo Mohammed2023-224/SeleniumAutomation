@@ -10,30 +10,30 @@ public class BrowserActions {
     public static void navigateTo(WebDriver driver, String url) {
         String logs="Navigated to url: {}"+ url;
         driver.navigate().to(url);
-       Loggers.addInfoAndAllureStep(logs);
+       Loggers.log.info(logs);
     }
     public static void navigateBack(WebDriver driver) {
         String logs="Navigated to last page";
         driver.navigate().back();
-       Loggers.addInfoAndAllureStep(logs);
+       Loggers.log.info(logs);
     }
 
     public static void navigateForward(WebDriver driver) {
         String logs="Navigated forward";
         driver.navigate().forward();
-       Loggers.addInfoAndAllureStep(logs);
+       Loggers.log.info(logs);
     }
 
     public static void switchIframe(WebDriver driver, By frameLocator) {
         String log="Switch to iframe located at: {}"+ frameLocator;
         driver.switchTo().frame(driver.findElement(frameLocator));
-       Loggers.addInfoAndAllureStep(log);
+       Loggers.log.info(log);
     }
 
     public static void switchParentFrame(WebDriver driver) {
         String log="Switch to main frame";
         driver.switchTo().parentFrame();
-       Loggers.addInfoAndAllureStep(log);
+       Loggers.log.info(log);
     }
 
     public static void switchToWindowByIndex(WebDriver driver, int windowNumber) {
@@ -42,19 +42,24 @@ public class BrowserActions {
             driver.switchTo().window(windows.get(windowNumber));
         }
         String log="Switch to windows number: "+ windowNumber;
-       Loggers.addInfoAndAllureStep(log);
+       Loggers.log.info(log);
     }
 
     public static void switchToWindowByTitle(WebDriver driver, String title) {
+        String log="";
         ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
         for(String t: windows){
             driver.switchTo().window(t);
             if(driver.getTitle().equalsIgnoreCase(title)){
+                log="Switch to windows titled: "+ title;
                 break;
             }
         }
-        String log="Switch to windows titled: "+ title;
-       Loggers.addInfoAndAllureStep(log);
+        if(log.isEmpty()){
+            log="No windows was found with title "+ title;
+            switchToParentWindow(driver);
+        }
+       Loggers.log.info(log);
     }
 
     public static void switchToWindowByURL(WebDriver driver, String url) {
@@ -66,18 +71,19 @@ public class BrowserActions {
             }
         }
         String log="Switch to windows titled: "+ url;
-       Loggers.addInfoAndAllureStep(log);
+       Loggers.log.info(log);
     }
 
     public static void switchToParentWindow(WebDriver driver) {
         String log="Switch to main window";
         ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
             driver.switchTo().window(windows.get(0));
-       Loggers.addInfoAndAllureStep(log);
+       Loggers.log.info(log);
     }
 
     public static void acceptAlert(WebDriver driver){
+        String log="Accept existing alert";
         driver.switchTo().alert().accept();
-       Loggers.log.info("Accept url");
+        Loggers.log.info(log);
     }
 }
