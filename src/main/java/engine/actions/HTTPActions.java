@@ -3,10 +3,12 @@ package engine.actions;
 import engine.reporters.Loggers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.Map;
 
 public class HTTPActions {
     URL url ;
@@ -30,6 +32,12 @@ public class HTTPActions {
         return this;
     }
 
+    public HTTPActions setHeaders(Map<String, String> headers) {
+        if (headers != null) {
+            headers.forEach(connection::setRequestProperty);
+        }
+        return this;
+    }
     public HTTPActions startConnection(){
         try {
             connection.connect();
@@ -48,5 +56,16 @@ public class HTTPActions {
             Loggers.log.error("Failed to get response code");
         }
         return resCode;
+    }
+    public InputStream getResponseStream() {
+        try {
+            return connection.getInputStream();
+        } catch (IOException e) {
+            try {
+                return connection.getErrorStream();
+            } catch (Exception ex) {
+                throw new RuntimeException("No response stream available", ex);
+            }
+        }
     }
 }
