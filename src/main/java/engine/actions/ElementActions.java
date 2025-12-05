@@ -10,24 +10,28 @@ import java.time.Duration;
 
 public class ElementActions {
 
+    private static Actions actions(WebDriver driver) {
+        return new Actions(driver);
+    }
+    private static JavascriptExecutor  jsExec(WebDriver driver) {
+        return (JavascriptExecutor) driver;
+    }
+
     public static void clickElement(WebDriver driver, By locator) {
         String logs = "click element located at:  " + locator;
-        scrollToElement(driver,locator);
         Waits.waitToBeClickable(driver, locator);
         driver.findElement(locator).click();
-       Loggers.addInfoAndAllureStep(logs);
+       Loggers.log.info(logs);
     }
 
     public static void selectOption(WebDriver driver, By locator,String text) {
         String logs = "Select "+text+" from selection located at:  " + locator;
-        scrollToElement(driver,locator);
         Waits.waitToBeClickable(driver, locator);
         Select select=new Select(driver.findElement(locator));
         select.selectByValue(text);
-       Loggers.addInfoAndAllureStep(logs);
+       Loggers.log.info(logs);
     }
     public static void selectDDLOptionText(WebDriver driver, By locator,String option){
-        Waits.explicitWaitShortTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locator));
         Waits.explicitWaitShortTime(driver).until(x -> {
             Select dynamicSelect = new Select(driver.findElement(locator));
             return !dynamicSelect.getOptions().isEmpty();
@@ -37,151 +41,72 @@ public class ElementActions {
      Loggers.log.info("Select option with text "+option+" from locator "+locator);
     }
 
-    public static void JSDragAndDrop(WebDriver driver, By locator,By position) {
-        String logs = "drag "+locator+" to  " + position;
-        String script = """
-        function triggerDragAndDrop(selectorDrag, selectorDrop) {
-          const drag = arguments[0], drop = arguments[1];
-          const dataTransfer = new DataTransfer();
-          drag.dispatchEvent(new DragEvent('dragstart', {dataTransfer}));
-          drop.dispatchEvent(new DragEvent('drop', {dataTransfer}));
-          drag.dispatchEvent(new DragEvent('dragend', {dataTransfer}));
-        }
-        triggerDragAndDrop(arguments[0], arguments[1]);
-    """;
-        ((JavascriptExecutor) driver).executeScript(script, driver.findElement(locator), driver.findElement(position));
-       Loggers.addInfoAndAllureStep(logs);
-    }
-
-    public static void JSDragAndDropAsHTML(WebDriver driver, By locator,By position) {
-        String logs = "drag "+locator+" to  " + position;
-        String script = """
-        const src = arguments[0];
-       const dest = arguments[1];
-       const dataTransfer = new DataTransfer();
-       const fireEvent = (type, elem) => {
-           const event = new DragEvent(type, {
-               bubbles: true,
-               cancelable: true,
-               dataTransfer: dataTransfer
-           });
-           elem.dispatchEvent(event);
-       };
-       fireEvent('dragstart', src);
-       fireEvent('dragenter', dest);
-       fireEvent('dragover', dest);
-       fireEvent('drop', dest);
-       fireEvent('dragend', src);
-    """;
-        ((JavascriptExecutor) driver).executeScript(script, driver.findElement(locator), driver.findElement(position));
-       Loggers.addInfoAndAllureStep(logs);
-    }
-    public static void dragAndDrop(WebDriver driver, By locator,By position) {
-        String logs = "drag "+locator+" to  " + position;
-        scrollToElement(driver,locator);
-        Waits.waitToBeClickable(driver, locator);
-        new Actions(driver).dragAndDrop(driver.findElement(locator),driver.findElement(position) ).perform();
-       Loggers.addInfoAndAllureStep(logs);
-    }
-
-    public static void manualDragAndDrop(WebDriver driver, By locator,By position) {
-        String logs = "drag "+locator+" to  " + position;
-        scrollToElement(driver,locator);
-        Waits.waitToBeClickable(driver, locator);
-        new  Actions(driver).moveToElement(driver.findElement(locator))
-                .pause(Duration.ofMillis(200))
-                .clickAndHold(driver.findElement(locator))
-                .pause(Duration.ofMillis(300))
-                .moveToElement(driver.findElement(position))
-                .pause(Duration.ofMillis(300))
-                .release(driver.findElement(position))
-                .build()
-                .perform();
-       Loggers.addInfoAndAllureStep(logs);
-    }
 
     public static void typeInElement(WebDriver driver, By locator, String text) {
         String logs = "type " + text + " in element located at:" + locator;
-        scrollToElement(driver,locator);
         Waits.waitToBeClickable(driver, locator);
         driver.findElement(locator).sendKeys(text);
-       Loggers.addInfoAndAllureStep(logs);
+       Loggers.log.info(logs);
     }
     public static void clearField(WebDriver driver, By locator) {
         String logs = "clear field located at " + locator ;
-        scrollToElement(driver,locator);
         Waits.waitToBeClickable(driver, locator);
         driver.findElement(locator).clear();
-       Loggers.addInfoAndAllureStep(logs);
+       Loggers.log.info(logs);
     }
 
     public static String getText(WebDriver driver, By locator) {
         Waits.waitToBeClickable(driver, locator);
         String text = driver.findElement(locator).getText();
         String logs = "get text "+text +" out of element located at " + locator;
-       Loggers.addInfoAndAllureStep(logs);
+       Loggers.log.info(logs);
         return text;
     }
 
     public static void clickUsingJavaScript(WebDriver driver, By locator) {
-        Helpers.initiateJSExecutor(driver).executeScript("arguments[0].click();", driver.findElement(locator));
-       Loggers.addInfoAndAllureStep("click element located at: "+locator+" using java script ");
+        jsExec(driver).executeScript("arguments[0].click();", driver.findElement(locator));
+       Loggers.log.info("click element located at: "+locator+" using java script ");
     }
 
     public static void scrollToElement(WebDriver driver, By locator) {
         Waits.waitToBeVisible(driver, locator);
-         Helpers.seleniumActions(driver).scrollToElement(driver.findElement(locator)).perform();
-       Loggers.addInfoAndAllureStep("scroll to element located at:" + locator);
+        actions(driver).scrollToElement(driver.findElement(locator)).perform();
+       Loggers.log.info("scroll to element located at:" + locator);
 
     }
 
     public static void doubleClickElement(WebDriver driver, By locator) {
         Waits.waitToExist(driver, locator);
-        Helpers.seleniumActions(driver).doubleClick(driver.findElement(locator)).perform();
-       Loggers.addInfoAndAllureStep("double click element located at:  "+ locator);
+        actions(driver).doubleClick(driver.findElement(locator)).perform();
+       Loggers.log.info("double click element located at:  "+ locator);
 
     }
 
     public static void hoverOverElement(WebDriver driver, By locator) {
         Waits.waitToExist(driver, locator);
-        Helpers.seleniumActions(driver).moveToElement(driver.findElement(locator)).perform();
-       Loggers.addInfoAndAllureStep("hover over element located at: "+ locator);
+        actions(driver).moveToElement(driver.findElement(locator)).perform();
+       Loggers.log.info("hover over element located at: "+ locator);
 
     }
 
     public static void pressKeyboardKeys(WebDriver driver, By locator, Keys key) {
         Waits.waitToExist(driver, locator);
         driver.findElement(locator).sendKeys(key);
-       Loggers.addInfoAndAllureStep("press keyboard key: "+ key+" in element located at "+ locator);
+       Loggers.log.info("press keyboard key: "+ key+" in element located at "+ locator);
     }
     public static void pressKeyboardKeys(WebDriver driver, Keys key) {
-        Helpers.seleniumActions(driver).sendKeys(key).perform();
-       Loggers.addInfoAndAllureStep("press keyboard key: "+ key);
+        actions(driver).sendKeys(key).perform();
+       Loggers.log.info("press keyboard key: "+ key);
     }
 
     public static WebElement getShadowElement(WebDriver driver, By shadowHost, String cssSelectorInsideShadowRoot) {
      Loggers.log.info("get shadow element with cssSelector "+cssSelectorInsideShadowRoot+" and host ", shadowHost);
-        return (WebElement) Helpers.initiateJSExecutor(driver).executeScript(
+        return (WebElement) jsExec(driver).executeScript(
                 "return arguments[0].shadowRoot.querySelector(arguments[1])",
                 driver.findElement(shadowHost), cssSelectorInsideShadowRoot);
     }
 
-    public static void dragAndDropByMouse(WebDriver driver, By locatorSource, By locatorTarget){
-        Waits.explicitWaitLongTime(driver).until(ExpectedConditions.elementToBeClickable(locatorSource));
-        Waits.explicitWaitShortTime(driver).until(ExpectedConditions.elementToBeClickable(locatorTarget));
-        new Actions(driver).scrollToElement(driver.findElement(locatorSource))
-                .clickAndHold(driver.findElement(locatorSource))
-                .scrollToElement(driver.findElement(locatorTarget))
-                .moveToElement(driver.findElement(locatorTarget))
-                .release(driver.findElement(locatorTarget)).build().perform();
-     Loggers.log.info(" drag element from "+locatorSource+" to "+locatorTarget+" by mouse");
-    }
 
-    public static void dragAndDropByLocation(WebDriver driver, By locatorSource ,int horizontal, int vertical){
-        Waits.explicitWaitShortTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locatorSource));
-        new Actions(driver).dragAndDropBy(driver.findElement(locatorSource),horizontal,vertical).perform();
-     Loggers.log.info(" drag element from "+locatorSource+" to "+horizontal+" , " +vertical);
-    }
     public static String getElementPropertyJSExecutor(WebDriver driver, By locator, String property){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         String value= (String) js.executeScript("return arguments[0][arguments[1]];", driver.findElement(locator), property);
@@ -235,7 +160,7 @@ public class ElementActions {
              Loggers.log.info("Element located at "+locator+" exists");
             }
         } catch (Exception e) {
-         Loggers.log.info("Element located at "+locator+" doesn't exist");
+         Loggers.log.warn("Element located at "+locator+" doesn't exist");
         }
         return flag;
     }
@@ -248,7 +173,7 @@ public class ElementActions {
              Loggers.log.info("Element located at: "+locator+" is visible");
             }
         } catch (Exception e) {
-         Loggers.log.info("Element located at "+locator+" isn't visible");
+         Loggers.log.warn("Element located at "+locator+" isn't visible");
         }
         return flag;
     }
@@ -262,7 +187,7 @@ public class ElementActions {
              Loggers.log.info("Element located at: "+locator+" is clickable");
             }
         } catch (Exception e) {
-         Loggers.log.info("Element located at "+locator+" isn't clickable");
+         Loggers.log.warn("Element located at "+locator+" isn't clickable");
         }
         return flag;
     }
@@ -275,7 +200,7 @@ public class ElementActions {
              Loggers.log.info("Element located at {} is selected", locator);
             }
         } catch (Exception e) {
-         Loggers.log.info("Element located at {} isn't selected", locator);
+         Loggers.log.warn("Element located at {} isn't selected", locator);
         }
         return flag;
     }
