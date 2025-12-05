@@ -1,5 +1,7 @@
 package engine.actions;
 
+import engine.reporters.Loggers;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -15,7 +17,7 @@ public class HTTPActions {
             this.url = new URL(url);
             this.connection = (HttpURLConnection) this.url.openConnection();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            Loggers.log.error("Failed to create HTTP connection");
         }
     }
 
@@ -23,7 +25,7 @@ public class HTTPActions {
         try {
             connection.setRequestMethod(method);
         } catch (ProtocolException e) {
-            throw new RuntimeException(e);
+            Loggers.log.error("Failed to set HTTP method");
         }
         return this;
     }
@@ -32,18 +34,18 @@ public class HTTPActions {
         try {
             connection.connect();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Loggers.log.error("Failed to connect");
         }
         return this;
     }
 
 
     public int getResponseCode(){
-        int resCode;
+        int resCode = 0;
         try {
             resCode=connection.getResponseCode();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Loggers.log.error("Failed to get response code");
         }
         return resCode;
     }
