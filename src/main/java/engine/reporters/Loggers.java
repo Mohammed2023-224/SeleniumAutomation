@@ -14,9 +14,4 @@ public class Loggers {
     public static Logger log = (Logger) LogManager.getRootLogger();
 
 
-        public  static void addInfoAndAllureStep(String logs){
-        Allure.step(logs);
-      log.info(logs);
-    }
-
 }
