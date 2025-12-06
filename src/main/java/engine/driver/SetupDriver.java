@@ -18,6 +18,8 @@ public class SetupDriver {
             case "chrome":
                 driver = new Chrome().initiateDriver();
                 break;
+            default:
+                throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
         return driver;
     }
@@ -31,6 +33,8 @@ public class SetupDriver {
             case "chrome":
                 driver = new Chrome().initiateRemoteDriver(proxyURL);
                 break;
+            default:
+                throw new IllegalArgumentException("Unsupported remote browser: " + browser);
         }
         return driver;
     }
