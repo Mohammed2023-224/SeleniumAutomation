@@ -12,7 +12,7 @@ import java.util.Properties;
 public class PropertyReader {
     static Properties prop;
     static FileReader fr;
-    static String path="src/main/resources/properties/";
+    static String path="src/test/resources/properties/";
 
     public static Properties readAllProperties(){
         prop=new Properties();
