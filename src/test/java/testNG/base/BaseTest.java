@@ -6,7 +6,6 @@ import engine.actions.JSActions;
 import engine.constants.Constants;
 import engine.driver.SetupDriver;
 import engine.listeners.AllureListener;
-import engine.listeners.RetryListener;
 import engine.listeners.TestExecutionListener;
 import engine.listeners.TransformListener;
 import engine.reporters.Loggers;

@@ -4,6 +4,7 @@ import engine.reporters.Loggers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -13,11 +14,13 @@ public class DragAndDropActions {
     public static void dragAndDropByMouse(WebDriver driver, By locatorSource, By locatorTarget){
         Waits.explicitWaitLongTime(driver).until(ExpectedConditions.elementToBeClickable(locatorSource));
         Waits.explicitWaitShortTime(driver).until(ExpectedConditions.elementToBeClickable(locatorTarget));
-        new Actions(driver).scrollToElement(driver.findElement(locatorSource))
-                .clickAndHold(driver.findElement(locatorSource))
-                .scrollToElement(driver.findElement(locatorTarget))
-                .moveToElement(driver.findElement(locatorTarget))
-                .release(driver.findElement(locatorTarget)).build().perform();
+        WebElement source=driver.findElement(locatorSource);
+        WebElement target=driver.findElement(locatorTarget);
+        new Actions(driver).scrollToElement(source)
+                .clickAndHold(source)
+                .scrollToElement(target)
+                .moveToElement(target)
+                .release(target).build().perform();
         Loggers.log.info(" drag element from "+locatorSource+" to "+locatorTarget+" by mouse");
     }
 

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class BrowserActions {
     public static void navigateTo(WebDriver driver, String url) {
-        String logs="Navigated to url: {}"+ url;
+        String logs="Navigated to url: "+ url;
         driver.navigate().to(url);
        Loggers.log.info(logs);
     }
@@ -25,7 +25,7 @@ public class BrowserActions {
     }
 
     public static void switchIframe(WebDriver driver, By frameLocator) {
-        String log="Switch to iframe located at: {}"+ frameLocator;
+        String log="Switch to iframe located at: "+ frameLocator;
         driver.switchTo().frame(driver.findElement(frameLocator));
        Loggers.log.info(log);
     }
@@ -56,7 +56,7 @@ public class BrowserActions {
             }
         }
         if(log.isEmpty()){
-            log="No windows was found with title "+ title;
+            log="No windows was found with title "+ title+" so switched to first window ";
             switchToParentWindow(driver);
         }
        Loggers.log.info(log);

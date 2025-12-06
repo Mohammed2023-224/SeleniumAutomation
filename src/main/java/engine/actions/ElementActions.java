@@ -15,13 +15,13 @@ public class ElementActions {
     }
 
     public static void clickElement(WebDriver driver, By locator) {
-        String logs = "click element located at:  " + locator;
+        String logs = "click element located at: " + locator;
         driver.findElement(locator).click();
        Loggers.log.info(logs);
     }
 
     public static void selectOption(WebDriver driver, By locator,String text) {
-        String logs = "Select "+text+" from selection located at:  " + locator;
+        String logs = "Select "+text+" from selection located at: " + locator;
         Select select=new Select(driver.findElement(locator));
         select.selectByValue(text);
        Loggers.log.info(logs);
@@ -57,12 +57,12 @@ public class ElementActions {
 
     public static void scrollToElement(WebDriver driver, By locator) {
         actions(driver).scrollToElement(driver.findElement(locator)).perform();
-       Loggers.log.info("scroll to element located at:" + locator);
+       Loggers.log.info("scroll to element located at: " + locator);
     }
 
     public static void doubleClickElement(WebDriver driver, By locator) {
         actions(driver).doubleClick(driver.findElement(locator)).perform();
-       Loggers.log.info("double click element located at:  "+ locator);
+       Loggers.log.info("double click element located at: "+ locator);
     }
 
     public static void hoverOverElement(WebDriver driver, By locator) {
@@ -99,7 +99,7 @@ public class ElementActions {
 
     public static void contextClickElement(WebDriver driver, By locator){
         new Actions(driver).contextClick(driver.findElement(locator)).perform();
-     Loggers.log.info(" right Clicking element: ",locator);
+     Loggers.log.info("right Clicking element: ",locator);
     }
 
     public static void switchToParentFrame(WebDriver driver){
@@ -152,10 +152,10 @@ public class ElementActions {
         try {
             if (driver.findElement(locator).isSelected()) {
                 flag = true;
-             Loggers.log.info("Element located at {} is selected", locator);
+             Loggers.log.info("Element located at "+locator+"is selected" );
             }
         } catch (Exception e) {
-         Loggers.log.warn("Element located at {} isn't selected", locator);
+         Loggers.log.warn("Element located at "+locator+" isn't selected");
         }
         return flag;
     }
