@@ -27,7 +27,6 @@ public class AllureListener {
     public static void  saveScreensShot(WebDriver driver, String name){
         try {
             if (driver == null) return;
-
             byte[] ss = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
             Allure.addAttachment(name, new ByteArrayInputStream(ss));
 

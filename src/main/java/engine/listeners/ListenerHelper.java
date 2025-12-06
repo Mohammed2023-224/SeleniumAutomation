@@ -7,11 +7,12 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 
 public class ListenerHelper {
-    static LoggerContext  ctx;
-    static Configuration config;
-    static Appender appender;
+
 
     public static void stopAppenderRootLog(String appenderName){
+        LoggerContext  ctx;
+        Configuration config;
+        Appender appender;
         ctx = (LoggerContext) LogManager.getContext(false);
         config=ctx.getConfiguration();
         LoggerConfig loggerConfig = config.getLoggerConfig("");
@@ -24,6 +25,7 @@ public class ListenerHelper {
     }
 
     public static void reconfigureLogs(){
+        LoggerContext  ctx;
         ctx = (LoggerContext) LogManager.getContext(false);
         ctx.reconfigure();
     }

@@ -8,11 +8,13 @@ import org.testng.ITestResult;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RetryListener implements IRetryAnalyzer {
     int retryLimit = Constants.retryCount;
 
-    private Map<String, Integer> retryCountMap = new HashMap<>();
+    private final Map<String, Integer> retryCountMap = new ConcurrentHashMap<>();
+
 
     @Override
     public boolean retry(ITestResult iTestResult) {
