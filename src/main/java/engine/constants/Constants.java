@@ -9,7 +9,7 @@ public class Constants {
      static {
           PropertyReader.readAllProperties();
      }
-
+    private Constants() {}
      public static int shortWaitTime= Integer.parseInt(PropertyReader.readProp("shortWaitTime"));
      public static int longWaitTime=Integer.parseInt(PropertyReader.readProp("longWaitTime"));
      public static String openAllure=PropertyReader.readProp("openAllureAfterTest");
