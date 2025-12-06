@@ -1,6 +1,7 @@
 package pages.appUATPg;
 
 import engine.actions.ElementActions;
+import engine.actions.JSActions;
 import engine.actions.Waits;
 
 import org.openqa.selenium.By;
@@ -38,7 +39,7 @@ private By options(String option){
 public void loginForm(){
     ElementActions.typeInElement(driver,userName,"admin");
     ElementActions.clickElement(driver,login);
-    Assert.assertTrue(ElementActions.getElementPropertyJSExecutor(driver,pass,"validationMessage").contains("Please fill out this field."));
+    Assert.assertTrue(JSActions.getElementPropertyJSExecutor(driver,pass,"validationMessage").contains("Please fill out this field."));
     ElementActions.typeInElement(driver,pass,"admin");
         ElementActions.clickElement(driver,rememberMe);
         ElementActions.clickElement(driver,login);

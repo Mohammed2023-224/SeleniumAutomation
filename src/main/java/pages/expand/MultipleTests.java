@@ -36,7 +36,7 @@ public class MultipleTests extends HomePage {
     }
 
     public void shadowDom(){
-        WebElement e=ElementActions.getShadowElement(driver,By.id("shadow-host"),"button[id='my-btn']");
+        WebElement e=JSActions.getShadowElement(driver,By.id("shadow-host"),"button[id='my-btn']");
         System.out.println(e.getText());
     }
 
@@ -77,15 +77,15 @@ public class MultipleTests extends HomePage {
         public void scroll () {
         int num=0;
             while (num<=5) {
-                Number heightObj = (Number) Helpers.initiateJSExecutor(driver).executeScript("return document.body.scrollHeight");
+                Number heightObj = (Number) JSActions.executeScript(driver,"return document.body.scrollHeight");
                 long lastHeight = heightObj != null ? heightObj.longValue() : 0;
                 AtomicLong newHeight = new AtomicLong();
                 // Scroll to bottom
-                Helpers.initiateJSExecutor(driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
+                JSActions.executeScript(driver,"window.scrollTo(0, document.body.scrollHeight);");
                 try {
                     Waits.explicitWaitShortTime(driver).until(x -> {
                         Number newHeightObj = (Number)
-                                Helpers.initiateJSExecutor(driver).executeScript("return document.body.scrollHeight");
+                                JSActions.executeScript(driver,"return document.body.scrollHeight");
                         newHeight.set(newHeightObj != null ? newHeightObj.longValue() : 0);
                         return lastHeight != newHeight.get();
                     });
@@ -104,15 +104,15 @@ public class MultipleTests extends HomePage {
         By scrollingElement=By.xpath("//table//parent::div//parent::div");
         int num=0;
             while (num<5) {
-                Number heightObj = (Number) Helpers.initiateJSExecutor(driver).executeScript("return arguments[0].scrollHeight",driver.findElement(scrollingElement));
+                Number heightObj = (Number) JSActions.executeScript(driver,"return arguments[0].scrollHeight",driver.findElement(scrollingElement));
                 long lastHeight = heightObj != null ? heightObj.longValue() : 0;
                 AtomicLong newHeight = new AtomicLong();
                 // Scroll to bottom
-                Helpers.initiateJSExecutor(driver).executeScript("arguments[0].scrollTo(0, arguments[0].scrollHeight);",driver.findElement(scrollingElement));
+                JSActions.executeScript(driver,"arguments[0].scrollTo(0, arguments[0].scrollHeight);",driver.findElement(scrollingElement));
                 try {
                     Waits.explicitWaitShortTime(driver).until(x -> {
                         Number newHeightObj = (Number)
-                                Helpers.initiateJSExecutor(driver).executeScript("return arguments[0].scrollHeight",driver.findElement(scrollingElement));
+                                JSActions.executeScript(driver,"return arguments[0].scrollHeight",driver.findElement(scrollingElement));
                         newHeight.set(newHeightObj != null ? newHeightObj.longValue() : 0);
                         return lastHeight != newHeight.get();
                     });

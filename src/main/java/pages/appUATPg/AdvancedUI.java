@@ -1,6 +1,7 @@
 package pages.appUATPg;
 
 import engine.actions.ElementActions;
+import engine.actions.JSActions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
@@ -16,7 +17,7 @@ public AdvancedUI(WebDriver driver){
 
 }
 public void handleTab(){
-    String text=ElementActions.getPseudoElementContent(driver,starRating,"::after");
+    String text= JSActions.getPseudoElementContent(driver,starRating,"::after");
     ElementActions.typeInElement(driver,textRating,text);
     ElementActions.clickElement(driver,checkRating);
     Assert.assertTrue(ElementActions.getText(driver,validateRating).contains("Well done!"));

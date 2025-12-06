@@ -1,5 +1,6 @@
 package pages.expand;
 
+import engine.actions.DragAndDropActions;
 import engine.actions.ElementActions;
 import engine.actions.Waits;
 import engine.reporters.Loggers;
@@ -23,7 +24,7 @@ public class DragAndDrop extends HomePage{
     }
 
     public void dragAToB(){
-        ElementActions.dragAndDrop(driver,columnA,columnB);
+        DragAndDropActions.dragAndDrop(driver,columnA,columnB);
         Assert.assertTrue(ElementActions.getText(driver,columnA).equalsIgnoreCase("b"));
     }
 
@@ -31,7 +32,7 @@ public class DragAndDrop extends HomePage{
         int c=1;
             for (int i = 1; i < 3; i++) {
                 try {
-                    ElementActions.dragAndDrop(driver, greenCircle, target);
+                    DragAndDropActions.dragAndDrop(driver, greenCircle, target);
                     Waits.waitToBeVisible(driver, targetAssertion(String.valueOf(i)));
                     Waits.fluentWaitShortTime(driver).until(ExpectedConditions.domAttributeToBe(
                             driver.findElement(targetAssertion(String.valueOf(i))), "class", "green"));
@@ -43,11 +44,11 @@ public class DragAndDrop extends HomePage{
             }
                 System.out.println(ElementActions.getElementAttribute(driver, targetAssertion(String.valueOf(c)), "class"));
                 Assert.assertTrue(driver.findElement(targetAssertion(String.valueOf(c))).getDomAttribute("class").equalsIgnoreCase("green"));
-                ElementActions.dragAndDrop(driver, redCircle, target);
+            DragAndDropActions.dragAndDrop(driver, redCircle, target);
                 Waits.fluentWaitShortTime(driver).until(ExpectedConditions.domAttributeToBe(
                         driver.findElement(targetAssertion(String.valueOf(c+1))), "class", "red"));
                 Assert.assertTrue(driver.findElement(targetAssertion(String.valueOf(c+1))).getDomAttribute("class").equalsIgnoreCase("red"));
-                ElementActions.dragAndDrop(driver, blueCircle, target);
+            DragAndDropActions.dragAndDrop(driver, blueCircle, target);
                 Waits.fluentWaitShortTime(driver).until(ExpectedConditions.domAttributeToBe(
                         driver.findElement(targetAssertion(String.valueOf(c+2))), "class", "blue"));
                 Assert.assertTrue(driver.findElement(targetAssertion(String.valueOf(c+2))).getDomAttribute("class").equalsIgnoreCase("blue"));

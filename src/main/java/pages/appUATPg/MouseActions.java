@@ -1,5 +1,6 @@
 package pages.appUATPg;
 
+import engine.actions.DragAndDropActions;
 import engine.actions.ElementActions;
 
 import org.openqa.selenium.*;
@@ -39,7 +40,7 @@ public class MouseActions {
 
 
     public void dragAndDrop(){
-        ElementActions.dragAndDrop(driver,dragSource,dropSource);
+        DragAndDropActions.dragAndDrop(driver,dragSource,dropSource);
         Assert.assertTrue(ElementActions.getText(driver,assertion).contains("Drop is suc"));
     }
 }

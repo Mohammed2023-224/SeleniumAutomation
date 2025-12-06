@@ -1,9 +1,8 @@
 package pages.expand;
 
 import engine.actions.ElementActions;
-import engine.actions.Helpers;
+import engine.actions.JSActions;
 import engine.actions.Waits;
-import engine.reporters.Loggers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
@@ -42,14 +41,14 @@ public class WebInputs extends HomePage{
 
     public void clickClearBtn(){
         ElementActions.scrollToElement(driver,clearInputsBtn);
-        ElementActions.clickUsingJavaScript(driver,clearInputsBtn);
+        JSActions.clickUsingJavaScript(driver,clearInputsBtn);
         Waits.waitToBeInvisible(driver,outputNumber);
         Assert.assertFalse(ElementActions.checkIfElementVisible(driver,outputNumber));
     }
 
     public void clickDisplayBtn(){
         ElementActions.scrollToElement(driver,displayInputsBtn);
-        ElementActions.clickUsingJavaScript(driver,displayInputsBtn);
+        JSActions.clickUsingJavaScript(driver,displayInputsBtn);
         Waits.waitToBeVisible(driver,outputNumber);
         Assert.assertTrue(ElementActions.checkIfElementVisible(driver,outputNumber));
     }

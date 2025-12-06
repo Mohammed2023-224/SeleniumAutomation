@@ -1,6 +1,7 @@
 package pages.expand;
 
 import engine.actions.ElementActions;
+import engine.actions.JSActions;
 import engine.actions.Waits;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -45,21 +46,21 @@ public class LoginPage extends HomePage{
     }
     public void clickLogOut(){
         ElementActions.scrollToElement(driver,logoutLink);
-        ElementActions.clickUsingJavaScript(driver,logoutLink);
+        JSActions.clickUsingJavaScript(driver,logoutLink);
         Waits.waitToBeVisible(driver,logoutAssertion);
     }
 
     public void clickLogin(){
         ElementActions.scrollToElement(driver, button);
-        ElementActions.clickUsingJavaScript(driver, button);
+        JSActions.clickUsingJavaScript(driver, button);
     }
     public void clickRegisterLink(){
         ElementActions.scrollToElement(driver,registerLink);
-        ElementActions.clickUsingJavaScript(driver,registerLink);
+        JSActions.clickUsingJavaScript(driver,registerLink);
     }
     public void clickRegister(){
         ElementActions.scrollToElement(driver,registerButton);
-        ElementActions.clickUsingJavaScript(driver,registerButton);
+        JSActions.clickUsingJavaScript(driver,registerButton);
     }
 
 

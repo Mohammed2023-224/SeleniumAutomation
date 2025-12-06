@@ -2,22 +2,23 @@ package testNG.base;
 
 
 
-import engine.actions.Helpers;
+import engine.actions.JSActions;
 import engine.constants.Constants;
 import engine.driver.SetupDriver;
 import engine.listeners.AllureListener;
-import engine.listeners.TestNg;
+import engine.listeners.RetryListener;
+import engine.listeners.TestExecutionListener;
+import engine.listeners.TransformListener;
 import engine.reporters.Loggers;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.*;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 
-@Listeners(TestNg.class)
+@Listeners({TestExecutionListener.class, TransformListener.class})
 public class BaseTest {
     public WebDriver driver;
 
@@ -46,7 +47,7 @@ public class BaseTest {
     }
     @AfterMethod
     protected void startNewTab() {
-        Helpers.initiateJSExecutor(driver).executeScript("window.open();");
+        JSActions.executeScript(driver,"window.open();");
         String currentHandle = driver.getWindowHandle();
         List<String> handles = new ArrayList<>(driver.getWindowHandles());
         System.out.println(handles);

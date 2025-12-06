@@ -2,6 +2,7 @@ package pages.expand;
 
 import engine.actions.BrowserActions;
 import engine.actions.ElementActions;
+import engine.actions.JSActions;
 import engine.constants.Constants;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -26,7 +27,7 @@ public class HomePage {
 
     public void clickOnSubLink(String linkName){
         ElementActions.scrollToElement(driver,link(linkName));
-        ElementActions.clickUsingJavaScript(driver,link(linkName));
+        JSActions.clickUsingJavaScript(driver,link(linkName));
     }
 
 

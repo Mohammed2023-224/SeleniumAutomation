@@ -1,9 +1,7 @@
 package pages.appUATPg;
 
 
-import engine.actions.ElementActions;
-import engine.actions.SystemMethods;
-import engine.actions.Waits;
+import engine.actions.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -78,11 +76,11 @@ public void handleForm(){
     ElementActions.typeInElement(driver,notesField,"test");
     Assert.assertTrue(ElementActions.getText(driver,notesFieldValidate).contains("test"));
     Assert.assertTrue(driver.findElement(onlyReadField).getDomProperty("placeholder").contains("Common Sense"));
-    ElementActions.clickUsingJavaScript(driver,readGerman);
+    JSActions.clickUsingJavaScript(driver,readGerman);
     Assert.assertTrue(ElementActions.getText(driver,readGermanValidate).contains("true"));
-    ElementActions.clickUsingJavaScript(driver,readGerman);
+    JSActions.clickUsingJavaScript(driver,readGerman);
     Assert.assertTrue(ElementActions.getText(driver,readGermanValidate).contains("false"));
-    ElementActions.dragAndDropByLocation(driver,fluency,-100,0);
+    DragAndDropActions.dragAndDropByLocation(driver,fluency,-100,0);
 //    Assert.assertTrue(ElementActions.getText(driver,fluencyValidate).contains("0"));
     ElementActions.typeInElement(driver,uploadCV,path+firstFile);
     Assert.assertTrue(ElementActions.getText(driver,uploadCVValidate).contains(firstFile));

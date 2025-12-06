@@ -1,7 +1,7 @@
 package pages.expand;
 
 import engine.actions.ElementActions;
-import engine.actions.Helpers;
+import engine.actions.JSActions;
 import engine.actions.Waits;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -44,11 +44,11 @@ public class OneTimePass extends HomePage{
 
 
     public void clickSendOTP(){
-        ElementActions.clickUsingJavaScript(driver,sendOTPButton);
+        JSActions.clickUsingJavaScript(driver,sendOTPButton);
         Waits.waitToBeInvisible(driver,sendOTPButton);
     }
     public void clickVerifyOTP(){
-        ElementActions.clickUsingJavaScript(driver,verifyOTPBN);
+        JSActions.clickUsingJavaScript(driver,verifyOTPBN);
 //        Waits.waitToBeInvisible(driver,verifyOTPBN);
     }
 }

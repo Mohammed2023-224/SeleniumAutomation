@@ -2,6 +2,7 @@ package pages.appUATPg;
 
 import engine.actions.BrowserActions;
 import engine.actions.ElementActions;
+import engine.actions.JSActions;
 import engine.actions.Waits;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
@@ -118,7 +119,7 @@ private final By minWaitTime= By.id("min_wait");
         Waits.explicitWaitLongTime(driver).until
                 (ExpectedConditions.frameToBeAvailableAndSwitchToIt(frame));
         System.out.println("test");
-        ElementActions.clickUsingJavaScript(driver, frameButtonTarget);
+        JSActions.clickUsingJavaScript(driver, frameButtonTarget);
         Assert.assertTrue(ElementActions.getText(driver, frameButtonTarget)
                 .contains("Clicked"));
     }
