@@ -6,6 +6,7 @@ import engine.utils.JSONReader;
 import engine.utils.PropertyReader;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,31 +29,22 @@ public class DriverOptions {
             opts.add("--disable-popup-blocking");
          Loggers.log.info("disable popup blocking");
         }
-        opts.add("--disable-save-password-bubble");
-        opts.add("--disable-infobars");
-        opts.add("disable-autofill");
-//        opts.add("--incognito");
-        opts.add("--disable-blink-features=AutomationControlled");
-        opts.add("--disable-popup-blocking");
-        opts.add("--safebrowsing-disable-download-protection");
-        opts.add("--no-default-browser-check");
-        opts.add("--no-first-run");
-        opts.add("--disable-notifications");
-        opts.add("--disable-infobars");
-        opts.add("--blink-settings=imagesEnabled=false"); // disables image ads
-        opts.add("--disable-popup-blocking");
-        opts.add("--disable-features=InterestCohortAPI,SameSiteByDefaultCookies,CookiesWithoutSameSiteMustBeSecure");
-        opts.add("--disable-extensions");
-        opts.add("--disable-notifications");
-        opts.add("--no-default-browser-check");
-        opts.add("--disable-features=PreloadMediaEngagementData,MediaRouter");
 
-// Still experimental and may not always work:
-        opts.add("--disable-features=DownloadBubble");
-        opts.add("--disable-features=DownloadsUX");
-        opts.add("--suppress-download-notification");
-
-//        opts.add()
+        Collections.addAll(opts,
+                "--disable-save-password-bubble",
+                "--disable-infobars",
+                "--disable-blink-features=AutomationControlled",
+                "--safebrowsing-disable-download-protection",
+                "--no-default-browser-check",
+                "--disable-notifications",
+                "--disable-extensions",
+                "--blink-settings=imagesEnabled=false",
+                "--disable-features=InterestCohortAPI,SameSiteByDefaultCookies,CookiesWithoutSameSiteMustBeSecure",
+                "--disable-features=PreloadMediaEngagementData,MediaRouter",
+                "--disable-features=DownloadBubble",
+                "--disable-features=DownloadsUX",
+                "--suppress-download-notification"
+        );
         return opts;
     }
 
