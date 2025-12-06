@@ -3,10 +3,7 @@ package engine.actions;
 import engine.reporters.Loggers;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-
-import java.time.Duration;
 
 public class ElementActions {
 
@@ -16,6 +13,7 @@ public class ElementActions {
 
     public static void clickElement(WebDriver driver, By locator) {
         String logs = "click element located at: " + locator;
+        Waits.waitToBeClickable(driver,locator);
         driver.findElement(locator).click();
        Loggers.log.info(logs);
     }
@@ -23,7 +21,7 @@ public class ElementActions {
     public static void selectOption(WebDriver driver, By locator,String text) {
         String logs = "Select "+text+" from selection located at: " + locator;
         Select select=new Select(driver.findElement(locator));
-        select.selectByValue(text);
+        select.selectByVisibleText(text);
        Loggers.log.info(logs);
     }
 
@@ -39,16 +37,19 @@ public class ElementActions {
 
     public static void typeInElement(WebDriver driver, By locator, String text) {
         String logs = "type " + text + " in element located at:" + locator;
+        Waits.waitToBeClickable(driver,locator);
         driver.findElement(locator).sendKeys(text);
        Loggers.log.info(logs);
     }
     public static void clearField(WebDriver driver, By locator) {
         String logs = "clear field located at " + locator ;
+        Waits.waitToBeClickable(driver,locator);
         driver.findElement(locator).clear();
        Loggers.log.info(logs);
     }
 
     public static String getText(WebDriver driver, By locator) {
+        Waits.waitToBeClickable(driver,locator);
         String text = driver.findElement(locator).getText();
         String logs = "get text "+text +" out of element located at " + locator;
        Loggers.log.info(logs);
@@ -56,21 +57,25 @@ public class ElementActions {
     }
 
     public static void scrollToElement(WebDriver driver, By locator) {
+        Waits.waitToBeClickable(driver,locator);
         actions(driver).scrollToElement(driver.findElement(locator)).perform();
        Loggers.log.info("scroll to element located at: " + locator);
     }
 
     public static void doubleClickElement(WebDriver driver, By locator) {
+        Waits.waitToBeClickable(driver,locator);
         actions(driver).doubleClick(driver.findElement(locator)).perform();
        Loggers.log.info("double click element located at: "+ locator);
     }
 
     public static void hoverOverElement(WebDriver driver, By locator) {
+        Waits.waitToBeVisible(driver,locator);
         actions(driver).moveToElement(driver.findElement(locator)).perform();
        Loggers.log.info("hover over element located at: "+ locator);
     }
 
     public static void pressKeyboardKeys(WebDriver driver, By locator, Keys key) {
+        Waits.waitToBeClickable(driver,locator);
         driver.findElement(locator).sendKeys(key);
        Loggers.log.info("press keyboard key: "+ key+" in element located at "+ locator);
     }
@@ -81,25 +86,27 @@ public class ElementActions {
 
 
     public static String getElementAttribute(WebDriver driver, By locator, String property){
+        Waits.waitToBeVisible(driver,locator);
         String attributeValue=driver.findElement(locator).getDomAttribute(property);
-     Loggers.log.info("Get the attribute of "+property+" with value : " ,attributeValue);
+     Loggers.log.info("Get the attribute value of "+property+" which equals : " +attributeValue);
         return attributeValue;
     }
 
     public static String getElementAttribute( WebElement locator, String property){
         String attributeValue=locator.getDomAttribute(property);
-     Loggers.log.info("Get the attribute of web element "+property+" with value : ",attributeValue);
+     Loggers.log.info("Get the attribute of web element "+property+" with value : "+attributeValue);
         return attributeValue;
     }
 
     public static void switchToFrameByLocator(WebDriver driver, By locator){
         driver.switchTo().frame(driver.findElement(locator));
-     Loggers.log.info("switch to frame by locator: ",locator);
+     Loggers.log.info("switch to frame by locator: "+locator);
     }
 
     public static void contextClickElement(WebDriver driver, By locator){
+        Waits.waitToBeVisible(driver,locator);
         new Actions(driver).contextClick(driver.findElement(locator)).perform();
-     Loggers.log.info("right Clicking element: ",locator);
+     Loggers.log.info("right Clicking element: "+locator);
     }
 
     public static void switchToParentFrame(WebDriver driver){
@@ -121,7 +128,7 @@ public class ElementActions {
     }
 
     public static Boolean checkIfElementVisible(WebDriver driver, By locator) {
-        Boolean flag = false;
+        boolean flag = false;
         try {
             if (driver.findElement(locator).isDisplayed()) {
                 flag = true;
@@ -135,9 +142,10 @@ public class ElementActions {
 
 
     public static Boolean checkIfElementClickable(WebDriver driver, By locator) {
-        Boolean flag = false;
+        boolean flag = false;
         try {
-            if (driver.findElement(locator).isEnabled() && driver.findElement(locator).isDisplayed()) {
+            WebElement ele=driver.findElement(locator);
+            if (ele.isEnabled() && ele.isDisplayed()) {
                 flag = true;
              Loggers.log.info("Element located at: "+locator+" is clickable");
             }

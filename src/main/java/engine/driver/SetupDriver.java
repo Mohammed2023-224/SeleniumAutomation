@@ -8,34 +8,22 @@ import org.openqa.selenium.WebDriver;
 
 public class SetupDriver {
 
-    public WebDriver driver;
+//    public WebDriver driver;
 
-    public WebDriver startDriver(String browser) {
-        switch(browser.toLowerCase()){
-            case "edge":
-                driver = new Edge().initiateDriver();
-                break;
-            case "chrome":
-                driver = new Chrome().initiateDriver();
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported browser: " + browser);
-        }
-        return driver;
+    public  WebDriver startDriver(String browser) {
+        return switch (browser.toLowerCase()) {
+            case "edge" -> new Edge().initiateDriver();
+            case "chrome" -> new Chrome().initiateDriver();
+            default -> throw new IllegalArgumentException("Unsupported browser: " + browser);
+        };
     }
 
     public WebDriver startDriverRemotely(String browser) {
         String proxyURL= Constants.proxyURL;
-        switch(browser.toLowerCase()){
-            case "edge":
-                driver = new Edge().initiateRemoteDriver(proxyURL);
-                break;
-            case "chrome":
-                driver = new Chrome().initiateRemoteDriver(proxyURL);
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported remote browser: " + browser);
-        }
-        return driver;
+        return switch (browser.toLowerCase()) {
+            case "edge" -> new Edge().initiateRemoteDriver(proxyURL);
+            case "chrome" -> new Chrome().initiateRemoteDriver(proxyURL);
+            default -> throw new IllegalArgumentException("Unsupported remote browser: " + browser);
+        };
     }
 }

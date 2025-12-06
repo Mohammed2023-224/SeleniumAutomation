@@ -33,8 +33,8 @@ public class SystemMethods {
             return;
         }
         try {
-            FileOutputStream fis = new FileOutputStream(path);
-            fis.close();
+//            FileOutputStream fis = new FileOutputStream(path);
+//            fis.close();
             FileUtils.forceDelete(file);
          Loggers.log.info("Deleted the file: {}", path);
         } catch (Exception e) {

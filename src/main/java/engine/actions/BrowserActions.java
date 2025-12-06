@@ -57,7 +57,7 @@ public class BrowserActions {
         }
         if(log.isEmpty()){
             log="No windows was found with title "+ title+" so switched to first window ";
-            switchToParentWindow(driver);
+            switchToFirstWindow(driver);
         }
        Loggers.log.info(log);
     }
@@ -70,11 +70,11 @@ public class BrowserActions {
                 break;
             }
         }
-        String log="Switch to windows titled: "+ url;
+        String log="Switch to windows url: "+ url;
        Loggers.log.info(log);
     }
 
-    public static void switchToParentWindow(WebDriver driver) {
+    public static void switchToFirstWindow(WebDriver driver) {
         String log="Switch to main window";
         ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
             driver.switchTo().window(windows.get(0));

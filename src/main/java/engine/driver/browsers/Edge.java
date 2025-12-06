@@ -16,9 +16,10 @@ public class Edge {
 
     // get driver options
     private EdgeOptions getDriverOptions() {
+        DriverOptions driverOptions = new DriverOptions();
         EdgeOptions edgeOptions = new EdgeOptions();
-        edgeOptions.addArguments(new DriverOptions().defineDriverOptions());
-        edgeOptions.setExperimentalOption("prefs",new DriverOptions().definePreferences());
+        edgeOptions.addArguments(driverOptions.defineDriverOptions());
+        edgeOptions.setExperimentalOption("prefs",driverOptions.definePreferences());
         return edgeOptions;
     }
 
