@@ -6,15 +6,10 @@ import io.qameta.allure.Allure;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.DevToolsException;
+
 
 import java.io.*;
-import java.nio.file.Paths;
-import java.util.Base64;
-import java.util.Optional;
+
 
 public class AllureListener {
 
@@ -29,9 +24,16 @@ public class AllureListener {
 }
     }
 
-    public static void  saveScreensShot(WebDriver driver, String text){
-     Loggers.log.info("Taking screenshot and saving to allure report");
-        io.qameta.allure.Allure.addAttachment(text, new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
+    public static void  saveScreensShot(WebDriver driver, String name){
+        try {
+            if (driver == null) return;
+
+            byte[] ss = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            Allure.addAttachment(name, new ByteArrayInputStream(ss));
+
+        } catch (Exception e) {
+            Loggers.log.warn("⚠ Unable to capture screenshot for Allure: {}", e.getMessage());
+        }
     }
 
     }

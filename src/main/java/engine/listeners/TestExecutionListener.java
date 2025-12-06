@@ -5,13 +5,10 @@ import engine.constants.Constants;
 import engine.reporters.Loggers;
 import engine.utils.GmailHandler;
 import engine.utils.ReadExecutionFlow;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.*;
 import org.testng.annotations.ITestAnnotation;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -21,11 +18,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class TestNg extends AllureListener implements ITestListener, IRetryAnalyzer,IHookable , IExecutionListener ,IAnnotationTransformer {
+public class TestExecutionListener extends AllureListener implements ITestListener , IExecutionListener  {
 
-    int counter = 0;
-    int retryLimit = Constants.retryCount;
-    Set<String> runningTests = new ReadExecutionFlow().readExecutionControl();
 
     private static final List<String> successfulTests = Collections.synchronizedList(new ArrayList<>());
     private static final List<String> failedTests = Collections.synchronizedList(new ArrayList<>());
@@ -77,17 +71,7 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
      Loggers.log.info("finished Execution");
     }
 
-    @Override
-    public boolean retry(ITestResult iTestResult) {
-        WebDriver mainDriver = (WebDriver) iTestResult.getTestContext().getAttribute("driver");
-        if (counter < retryLimit) {
-            counter++;
-            mainDriver.manage().deleteAllCookies();
-         Loggers.log.info("ended retry number: {}", counter);
-            return true;
-        }
-        return false;
-    }
+
 
     public void onExecutionFinish() {
 
@@ -114,33 +98,23 @@ public class TestNg extends AllureListener implements ITestListener, IRetryAnaly
     public void onExecutionStart() {
     }
 
-    @Override
-    public void run(IHookCallBack callBack, ITestResult testResult) {
-        callBack.runTestMethod(testResult);
-        if (testResult.getThrowable() != null) {
-            if (retry(testResult)) {
-                callBack.runTestMethod(testResult);
-            }
-        }
-    }
+//    @Override
+//    public void run(IHookCallBack callBack, ITestResult testResult) {
+//        callBack.runTestMethod(testResult);
+//        if (testResult.getThrowable() != null) {
+//            if (retry(testResult)) {
+//                callBack.runTestMethod(testResult);
+//            }
+//        }
+//    }
 
-    @Override
-    public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {
-        if (testMethod == null) return; // Don't process config methods or null test methods
-        String className = testClass != null ? testClass.getSimpleName() : testMethod.getDeclaringClass().getSimpleName();
-        String testSignature = (className + "." + testMethod.getName()).trim().toLowerCase();
-        if (!runningTests.contains(testSignature.toLowerCase())) {
-            annotation.setEnabled(false);
-         Loggers.log.info("⛔ Skipping: " + testSignature);
-         numberOfSkippedTests.incrementAndGet();
-        } else {
-         Loggers.log.info("✅ Executing: " + testSignature);
-        }
-    }
+
 
     public static String getBrowserName(WebDriver driver) {
-        Capabilities caps = ((RemoteWebDriver) driver).getCapabilities();
-        return caps.getBrowserName().toLowerCase(); // chrome, edge, firefox
+        if (driver instanceof RemoteWebDriver) {
+            return ((RemoteWebDriver) driver).getCapabilities().getBrowserName().toLowerCase();
+        }
+        return "unknown";
     }
 }
 
