@@ -11,23 +11,22 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RetryListener implements IRetryAnalyzer {
-    int retryLimit = Constants.retryCount;
-
+    private final int retryLimit = Constants.retryCount;
     private final Map<String, Integer> retryCountMap = new ConcurrentHashMap<>();
 
+    public boolean retry(ITestResult result) {
+        try {
+            String key = result.getTestClass().getName() + "." + result.getMethod().getMethodName();
+            int count = retryCountMap.getOrDefault(key, 0);
 
-    @Override
-    public boolean retry(ITestResult iTestResult) {
-        String testName = iTestResult.getMethod().getMethodName();
-        WebDriver mainDriver = (WebDriver) iTestResult.getTestContext().getAttribute("driver");
-        int counter = retryCountMap.getOrDefault(testName, 0);
-        if (counter < retryLimit) {
-            retryCountMap.put(testName, counter + 1);
-            mainDriver.manage().deleteAllCookies();
-            Loggers.log.info("Retrying test {} (retry {}/{})",
-                    testName, counter + 1, Constants.retryCount);
+            if (count < retryLimit) {
+                retryCountMap.put(key, count + 1);
+                Loggers.log.info("Retrying test {} ({}/{})", key, count + 1, retryLimit);
+                return true;
+            }
 
-            return true;
+        } catch (Exception e) {
+            Loggers.log.error("Retry failed internally: " + e.getMessage());
         }
         return false;
     }

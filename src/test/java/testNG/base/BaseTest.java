@@ -6,7 +6,6 @@ import engine.actions.JSActions;
 import engine.constants.Constants;
 import engine.driver.SetupDriver;
 import engine.listeners.AllureListener;
-import engine.listeners.ListenerHelper;
 import engine.listeners.TestExecutionListener;
 import engine.listeners.TransformListener;
 import engine.reporters.Loggers;
@@ -27,7 +26,6 @@ public class BaseTest {
     @BeforeClass
     protected void InitDriver(ITestContext con, @Optional String browser) {
         browser = browser == null || browser.isEmpty() ? Constants.browser : browser;
-
         if (Constants.executionType.equalsIgnoreCase("local")) {
             driver = new SetupDriver().startDriver(browser);
         } else if (Constants.executionType.equalsIgnoreCase("remote")) {
@@ -43,7 +41,6 @@ public class BaseTest {
 
     @AfterMethod
     protected void attachLogs() {
-
         AllureListener.saveTextLog(ThreadContext.get("testLogFileName") + ".log",
                 Constants.reportsPath + ThreadContext.get("testLogFileName") + ".log");
     }

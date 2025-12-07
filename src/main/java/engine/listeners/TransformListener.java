@@ -14,7 +14,6 @@ public class TransformListener implements IAnnotationTransformer {
 
     @Override
     public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {
-        annotation.setRetryAnalyzer(RetryListener.class);
         if (testMethod == null) return; // Don't process config methods or null test methods
         String className = testClass != null ? testClass.getSimpleName() : testMethod.getDeclaringClass().getSimpleName();
         String testSignature = (className + "." + testMethod.getName()).trim().toLowerCase();
@@ -22,6 +21,7 @@ public class TransformListener implements IAnnotationTransformer {
             annotation.setEnabled(false);
             Loggers.log.info("⛔ Skipping: " + testSignature);
         } else {
+            annotation.setRetryAnalyzer(RetryListener.class);
             Loggers.log.info("✅ Executing: " + testSignature);
         }
     }

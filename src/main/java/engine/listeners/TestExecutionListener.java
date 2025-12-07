@@ -68,12 +68,7 @@ public class TestExecutionListener extends AllureListener implements ITestListen
     public void onStart(ITestContext context) {
     }
 
-    public void onTestFinish(ITestContext context) {
-        ThreadContext.remove("testLogFileName");
-    }
-
     public void onFinish(ITestContext context) {
-//        ListenerHelper.stopAppenderRootLog("PerTestRouting");
      Loggers.log.info("finished Execution");
     }
 
