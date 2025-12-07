@@ -95,21 +95,12 @@ public class TestExecutionListener extends AllureListener implements ITestListen
          Loggers.log.info("start allure report pls don't stop the execution");
             SystemMethods.runFile(Constants.allureFile);
         }
+    ListenerHelper.stopAppenderRootLog("PerTestRouting");
+        SystemMethods.deleteFile("reports/log4j/perTest/${ctx");
     }
 
     public void onExecutionStart() {
     }
-
-//    @Override
-//    public void run(IHookCallBack callBack, ITestResult testResult) {
-//        callBack.runTestMethod(testResult);
-//        if (testResult.getThrowable() != null) {
-//            if (retry(testResult)) {
-//                callBack.runTestMethod(testResult);
-//            }
-//        }
-//    }
-
 
 
     public static String getBrowserName(WebDriver driver) {
