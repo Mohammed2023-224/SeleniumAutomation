@@ -5,6 +5,7 @@ import engine.constants.Constants;
 import engine.reporters.Loggers;
 import engine.utils.GmailHandler;
 import engine.utils.ReadExecutionFlow;
+import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.*;
@@ -38,9 +39,10 @@ public class TestExecutionListener extends AllureListener implements ITestListen
         String name = result.getMethod().getMethodName();
         String fileName = name +"-"+browserName+"-"+timestamp;
         fileName = fileName.replaceAll("[^a-zA-Z0-9\\-_]", "_");
-        System.setProperty("testLogFileName", fileName);
-        ListenerHelper.reconfigureLogs();
+        ThreadContext.put("testLogFileName", fileName); // ✅ thread-local
+//        ListenerHelper.reconfigureLogs();
      Loggers.log.info("Start test: {}", result.getName());
+
     }
 
     public void onTestSuccess(ITestResult result) {
@@ -66,15 +68,16 @@ public class TestExecutionListener extends AllureListener implements ITestListen
     public void onStart(ITestContext context) {
     }
 
+    public void onTestFinish(ITestContext context) {
+        ThreadContext.remove("testLogFileName");
+    }
+
     public void onFinish(ITestContext context) {
-        ListenerHelper.stopAppenderRootLog("PerTestRouting");
+//        ListenerHelper.stopAppenderRootLog("PerTestRouting");
      Loggers.log.info("finished Execution");
     }
 
-
-
     public void onExecutionFinish() {
-
      Loggers.log.info("Number of all tests: {}", (numberOfSuccessTest.get()+numberOfFailedTests.get()+numberOfSkippedTests.get()));
      Loggers.log.info("Number of successful tests: {}", numberOfSuccessTest.get());
      Loggers.log.info("Name of successful tests: {}", Arrays.deepToString(successfulTests.toArray()));
@@ -92,7 +95,6 @@ public class TestExecutionListener extends AllureListener implements ITestListen
          Loggers.log.info("start allure report pls don't stop the execution");
             SystemMethods.runFile(Constants.allureFile);
         }
-
     }
 
     public void onExecutionStart() {
@@ -116,5 +118,6 @@ public class TestExecutionListener extends AllureListener implements ITestListen
         }
         return "unknown";
     }
+
 }
 

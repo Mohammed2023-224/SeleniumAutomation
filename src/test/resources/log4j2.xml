@@ -26,17 +26,16 @@
         </RollingFile>
 
         <Routing name="PerTestRouting">
-            <Routes pattern="${filePath}/perTest/${sys:testLogFileName:-mainConfigs}">
-                <Route key="${filePath}/perTest/${sys:testLogFileName:-mainConfigs}">
+            <Routes pattern="${ctx:testLogFileName}">
+                <Route>
                     <File name="PerTestLog"
-                          fileName="reports/log4j/perTest/${sys:testLogFileName:-mainConfigs}.log"
+                          fileName="reports/log4j/perTest/${ctx:testLogFileName}.log"
                           append="true">
                         <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
                     </File>
                 </Route>
             </Routes>
         </Routing>
-
     </Appenders>
     <Loggers>
         <Root level="info" additivity="false">

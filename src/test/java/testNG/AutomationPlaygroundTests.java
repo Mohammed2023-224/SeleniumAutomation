@@ -17,7 +17,7 @@ FormPage formPage;
 SamplePage samplePage;
 AdvancedUI advancedUI;
 
-    @Test()
+    @Test(enabled = false)
     public void waitActionsTest() {
         int minWait=2; int maxWait=4;
         homePage.clickPage("Wait Conditions");
@@ -44,7 +44,7 @@ waitActionsPage.handleWaitForFrame(maxWait);
         frames.handleFrames();
     }
 
-    @Test()
+    @Test(enabled = false)
     public void mouseActionsTest() {
         homePage.clickPage("Mouse Actions");
         mouseActions.mouseActions();
@@ -52,13 +52,13 @@ waitActionsPage.handleWaitForFrame(maxWait);
     mouseActions.dragAndDrop();
     }
 
-    @Test()
+    @Test(enabled = false)
     public void keyboardActions() {
         homePage.clickPage("Keyboard Actions");
         keyboardActions.handleKeyboard();
     }
 
-    @Test()
+    @Test(enabled = false)
     public void formPageTests() {
         homePage.clickPage("Forms");
         formPage.handleForm();

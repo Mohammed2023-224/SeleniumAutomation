@@ -30,12 +30,12 @@ public class DriverOptions {
          Loggers.log.info("disable popup blocking");
         }
 
-//        Collections.addAll(opts,
-//                "--disable-save-password-bubble",
+        Collections.addAll(opts,
+                "--disable-save-password-bubble",
 //                "--disable-blink-features=AutomationControlled",
 //                "--safebrowsing-disable-download-protection",
 //                "--no-default-browser-check",
-//                "--disable-notifications",
+                "--disable-notifications"
 //                "--disable-extensions",
 //                "--blink-settings=imagesEnabled=false",
 //                "--disable-features=InterestCohortAPI,SameSiteByDefaultCookies,CookiesWithoutSameSiteMustBeSecure",
@@ -43,7 +43,7 @@ public class DriverOptions {
 //                "--disable-features=DownloadBubble",
 //                "--disable-features=DownloadsUX",
 //                "--suppress-download-notification"
-//        );
+        );
         return opts;
     }
 

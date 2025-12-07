@@ -6,9 +6,11 @@ import engine.actions.JSActions;
 import engine.constants.Constants;
 import engine.driver.SetupDriver;
 import engine.listeners.AllureListener;
+import engine.listeners.ListenerHelper;
 import engine.listeners.TestExecutionListener;
 import engine.listeners.TransformListener;
 import engine.reporters.Loggers;
+import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.*;
@@ -41,8 +43,9 @@ public class BaseTest {
 
     @AfterMethod
     protected void attachLogs() {
-        AllureListener.saveTextLog(System.getProperty("testLogFileName") + ".log",
-                Constants.reportsPath + System.getProperty("testLogFileName") + ".log");
+
+        AllureListener.saveTextLog(ThreadContext.get("testLogFileName") + ".log",
+                Constants.reportsPath + ThreadContext.get("testLogFileName") + ".log");
     }
     @AfterMethod
     protected void startNewTab() {

@@ -32,13 +32,11 @@ public class SystemMethods {
          Loggers.log.warn("File does not exist: {}", path);
             return;
         }
-        try {
-//            FileOutputStream fis = new FileOutputStream(path);
-//            fis.close();
-            FileUtils.forceDelete(file);
-         Loggers.log.info("Deleted the file: {}", path);
+        try {;
+            FileUtils.delete(file);
+         Loggers.log.info("Deleted the file: "+ path);
         } catch (Exception e) {
-         Loggers.log.error("Couldn't delete file: {}. Error: {}", path, e.getMessage());
+         Loggers.log.error("Couldn't delete file: {}.", path);
         }
     }
 
