@@ -32,6 +32,7 @@ public class TestExecutionListener extends AllureListener implements ITestListen
         SystemMethods.deleteDirectory("reports");
         SystemMethods.deleteDirectory("allure-results");
     }
+    @Override
     public void onTestStart(ITestResult result) {
         String browserName = getBrowserName((WebDriver) result.getTestContext().getAttribute("driver")); // You'll define this method
         String timestamp = LocalDateTime.now()
@@ -44,34 +45,36 @@ public class TestExecutionListener extends AllureListener implements ITestListen
      Loggers.log.info("Start test: {}", result.getName());
 
     }
-
+    @Override
     public void onTestSuccess(ITestResult result) {
      Loggers.log.info("Test succeeded: {}", result.getName());
         numberOfSuccessTest.incrementAndGet();
         successfulTests.add(result.getName());
     }
-
-    public void onTestFailure(ITestResult result, ITestContext con) {
-        WebDriver driver = (WebDriver) con.getAttribute("driver");
+    @Override
+    public void onTestFailure(ITestResult result) {
+        WebDriver driver = (WebDriver)  result.getTestContext().getAttribute("driver");
+        saveScreensShot(driver, "failed test screenshot");
      Loggers.log.info("Test failed: {}", result.getName());
         numberOfFailedTests.incrementAndGet();
         failedTests.add(result.getName());
-        saveScreensShot(driver, "failed test screenshot");
+//        saveScreensShot(driver, "failed test screenshot");
     }
 
+    @Override
     public void onTestSkipped(ITestResult result) {
      Loggers.log.info("Test skipped: {}", result.getName());
         numberOfSkippedTests.incrementAndGet();
         skippedTests.add(result.getName());
     }
-
+    @Override
     public void onStart(ITestContext context) {
     }
-
+    @Override
     public void onFinish(ITestContext context) {
      Loggers.log.info("finished Execution");
     }
-
+    @Override
     public void onExecutionFinish() {
      Loggers.log.info("Number of all tests: {}", (numberOfSuccessTest.get()+numberOfFailedTests.get()+numberOfSkippedTests.get()));
      Loggers.log.info("Number of successful tests: {}", numberOfSuccessTest.get());
@@ -93,7 +96,7 @@ public class TestExecutionListener extends AllureListener implements ITestListen
     ListenerHelper.stopAppenderRootLog("PerTestRouting");
         SystemMethods.deleteFile("reports/log4j/perTest/${ctx");
     }
-
+    @Override
     public void onExecutionStart() {
     }
 

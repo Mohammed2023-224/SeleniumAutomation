@@ -28,6 +28,7 @@ public class AllureListener {
         try {
             if (driver == null) return;
             byte[] ss = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            Loggers.log.warn("Screen shot taken");
             Allure.addAttachment(name, new ByteArrayInputStream(ss));
 
         } catch (Exception e) {

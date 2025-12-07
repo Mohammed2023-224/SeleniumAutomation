@@ -14,7 +14,7 @@ public class TransformListener implements IAnnotationTransformer {
 
     @Override
     public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {
-        if (testMethod == null) return; // Don't process config methods or null test methods
+        if (testMethod == null) return;
         String className = testClass != null ? testClass.getSimpleName() : testMethod.getDeclaringClass().getSimpleName();
         String testSignature = (className + "." + testMethod.getName()).trim().toLowerCase();
         if (!runningTests.contains(testSignature.toLowerCase())) {

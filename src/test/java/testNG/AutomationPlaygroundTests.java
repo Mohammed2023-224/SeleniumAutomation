@@ -33,12 +33,12 @@ waitActionsPage.handleWaitForText(maxWait);
 waitActionsPage.handleWaitForFrame(maxWait);
     }
 
-    @Test()
+    @Test
     public void popUpWindowsTest() {
         homePage.clickPage("Popup Windows");
         popUpWindows.handlePopups();
         }
-
+    @Test
     public void framesTest() {
         homePage.clickPage("Frames");
         frames.handleFrames();
