@@ -18,11 +18,10 @@ public class SetupDriver {
         };
     }
 
-    public WebDriver startDriverRemotely(String browser) {
-        String proxyURL= Constants.proxyURL;
+    public WebDriver startDriverRemotely(String browser,String proxy) {
         return switch (browser.toLowerCase()) {
-            case "edge" -> new Edge().initiateRemoteDriver(proxyURL);
-            case "chrome" -> new Chrome().initiateRemoteDriver(proxyURL);
+            case "edge" -> new Edge().initiateRemoteDriver(proxy);
+            case "chrome" -> new Chrome().initiateRemoteDriver(proxy);
             default -> throw new IllegalArgumentException("Unsupported remote browser: " + browser);
         };
     }

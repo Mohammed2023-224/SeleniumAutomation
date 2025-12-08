@@ -22,14 +22,15 @@ import java.util.List;
 public class BaseTest {
     public WebDriver driver;
 
-    @Parameters("browser")
+    @Parameters({"browser","port"})
     @BeforeClass
-    protected void InitDriver(ITestContext con, @Optional String browser) {
+    protected void InitDriver(ITestContext con, @Optional String browser,@Optional String port) {
         browser = browser == null || browser.isEmpty() ? Constants.browser : browser;
+        port = port == null || port.isEmpty() ? Constants.proxyURL : port;
         if (Constants.executionType.equalsIgnoreCase("local")) {
             driver = new SetupDriver().startDriver(browser);
         } else if (Constants.executionType.equalsIgnoreCase("remote")) {
-            driver = new SetupDriver().startDriverRemotely(browser);
+            driver = new SetupDriver().startDriverRemotely(browser,port);
         }
         con.setAttribute("driver", driver);
     }

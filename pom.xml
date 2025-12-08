@@ -229,6 +229,7 @@
         <id>qa</id>
         <properties>
             <env>qa</env>
+            <testng.xml>src/test/resources/xml/testngRemote.xml</testng.xml>
         </properties>
     </profile>
     </profiles>

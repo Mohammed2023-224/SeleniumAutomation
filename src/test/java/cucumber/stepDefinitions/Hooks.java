@@ -26,7 +26,7 @@ public class Hooks {
         if (Constants.executionType.equalsIgnoreCase("local")) {
             driver = new SetupDriver().startDriver(browser);
         } else if (Constants.executionType.equalsIgnoreCase("remote")) {
-            driver = new SetupDriver().startDriverRemotely(browser);
+            driver = new SetupDriver().startDriverRemotely(browser,"ADD PROXY HERE");
         }
         DriverFactory.setDriver(driver);
 
