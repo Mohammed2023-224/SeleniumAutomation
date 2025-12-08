@@ -30,7 +30,6 @@ public class AllureListener {
             byte[] ss = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
             Loggers.log.warn("Screen shot taken");
             Allure.addAttachment(name, new ByteArrayInputStream(ss));
-
         } catch (Exception e) {
             Loggers.log.warn("⚠ Unable to capture screenshot for Allure: {}", e.getMessage());
         }

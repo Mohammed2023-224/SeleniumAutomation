@@ -214,8 +214,24 @@
     </dependency>
   </dependencies>
 
+    <profiles>
+    <profile>
+        <id>dev</id>
+        <properties>
+            <env>dev</env>
+        </properties>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+    </profile>
 
-
+    <profile>
+        <id>qa</id>
+        <properties>
+            <env>qa</env>
+        </properties>
+    </profile>
+    </profiles>
 
     <!-- Used to change structure -->
 <!--
