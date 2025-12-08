@@ -17,7 +17,7 @@ public class Constants {
      public static  final String generateAllureReport=PropertyReader.readProp("allure_generation_path");
      public static final String compressReport=PropertyReader.readProp("allure_compression_path");
      public static final String reportsPath=PropertyReader.readProp("report_logs_path");
-     public static final int retryCount=Integer.valueOf(PropertyReader.readProp("RetryCount"));
+     public static final int retryCount=Integer.parseInt(PropertyReader.readProp("RetryCount"));
      public static  final String testDataPath=PropertyReader.readProp("test_data_path");
      public static final String url=PropertyReader.readProp("mainurl");
      public static final String headlessMode=PropertyReader.readProp("headless");

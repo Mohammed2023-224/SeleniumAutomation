@@ -12,11 +12,11 @@ import java.util.Properties;
 public class PropertyReader {
     static Properties prop;
     static FileReader fr;
-    static String path="src/test/resources/properties/qa";
-    static String devPath="src/test/resources/properties/dev";
+    static String path="src/test/resources/properties/qa/";
+    static String devPath="src/test/resources/properties/dev/";
 
     public static Properties readAllProperties(){
-        String env= System.getProperty("env", "dev");
+        String env= System.getProperty("env", "qa");
         String configPath= env.equalsIgnoreCase("qa")? path:devPath;
         prop=new Properties();
         ArrayList<String> files=new ArrayList<>();
