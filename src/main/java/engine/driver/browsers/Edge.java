@@ -1,5 +1,6 @@
 package engine.driver.browsers;
 
+import engine.constants.Constants;
 import engine.driver.DriverOptions;
 import engine.reporters.Loggers;
 import org.openqa.selenium.WebDriver;
@@ -25,15 +26,23 @@ public class Edge {
 
     // initiate edge driver
     public WebDriver initiateDriver() {
-     Loggers.log.info("Start edge driver");
+        setLocalDriver();
+     Loggers.log.info("Start edge driver found at path: "+System.getProperty("webdriver.edge.driver"));
         return new EdgeDriver(getDriverOptions());
     }
     public WebDriver initiateRemoteDriver(String proxyURl) {
      Loggers.log.info("Start edge on remote driver");
+        setLocalDriver();
         try {
             return new RemoteWebDriver(new URL(proxyURl), getDriverOptions());
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void setLocalDriver(){
+        if(Constants.localDriver.equalsIgnoreCase("true")){
+            System.setProperty("webdriver.edge.driver", "src/main/resources/driver/msedgedriver.exe");
         }
     }
 }

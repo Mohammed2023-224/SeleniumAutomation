@@ -1,5 +1,6 @@
 package engine.driver.browsers;
 
+import engine.constants.Constants;
 import engine.driver.DriverOptions;
 import engine.reporters.Loggers;
 import org.openqa.selenium.WebDriver;
@@ -11,24 +12,27 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Chrome {
-
+// Can always download using webdriver manager as it gives more control then manual downloads
     // get driver options
     private ChromeOptions getDriverOptions() {
         DriverOptions driverOptions = new DriverOptions();
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments( driverOptions.defineDriverOptions());
         chromeOptions.setExperimentalOption("prefs",driverOptions.definePreferences());
+
         return chromeOptions;
     }
 
     // initiate chrome driver
     public WebDriver initiateDriver() {
-     Loggers.log.info("Start chrome driver");
+        setLocalDriver();
+        Loggers.log.info("Start chrome driver found at :" +System.getProperty("webdriver.chrome.driver"));
         return new ChromeDriver(getDriverOptions());
     }
 
 
     public WebDriver initiateRemoteDriver(String proxyURl) {
+        setLocalDriver();
      Loggers.log.info("Start chrome on remote driver");
         try {
             return new RemoteWebDriver(new URL(proxyURl), getDriverOptions());
@@ -36,5 +40,11 @@ public class Chrome {
             throw new RuntimeException(e);
         }
 
+    }
+
+    private void setLocalDriver(){
+        if(Constants.localDriver.equalsIgnoreCase("true")){
+            System.setProperty("webdriver.chrome.driver", "src/main/resources/driver/chromedriver.exe");
+        }
     }
 }
