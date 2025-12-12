@@ -1,5 +1,6 @@
 package testNG;
 
+import engine.driver.DriverFactory;
 import testNG.base.BaseTest;
 import engine.actions.BrowserActions;
 import engine.actions.DevToolsActions;
@@ -72,8 +73,8 @@ public class ExpandTests extends BaseTest {
         oneTimePass.typeOTP("476798");
         oneTimePass.clickVerifyOTP();
         oneTimePass.assertFail();
-        BrowserActions.navigateBack(driver);
-        BrowserActions.navigateBack(driver);
+        BrowserActions.navigateBack(DriverFactory.getDriver());
+        BrowserActions.navigateBack(DriverFactory.getDriver());
         oneTimePass.typeEmail("practice@expandtesting.com");
         oneTimePass.clickSendOTP();
         oneTimePass.typeOTP(otp);
@@ -114,7 +115,7 @@ public class ExpandTests extends BaseTest {
     @Test
     public void fileDownloader() {
         homePage.navigateHomePage();
-        new DevToolsActions(driver).createSession().setDownloadFolder("C:\\Users\\USER\\Downloads");
+        new DevToolsActions(DriverFactory.getDriver()).createSession().setDownloadFolder("C:\\Users\\USER\\Downloads");
         homePage.clickOnSubLink("File Downloader");
         fileDownloader.downloadFile();
     }
@@ -188,14 +189,14 @@ return new ExcelReader().
 
 @BeforeClass
     protected void initClasses(){
-    homePage=new HomePage(driver);
-    webInputs=new WebInputs(driver);
-    loginPage=new LoginPage(driver);
-    oneTimePass=new OneTimePass(driver);
-    dynamicTable=new DynamicTable(driver);
-    dragAndDrop=new DragAndDrop(driver);
-    fileDownloader=new FileDownloader(driver);
-    multipleTests=new MultipleTests(driver);
+    homePage=new HomePage(DriverFactory.getDriver());
+    webInputs=new WebInputs(DriverFactory.getDriver());
+    loginPage=new LoginPage(DriverFactory.getDriver());
+    oneTimePass=new OneTimePass(DriverFactory.getDriver());
+    dynamicTable=new DynamicTable(DriverFactory.getDriver());
+    dragAndDrop=new DragAndDrop(DriverFactory.getDriver());
+    fileDownloader=new FileDownloader(DriverFactory.getDriver());
+    multipleTests=new MultipleTests(DriverFactory.getDriver());
 }
 
 }

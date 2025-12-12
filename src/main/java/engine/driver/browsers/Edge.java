@@ -26,13 +26,11 @@ public class Edge {
 
     // initiate edge driver
     public WebDriver initiateDriver() {
-        setLocalDriver();
      Loggers.log.info("Start edge driver found at path: "+System.getProperty("webdriver.edge.driver"));
         return new EdgeDriver(getDriverOptions());
     }
     public WebDriver initiateRemoteDriver(String proxyURl) {
-     Loggers.log.info("Start edge on remote driver");
-        setLocalDriver();
+     Loggers.log.info("Start edge on remote driver port: "+proxyURl);
         try {
             return new RemoteWebDriver(new URL(proxyURl), getDriverOptions());
         } catch (MalformedURLException e) {

@@ -7,14 +7,12 @@
     </listeners>
     <test name="edge tests">
         <parameter name="browser" value="edge"/>
-        <parameter name="port" value="http://localhost:4445/wd/hub"/>
         <classes>
             <class name="testNG.AutomationPlaygroundTests"/>
         </classes>
     </test> <!-- Test -->
     <test name="chrome tests ">
         <parameter name="browser" value="chrome"/>
-        <parameter name="port" value="http://localhost:4444/wd/hub"/>
         <classes>
             <class name="testNG.AutomationPlaygroundTests"/>
         </classes>
