@@ -228,19 +228,18 @@
         <id>dev</id>
         <properties>
             <env>dev</env>
-            <testng.xml>src/test/resources/xml/testngRemote.xml</testng.xml>
-        </properties>
 
-    </profile>
-
-    <profile>
-        <id>qa</id>
-        <properties>
-            <env>qa</env>
         </properties>
         <activation>
             <activeByDefault>true</activeByDefault>
         </activation>
+    </profile>
+    <profile>
+        <id>qa</id>
+        <properties>
+            <env>qa</env>
+            <testng.xml>src/test/resources/xml/testngRemote.xml</testng.xml>
+        </properties>
     </profile>
     </profiles>
 
