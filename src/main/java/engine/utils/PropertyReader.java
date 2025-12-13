@@ -5,34 +5,38 @@ import engine.reporters.Loggers;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 public class PropertyReader {
     static Properties prop;
     static FileReader fr;
-    static String path="src/test/resources/properties/qa/";
-    static String devPath="src/test/resources/properties/dev/";
+    static String path="src/test/resources/properties/";
 
     public static Properties readAllProperties(){
-        String env= System.getProperty("env", "dev");
-        String configPath= env.equalsIgnoreCase("qa")? path:devPath;
+        String env= System.getProperty("env", "default");
+        Path configDir = Paths.get(path, env);
         prop=new Properties();
-        ArrayList<String> files=new ArrayList<>();
-        files.add(configPath+"Path.properties");
-        files.add(configPath+"Links.properties");
-        files.add(configPath+"Configs.properties");
-        for (String f: files) {
-            try {
-                fr = new FileReader(f);
-                prop.load(fr);
-            } catch (FileNotFoundException e) {
-             Loggers.log.error("Can't find file {}", f);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        try (Stream<Path> paths = Files.list(configDir)) {
+            paths
+                    .filter(p -> p.toString().endsWith(".properties"))
+                    .forEach(p -> {
+                        try (FileReader fr = new FileReader(p.toFile())) {
+                            prop.load(fr);
+                            Loggers.log.info("Loaded properties file: {}", p.getFileName());
+                        } catch (IOException e) {
+                            Loggers.log.error("Failed to load file {}", p, e);
+                        }
+                    });
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read config directory: " + configDir, e);
         }
+
         return prop;
     }
 
