@@ -5,7 +5,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import pages.expand.DragAndDrop;
 import pages.expand.HomePage;
-import pages.expand.LoginPage;
 
 public class MouseActionsSteps {
 

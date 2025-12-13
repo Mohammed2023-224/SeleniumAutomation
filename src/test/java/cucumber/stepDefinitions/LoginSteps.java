@@ -4,7 +4,8 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import pages.expand.*;
+import pages.expand.HomePage;
+import pages.expand.LoginPage;
 
 public class LoginSteps {
 

@@ -1,15 +1,14 @@
 package testNG;
 
 import engine.driver.DriverFactory;
+import pages.expand.*;
 import testNG.base.BaseTest;
 import engine.actions.BrowserActions;
 import engine.actions.DevToolsActions;
 import engine.utils.Faker;
 import org.testng.annotations.*;
-import pages.expand.MultipleTests;
 import engine.constants.Constants;
 import engine.utils.ExcelReader;
-import pages.expand.*;
 
 import java.util.LinkedHashMap;
 
@@ -18,7 +17,7 @@ public class ExpandTests extends BaseTest {
     HomePage homePage;
     WebInputs webInputs;
     LoginPage loginPage;
-    OneTimePass    oneTimePass;
+    OneTimePass oneTimePass;
     DynamicTable dynamicTable;
     DragAndDrop dragAndDrop;
     FileDownloader fileDownloader;
