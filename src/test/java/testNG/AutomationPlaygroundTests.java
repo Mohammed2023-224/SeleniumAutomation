@@ -74,7 +74,7 @@ waitActionsPage.handleWaitForFrame(maxWait);
     @Test()
     public void advancedUITests() {
         homePage.clickPage("Advanced UI Features");
-        advancedUI.handleTab();
+        advancedUI.handleAdvancedUIChallenge();
     }
 
 @BeforeMethod()
