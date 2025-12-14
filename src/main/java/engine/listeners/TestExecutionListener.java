@@ -13,6 +13,8 @@ import org.testng.annotations.ITestAnnotation;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -95,9 +97,18 @@ public class TestExecutionListener extends AllureListener implements ITestListen
         }
     ListenerHelper.stopAppenderRootLog("PerTestRouting");
         SystemMethods.deleteFile("reports/log4j/perTest/${ctx");
+        if (Constants.seleniumGridRun.equalsIgnoreCase("true")) {
+            System.out.println("Test execution finished. Cleaning up Selenium Grid...");
+            SystemMethods.killProcessesByPort(4444,5555);
+            System.out.println("Cleanup completed.");
+        }
     }
     @Override
     public void onExecutionStart() {
+        if(Constants.seleniumGridRun.equalsIgnoreCase("true")){
+            SystemMethods.startBatAsync("src/main/resources/grid/startHub.bat");
+            SystemMethods.startBatAsync("src/main/resources/grid/startNode.bat");
+        }
     }
 
 

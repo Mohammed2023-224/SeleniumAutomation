@@ -2,19 +2,19 @@ package engine.actions;
 
 import engine.reporters.Loggers;
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Appender;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.Configuration;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class SystemMethods {
+    private static final List<Process> runningProcesses = Collections.synchronizedList(new ArrayList<>());
 
     public static void deleteDirectory(String path) {
         File directory = new File(path);
@@ -39,6 +39,63 @@ public class SystemMethods {
          Loggers.log.error("Couldn't delete file: {}.", path);
         }
     }
+    public static Process startBatAsync(String batPath) {
+        CompletableFuture<Process> future = new CompletableFuture<>();
+
+        new Thread(() -> {
+            try {
+                File batFile = new File(batPath);
+                ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", batFile.getAbsolutePath());
+                builder.directory(batFile.getParentFile());
+                builder.inheritIO();
+
+                Process process = builder.start();
+                runningProcesses.add(process);
+                future.complete(process);
+            } catch (Exception e) {
+                future.completeExceptionally(e);
+            }
+        }).start();
+
+        try {
+            return future.get();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Interrupted while starting process", e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException("Failed to start process: " + batPath, e);
+        }
+    }
+    public static void killProcessesByPort(int... ports) {
+        try {
+            for (int port : ports) {
+                // Find PID using port
+                ProcessBuilder findPid = new ProcessBuilder(
+                        "cmd.exe", "/c",
+                        "netstat -ano | findstr :" + port + " | findstr LISTENING"
+                );
+
+                Process process = findPid.start();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (line.contains("LISTENING")) {
+                        String[] parts = line.trim().split("\\s+");
+                        String pid = parts[parts.length - 1];
+
+                        // Kill the process
+                        ProcessBuilder killPb = new ProcessBuilder("taskkill", "/F", "/PID", pid);
+                        killPb.start();
+                        System.out.println("Killed process " + pid + " using port " + port);
+                    }
+                }
+                process.waitFor();
+            }
+        } catch (Exception e) {
+            System.err.println("Error killing processes by port: " + e.getMessage());
+        }
+    }
+
 
     public static void runFile(String path) {
         File file = new File(path);

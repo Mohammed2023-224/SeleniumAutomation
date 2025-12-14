@@ -28,7 +28,7 @@ public class PropertyReader {
                     .forEach(p -> {
                         try (FileReader fr = new FileReader(p.toFile())) {
                             prop.load(fr);
-                            Loggers.log.info("Loaded properties file: {}", p.getFileName());
+                            Loggers.log.info("Loaded properties file: {}", p.toFile());
                         } catch (IOException e) {
                             Loggers.log.error("Failed to load file {}", p, e);
                         }

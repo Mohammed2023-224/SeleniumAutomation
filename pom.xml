@@ -6,45 +6,41 @@
   <version>1.0-SNAPSHOT</version>
   <name>Archetype - ExpandTesting</name>
   <url>http://maven.apache.org</url>
-  <properties>
-    <selenium.version>4.38.0</selenium.version>
-    <testng.version>7.11.0</testng.version>
-    <log4j2API.version>3.0.0-beta2</log4j2API.version>
-    <log4j2Core.version>3.0.0-beta2</log4j2Core.version>
-    <apache.poi.version>5.4.1</apache.poi.version>
-    <jackson.version>2.15.2</jackson.version>
-    <lombok.version>1.18.38</lombok.version>
-      <RestAssured.version>5.3.0</RestAssured.version>
-    <cucumberJava.version>7.24.0</cucumberJava.version>
-    <cucumberTestng.version>7.23.0</cucumberTestng.version>
-    <aspectJ.version>1.9.7</aspectJ.version>
-    <allure.version>2.29.1</allure.version>
-<!--    <allureMavenPlugin.version>2.11.2</allureMavenPlugin.version>-->
-    <mavenSureFirePlugin.version>3.2.5</mavenSureFirePlugin.version>
-    <faker.version>1.0.2</faker.version>
-    <jakarta.version>2.0.1</jakarta.version>
-    <awaitility.version>4.2.0</awaitility.version>
-      <testng.xml>src/test/resources/xml/testng.xml</testng.xml>
-      <javax.version>1.6.2</javax.version>
-      <javaxActivation.version>1.1.1</javaxActivation.version>
-      <googleAPIClient.version>1.31.5</googleAPIClient.version>
-      <maven.compiler.source>15</maven.compiler.source>
-      <maven.compiler.target>15</maven.compiler.target>
-  </properties>
+
+    <properties>
+        <selenium.version>4.38.0</selenium.version>
+        <testng.version>7.11.0</testng.version>
+        <log4j2API.version>3.0.0-beta2</log4j2API.version>
+        <log4j2Core.version>3.0.0-beta2</log4j2Core.version>
+        <apache.poi.version>5.4.1</apache.poi.version>
+        <jackson.version>2.15.2</jackson.version>
+        <lombok.version>1.18.38</lombok.version>
+        <RestAssured.version>5.3.0</RestAssured.version>
+        <cucumberJava.version>7.24.0</cucumberJava.version>
+        <cucumberTestng.version>7.23.0</cucumberTestng.version>
+        <aspectJ.version>1.9.7</aspectJ.version>
+        <allure.version>2.29.1</allure.version>
+        <!--    <allureMavenPlugin.version>2.11.2</allureMavenPlugin.version>-->
+        <mavenSureFirePlugin.version>3.2.5</mavenSureFirePlugin.version>
+        <faker.version>1.0.2</faker.version>
+        <jakarta.version>2.0.1</jakarta.version>
+        <awaitility.version>4.2.0</awaitility.version>
+        <testng.xml>src/test/resources/xml/testng.xml</testng.xml>
+        <javax.version>1.6.2</javax.version>
+        <javaxActivation.version>1.1.1</javaxActivation.version>
+        <googleAPIClient.version>1.31.5</googleAPIClient.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
 
   <build>
   <plugins>
-<!--  <plugin>-->
-<!--    <groupId>io.qameta.allure</groupId>-->
-<!--    <artifactId>allure-maven</artifactId>-->
-<!--    <version>${allureMavenPlugin.version}</version>-->
-<!--  </plugin>-->
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-surefire-plugin</artifactId>
       <version>${mavenSureFirePlugin.version}</version>
       <configuration>
-        <suiteXmlFiles>
+          <suiteXmlFiles>
             <suiteXmlFile>${testng.xml}</suiteXmlFile>
         </suiteXmlFiles>
       </configuration>
@@ -222,26 +218,6 @@
       <version>${faker.version}</version>
     </dependency>
   </dependencies>
-
-    <profiles>
-    <profile>
-        <id>dev</id>
-        <properties>
-            <env>dev</env>
-
-        </properties>
-        <activation>
-            <activeByDefault>true</activeByDefault>
-        </activation>
-    </profile>
-    <profile>
-        <id>qa</id>
-        <properties>
-            <env>qa</env>
-            <testng.xml>src/test/resources/xml/testngRemote.xml</testng.xml>
-        </properties>
-    </profile>
-    </profiles>
 
     <!-- Used to change structure -->
 <!--

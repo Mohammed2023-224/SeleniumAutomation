@@ -37,6 +37,7 @@ public class Constants {
      public static final String emailBody=PropertyReader.readProp("Email_body");
     public static final String downloadsPath= PropertyReader.readProp("downloaded_files_Path");
     public static final String localDriver= PropertyReader.readProp("localDriver");
+    public static final String seleniumGridRun= PropertyReader.readProp("seleniumGrid");
 
 
 }

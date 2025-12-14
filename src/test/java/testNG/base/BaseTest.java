@@ -14,6 +14,8 @@ import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.*;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +33,28 @@ public class BaseTest {
         if (Constants.executionType.equalsIgnoreCase("local")) {
             driver = new SetupDriver().startDriver(browser);
         } else if (Constants.executionType.equalsIgnoreCase("remote")) {
+            if(Constants.seleniumGridRun.equalsIgnoreCase("true")){
+                waitForGrid(port,15);
+            }
             driver = new SetupDriver().startDriverRemotely(browser,port);
         }
         con.setAttribute("driver", driver);
     }
-
+    public static void waitForGrid(String gridUrl, int timeoutSeconds) {
+        long end = System.currentTimeMillis() + timeoutSeconds * 1000;
+        while (System.currentTimeMillis() < end) {
+            try {
+                HttpURLConnection con =
+                        (HttpURLConnection) new URL(gridUrl + "/status").openConnection();
+                con.setConnectTimeout(1000);
+                if (con.getResponseCode() == 200) {
+                    return;
+                }
+            } catch (Exception ignored) {}
+            try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
+        }
+        throw new RuntimeException("Grid not ready");
+    }
     @AfterClass
     protected void tearDriver() {
         driver.quit();
