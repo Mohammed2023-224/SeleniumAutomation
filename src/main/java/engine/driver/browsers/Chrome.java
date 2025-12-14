@@ -26,13 +26,12 @@ public class Chrome {
     // initiate chrome driver
     public WebDriver initiateDriver() {
         setLocalDriver();
-        Loggers.log.info("Start chrome driver found at :" +System.getProperty("webdriver.chrome.driver"));
+        Loggers.log.info("Start chrome driver " );
         return new ChromeDriver(getDriverOptions());
     }
 
 
     public WebDriver initiateRemoteDriver(String proxyURl) {
-        setLocalDriver();
      Loggers.log.info("Start chrome on remote driver port: "+proxyURl);
         try {
             return new RemoteWebDriver(new URL(proxyURl), getDriverOptions());
@@ -45,6 +44,8 @@ public class Chrome {
     private void setLocalDriver(){
         if(Constants.localDriver.equalsIgnoreCase("true")){
             System.setProperty("webdriver.chrome.driver", "src/main/resources/driver/chromedriver.exe");
+            Loggers.log.info("chrome driver is found at path: "+System.getProperty("webdriver.chrome.driver"));
+
         }
     }
 }
