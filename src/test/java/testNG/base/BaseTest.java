@@ -68,16 +68,13 @@ public class BaseTest {
     @AfterMethod
     protected void startNewTab() {
         JSActions.executeScript(driver,"window.open();");
-        String currentHandle = driver.getWindowHandle();
         List<String> handles = new ArrayList<>(driver.getWindowHandles());
         System.out.println(handles);
         String validTab = null;
         for (String handle : handles) {
             try {
                 driver.switchTo().window(handle);
-//                String title = driver.getTitle();
                 String url = driver.getCurrentUrl();
-
                 boolean isEdgeDownloader = url.toLowerCase().contains("edge://");
                 boolean isBlank = url.equals("about:blank");
                 if ( isBlank) {

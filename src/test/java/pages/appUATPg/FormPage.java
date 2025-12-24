@@ -84,14 +84,13 @@ public void userFillsExperience(String text){
     assertText(expFieldAssertion,text);
     Allure.step("User fills in experience field");
 }
-public void userFillsProgrammingLanguagesCheckboxes(){
+public void userFillsProgrammingLanguagesCheckboxes() {
     Set<String> expectedSelections = new LinkedHashSet<>();
     toggleAndAssert("PYTHON", expectedSelections);
     toggleAndAssert("JAVASCRIPT", expectedSelections);
     toggleAndAssert("PYTHON", expectedSelections);
     Allure.step("User fills in programming languages checkboxes");
 }
-
 public void userFillsToolsRadioButtons(){
     ArrayList<String> data = new ArrayList<>(List.of("SELENIUM", "PROTRACTOR"));
     for (String i : data){
@@ -102,9 +101,6 @@ public void userFillsToolsRadioButtons(){
 }
 // Can be handled better through tests dividing and external data calling and method dividing per purpose
 public void handleForm(){
-    userFillsExperience("6");
-    userFillsProgrammingLanguagesCheckboxes();
-    userFillsToolsRadioButtons();
     selectOptionFromDDL("Cypress",selectTool);
     assertText(selectToolValidate,"cyp");
     selectOptionFromDDL("Python",multipleSelection);
@@ -147,8 +143,8 @@ Waits.waitForFileToBeDownloaded(driver,path+thirdFile);
     assertText(nonEnglishTextValidate,"test");
     clickOption("मराठी");
     assertText(nonEnglishSelectionValidate,"मराठी");
-    clickOption("मराठी ગુજરાતી");
-    assertText(nonEnglishSelectionValidate,"मराठी ગુજરાતી");
+    clickOption("ગુજરાતી");
+    assertText(nonEnglishSelectionValidate,"ગુજરાતી");
 }
 
 

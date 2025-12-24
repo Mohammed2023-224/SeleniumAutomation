@@ -19,7 +19,7 @@
         <cucumberJava.version>7.24.0</cucumberJava.version>
         <cucumberTestng.version>7.23.0</cucumberTestng.version>
         <aspectJ.version>1.9.7</aspectJ.version>
-        <allure.version>2.29.1</allure.version>
+        <allure.version>2.32.0</allure.version>
         <!--    <allureMavenPlugin.version>2.11.2</allureMavenPlugin.version>-->
         <mavenSureFirePlugin.version>3.2.5</mavenSureFirePlugin.version>
         <faker.version>1.0.2</faker.version>
