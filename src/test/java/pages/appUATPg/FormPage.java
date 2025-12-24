@@ -2,10 +2,18 @@ package pages.appUATPg;
 
 
 import engine.actions.*;
+import engine.reporters.Loggers;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 public class FormPage {
 private final WebDriver driver;
@@ -52,41 +60,75 @@ private By options(String option){
     return By.xpath("//input[@value='"+option+"']");
 }
 
+private void typeField(String text,By element){
+    ElementActions.typeInElement(driver,element,text);
+}
+
+private void clickOption(String text){
+    ElementActions.clickElement(driver,options(text));
+}
+
+ private void selectOptionFromDDL(String text,By element){
+    ElementActions.selectDDLOptionText(driver,element,text);
+}
+
+private void assertText(By element,String text){
+    Loggers.log.info(ElementActions.getText(driver,element));
+    Loggers.log.info(text);
+    Assert.assertTrue(ElementActions.getText(driver,element).contains(text));
+    Loggers.log.info("Assertion successful where "+ElementActions.getText(driver,element)+" contains "+ text);
+}
+
+public void userFillsExperience(String text){
+    typeField(text,expField);
+    assertText(expFieldAssertion,text);
+    Allure.step("User fills in experience field");
+}
+public void userFillsProgrammingLanguagesCheckboxes(){
+    Set<String> expectedSelections = new LinkedHashSet<>();
+    toggleAndAssert("PYTHON", expectedSelections);
+    toggleAndAssert("JAVASCRIPT", expectedSelections);
+    toggleAndAssert("PYTHON", expectedSelections);
+    Allure.step("User fills in programming languages checkboxes");
+}
+
+public void userFillsToolsRadioButtons(){
+    ArrayList<String> data = new ArrayList<>(List.of("SELENIUM", "PROTRACTOR"));
+    for (String i : data){
+        clickOption(i);
+        assertText(redValidate,i);
+    }
+    Allure.step("User fills in tools radio buttons");
+}
+// Can be handled better through tests dividing and external data calling and method dividing per purpose
 public void handleForm(){
-    ElementActions.typeInElement(driver,expField,"6");
-    Assert.assertTrue(ElementActions.getText(driver,expFieldAssertion).contains("6"));
-    ElementActions.clickElement(driver,options("PYTHON"));
-    ElementActions.clickElement(driver,options("JAVASCRIPT"));
-    Assert.assertTrue(ElementActions.getText(driver,checkCheckBoxes).contains("PYTHON JAVASCRIPT"));
-    ElementActions.clickElement(driver,options("JAVASCRIPT"));
-    Assert.assertTrue(ElementActions.getText(driver,checkCheckBoxes).contains("PYTHON"));
-    ElementActions.clickElement(driver,options("SELENIUM"));
-    Assert.assertTrue(ElementActions.getText(driver,redValidate).contains("SELENIUM"));
-    ElementActions.clickElement(driver,options("PROTRACTOR"));
-    Assert.assertTrue(ElementActions.getText(driver,redValidate).contains("PROTRACTOR"));
-    ElementActions.selectDDLOptionText(driver,selectTool,"Cypress");
-    Assert.assertTrue(ElementActions.getText(driver,selectToolValidate).contains("cyp"));
-    ElementActions.selectDDLOptionText(driver,multipleSelection,"Python");
-    Assert.assertTrue(ElementActions.getText(driver,multipleSelectionValidate).contains("python"));
-    ElementActions.selectDDLOptionText(driver,multipleSelection,"Java");
-    Assert.assertTrue(ElementActions.getText(driver,multipleSelectionValidate).contains("java"));
+    userFillsExperience("6");
+    userFillsProgrammingLanguagesCheckboxes();
+    userFillsToolsRadioButtons();
+    selectOptionFromDDL("Cypress",selectTool);
+    assertText(selectToolValidate,"cyp");
+    selectOptionFromDDL("Python",multipleSelection);
+    assertText(multipleSelectionValidate,"python");
+    selectOptionFromDDL("Java",multipleSelection);
+    assertText(multipleSelectionValidate,"java");
+
     ElementActions.pressKeyboardKeys(driver,multipleSelection, Keys.CONTROL);
-    ElementActions.selectDDLOptionText(driver,multipleSelection,"TypeScript");
-    Assert.assertTrue(ElementActions.getText(driver,multipleSelectionValidate).contains("java,python,typescript"));
-    ElementActions.typeInElement(driver,notesField,"test");
-    Assert.assertTrue(ElementActions.getText(driver,notesFieldValidate).contains("test"));
+    selectOptionFromDDL("TypeScript",multipleSelection);
+    assertText(multipleSelectionValidate,"java,python,typescript");
+    typeField("test",notesField);
+    assertText(notesFieldValidate,"test");
     Assert.assertTrue(driver.findElement(onlyReadField).getDomProperty("placeholder").contains("Common Sense"));
     JSActions.clickUsingJavaScript(driver,readGerman);
-    Assert.assertTrue(ElementActions.getText(driver,readGermanValidate).contains("true"));
+    assertText(readGermanValidate,"true");
     JSActions.clickUsingJavaScript(driver,readGerman);
-    Assert.assertTrue(ElementActions.getText(driver,readGermanValidate).contains("false"));
+    assertText(readGermanValidate,"false");
     DragAndDropActions.dragAndDropByLocation(driver,fluency,-100,0);
 //    Assert.assertTrue(ElementActions.getText(driver,fluencyValidate).contains("0"));
-    ElementActions.typeInElement(driver,uploadCV,path+firstFile);
-    Assert.assertTrue(ElementActions.getText(driver,uploadCVValidate).contains(firstFile));
-    ElementActions.typeInElement(driver,uploadFiles,path+secondFile+" \n "+path+firstFile);
-    Assert.assertTrue(ElementActions.getText(driver,uploadFilesValidate).contains
-            (secondFile+" "+firstFile));
+    typeField(path+firstFile,uploadCV);
+    assertText(uploadCVValidate,firstFile);
+    typeField(path+secondFile+" \n "+path+firstFile,uploadFiles);
+    assertText(uploadFilesValidate,secondFile+" "+firstFile);
+
     Assert.assertTrue(driver.findElement(salary).getDomProperty("placeholder").contains("You should not provide this"));
     ElementActions.clickElement(driver,downloadFile);
 Waits.waitForFileToBeDownloaded(driver,path+thirdFile);
@@ -95,17 +137,28 @@ Waits.waitForFileToBeDownloaded(driver,path+thirdFile);
     ElementActions.typeInElement(driver,city,"test");
     ElementActions.typeInElement(driver,state,"test");
     ElementActions.clickElement(driver,submitButton);
-    Assert.assertTrue(ElementActions.getText(driver,invalidZip).contains("Please provide a valid zip."));
-    Assert.assertTrue(ElementActions.getText(driver,invalidTerms).contains("You must agree before submitting."));
-    ElementActions.typeInElement(driver,zip,"test");
+    assertText(invalidZip,"Please provide a valid zip.");
+    assertText(invalidTerms,"You must agree before submitting.");
+    typeField("test",zip);
     ElementActions.clickElement(driver,agree);
     ElementActions.clickElement(driver,submitButton);
-    Assert.assertTrue(ElementActions.getText(driver,city).contains(""));
-    ElementActions.typeInElement(driver,nonEnglishText,"test");
-    Assert.assertTrue(ElementActions.getText(driver,nonEnglishTextValidate).contains("test"));
-    ElementActions.clickElement(driver,options("मराठी"));
-    Assert.assertTrue(ElementActions.getText(driver,nonEnglishSelectionValidate).contains("मराठी"));
-    ElementActions.clickElement(driver,options("ગુજરાતી"));
-    Assert.assertTrue(ElementActions.getText(driver,nonEnglishSelectionValidate).contains("मराठी ગુજરાતી"));
+    assertText(city,"");
+    typeField("test",nonEnglishText);
+    assertText(nonEnglishTextValidate,"test");
+    clickOption("मराठी");
+    assertText(nonEnglishSelectionValidate,"मराठी");
+    clickOption("मराठी ગુજરાતી");
+    assertText(nonEnglishSelectionValidate,"मराठी ગુજરાતી");
 }
+
+
+    private void toggleAndAssert(String language, Set<String> expected) {
+        clickOption(language);
+        if (expected.contains(language)) {
+            expected.remove(language);
+        } else {
+            expected.add(language);
+        }
+        assertText(checkCheckBoxes, String.join(" ", expected));
+    }
 }
