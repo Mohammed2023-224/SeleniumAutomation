@@ -3,6 +3,7 @@ package engine.listeners;
 import engine.reporters.Loggers;
 import io.qameta.allure.Allure;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -23,16 +24,20 @@ public class AllureListener {
          Loggers.log.warn("Error closing file stream for AllureListener: {}", filePath);
 }
     }
-
+//@Step("Adding screen shot")
     public static void  saveScreensShot(WebDriver driver, String name){
-        try {
-            if (driver == null) return;
-            byte[] ss = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-            Loggers.log.warn("Screen shot taken");
-            Allure.addAttachment(name, new ByteArrayInputStream(ss));
-        } catch (Exception e) {
-            Loggers.log.warn("⚠ Unable to capture screenshot for Allure: {}", e.getMessage());
-        }
+        Allure.step( "Save screen shot",()-> {
+            try {
+                if (driver == null) return;
+                byte[] ss = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+                Loggers.log.warn("Screen shot taken");
+                Allure.addAttachment(name, "img/png", new ByteArrayInputStream(ss), ".png");
+                Loggers.log.warn("attached to report");
+
+            } catch (Exception e) {
+                Loggers.log.warn("⚠ Unable to capture screenshot for Allure: {}", e.getMessage());
+            }
+        } );
     }
 
     }

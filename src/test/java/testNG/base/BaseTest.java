@@ -64,6 +64,7 @@ public class BaseTest {
     protected void attachLogs() {
         AllureListener.saveTextLog(ThreadContext.get("testLogFileName") + ".log",
                 Constants.reportsPath + ThreadContext.get("testLogFileName") + ".log");
+        AllureListener.saveScreensShot(driver,"test");
     }
     @AfterMethod
     protected void startNewTab() {

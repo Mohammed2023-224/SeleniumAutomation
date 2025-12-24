@@ -55,8 +55,6 @@ public class TestExecutionListener extends AllureListener implements ITestListen
     }
     @Override
     public void onTestFailure(ITestResult result) {
-        WebDriver driver = (WebDriver)  result.getTestContext().getAttribute("driver");
-        saveScreensShot(driver, "failed test screenshot");
      Loggers.log.info("Test failed: {}", result.getName());
         numberOfFailedTests.incrementAndGet();
         failedTests.add(result.getName());
