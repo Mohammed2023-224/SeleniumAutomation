@@ -42,7 +42,7 @@ public class ResponseActions {
         response.then().log().all();
     }
     public static void logBody(Response response){
-        Loggers.log.info("log bodu only");
+        Loggers.log.info("log body only");
         response.then().log().body();
     }
 
@@ -56,7 +56,7 @@ public class ResponseActions {
         response.then().log().cookies();
     }
     public static String getBodyAsString(Response response){
-        Loggers.log.info("log all cookies");
+        Loggers.log.info("get body");
         return response.body().asString();
     }
 
@@ -78,14 +78,12 @@ public class ResponseActions {
         return response.getCookie(value);
     }
 
-    public static Object getValueByPath(Response response, String path){
-        Loggers.log.info("get value in path [{}]",path);
-        return getResponse(response).path(path);
+    public static <T> T getValueByPath(Response response, String path, Class<T> type) {
+        return response.jsonPath().getObject(path, type);
     }
 
-    public static ArrayList<T> getArrayValueByPath(Response response, String path){
-        Loggers.log.info("get array value in path [{}]",path);
-        return getResponse(response).path(path);
+    public static <T> T getValueByPath(Response response, String path, TypeRef<T> typeRef) {
+        return response.jsonPath().getObject(path, typeRef);
     }
 
     public static ExtractableResponse<Response> getResponse(Response response){
@@ -98,19 +96,17 @@ public class ResponseActions {
         return response.body().jsonPath();
     }
 
-    public static Object deserializeResponse(Response response, Class<?> className){
-        Object user=null ;
+    public static <T> T deserializeResponseIntoClass(Response response, Class<T> className){
         try{
-            user = objectMapper.readValue(response.getBody().asString(), className);
-            Loggers.log.info("read json from current response and deserialize it into class [{}]",className );
+            T object = objectMapper.readValue(response.getBody().asString(), className);
+            Loggers.log.info("read json from current response and deserialize it into class [{}]",className.getSimpleName() );
+            return object;
         }
         catch (Exception e){
             Loggers.log.info("Couldn't deserialize current response");
+            throw new RuntimeException(e);
         }
-        return user;
     }
-
-
 
     public static <T> void assertEquals(T expected, T actual ){
         if( expected.equals(actual) ){

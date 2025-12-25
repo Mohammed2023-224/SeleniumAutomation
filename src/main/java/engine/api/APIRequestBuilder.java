@@ -16,12 +16,12 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 public class APIRequestBuilder {
+
     private String url;
     private LinkedHashMap<String, String> cookies = new LinkedHashMap<>();
     private LinkedHashMap<String, String> headers = new LinkedHashMap<>();
     private RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
 
-    // ✅ Copy constructor
     public APIRequestBuilder(APIRequestBuilder api) {
         this.requestSpecBuilder = new RequestSpecBuilder();
         setURL(api.url); // copy base URL
@@ -29,7 +29,8 @@ public class APIRequestBuilder {
         setHeaders(api.headers); // copy cookies
     }
 
-    public APIRequestBuilder() {}
+    public APIRequestBuilder() {
+    }
 
     public APIRequestBuilder(String url, Map<String, String> cookies) {
         setURL(url);
@@ -37,31 +38,23 @@ public class APIRequestBuilder {
     }
 
 
-
-    private Response sendRequest(String requestType) {
-        switch (requestType.toLowerCase()) {
-            case "get":
-                return RestAssured.given().spec(requestSpecBuilder.build()).when().get();
-            case "post":
-                return RestAssured.given().spec(requestSpecBuilder.build()).when().post();
-            case "put":
-                return RestAssured.given().spec(requestSpecBuilder.build()).when().put();
-            case "patch":
-                return RestAssured.given().spec(requestSpecBuilder.build()).when().patch();
-            case "delete":
-                return RestAssured.given().spec(requestSpecBuilder.build()).when().delete();
-            default:
-                throw new IllegalArgumentException("Unsupported request type: " + requestType);
-        }
+    private Response sendRequest(HttpMethods method) {
+        return switch (method) {
+            case GET -> RestAssured.given().spec(requestSpecBuilder.build()).when().get();
+            case POST -> RestAssured.given().spec(requestSpecBuilder.build()).when().post();
+            case PUT -> RestAssured.given().spec(requestSpecBuilder.build()).when().put();
+            case PATCH -> RestAssured.given().spec(requestSpecBuilder.build()).when().patch();
+            case DELETE -> RestAssured.given().spec(requestSpecBuilder.build()).when().delete();
+        };
     }
 
     public Response performRequest(HttpMethods requestType) {
         Loggers.log.info("Start executing sync {} request", requestType.getMethod());
-        return sendRequest(requestType.getMethod());
+        return sendRequest(requestType);
     }
 
 
-    public CompletableFuture<Response> performAsyncRequest(String requestType, int waitTime, int pollTime, int statusCode) {
+    public CompletableFuture<Response> performAsyncRequest(HttpMethods requestType, int waitTime, int pollTime, int statusCode) {
         return CompletableFuture.supplyAsync(() -> {
             Loggers.log.info("Start executing async {} request", requestType);
             final Response[] finalResponse = {null};
@@ -79,47 +72,53 @@ public class APIRequestBuilder {
     }
 
 
-    public void setURL(String url){
+    public void setURL(String url) {
         requestSpecBuilder.setBaseUri(url);
         this.url = url;
-        Loggers.log.info("Set base URl to [{}]",url);
+        Loggers.log.info("Set base URl to [{}]", url);
     }
 
-    public void setAuthorization(String... info){
-        requestSpecBuilder.setAuth(APIHelpers.setAuthorizationScheme(info));
+    public void setAuthorization(APIHelpers.AuthType authType, String... info) {
+        requestSpecBuilder.setAuth(APIHelpers.setAuthorizationScheme(authType, info));
     }
 
 
     public void setHeaders(Map<String, String> headers) {
         this.headers.clear();
         if (headers != null && !headers.isEmpty()) {
-            this.headers.putAll(headers); // copy instead of assigning
+            this.headers.putAll(headers);
             requestSpecBuilder.addHeaders(this.headers);
             Loggers.log.info("set headers: {}", this.headers);
         }
     }
 
+    public void setHeaders(String headerName, String headerValue) {
+        requestSpecBuilder.addHeader(headerName, headerValue);
+        Loggers.log.info("Add header [{}] -> [{}]", headerName, headerValue);
+    }
 
-    public void addQueryParams(Map<String,String> queryParams){
-        for (Map.Entry<String, String> entry : queryParams.entrySet()) {
-            requestSpecBuilder.addQueryParam(entry.getKey(), entry.getValue());
-            Loggers.log.info("set query parameters: {} -> {}",entry.getKey(), entry.getValue());
+    public void addQueryParam(Map<String, String> queryParams) {
+        if (queryParams != null) {
+            queryParams.forEach((k, v) -> {
+                requestSpecBuilder.addQueryParam(k, v);
+                Loggers.log.info("Query param [{}]=[masked]", k);
+            });
         }
     }
 
-    public void addQueryParam(String queryName, String value){
-        requestSpecBuilder.addQueryParam(queryName,value);
-        Loggers.log.info("add query parameters: {} -> {}",queryName,value);
+    public void addQueryParam(String queryName, String value) {
+        requestSpecBuilder.addQueryParam(queryName, value);
+        Loggers.log.info("add query parameters: {} -> {}", queryName, value);
     }
 
-    public void setPathParams(String path){
+    public void setBasePathParameter(String path) {
         requestSpecBuilder.setBasePath(path);
-        Loggers.log.info("Set base path parameter to [{}]",path);
+        Loggers.log.info("Set base path parameter to [{}]", path);
     }
 
-    public void setProxy(int proxy){
+    public void setProxy(int proxy) {
         requestSpecBuilder.setProxy(proxy);
-        Loggers.log.info("Set proxy to [{}]",proxy);
+        Loggers.log.info("Set proxy to [{}]", proxy);
     }
 
 
@@ -128,39 +127,23 @@ public class APIRequestBuilder {
         if (cookies != null && !cookies.isEmpty()) {
             this.cookies.putAll(cookies); // copy instead of assigning
             requestSpecBuilder.addCookies(this.cookies);
-            System.out.println("Cookies set: " + this.cookies);
+            System.out.println("Cookies set: " + this.cookies.keySet());
         }
     }
 
-    public void clearCookies(){
-        Map<String, String> LinkedHashMap = new LinkedHashMap<>();
-        requestSpecBuilder.addCookies(LinkedHashMap);
-    }
-    public void clearHeaders(){
-        Map<String, String> LinkedHashMap = new LinkedHashMap<>();
-        requestSpecBuilder.addHeaders(LinkedHashMap);
-    }
-
-
-    public void addCookie(String cookies){
+    public void setCookies(String cookies) {
         requestSpecBuilder.addCookie(cookies);
-        Loggers.log.info("Add cookie to [{}]",cookies);
+        Loggers.log.info("Add cookie to [{}]", cookies);
     }
 
-    public void addHeader(String headerName,String headerValue){
-        requestSpecBuilder.addHeader(headerName,headerValue);
-        Loggers.log.info("Add header [{}] -> [{}]",headerName,headerValue);
-    }
-
-    public void setContentTypeAndAccept(String contentType){
+    public void setContentTypeAndAccept(String contentType) {
         requestSpecBuilder.setContentType(contentType).setAccept(contentType);
-        Loggers.log.info("Set content type to [{}]",contentType);
+        Loggers.log.info("Set content type to [{}]", contentType);
     }
 
-    public void setBodyAsFile(String filePath){
+    public void setBodyAsFile(String filePath, String contentType) {
         try {
-            requestSpecBuilder.addHeader("Content-Type","application/json");
-            requestSpecBuilder.addHeader("Accept","application/json");
+            setContentTypeAndAccept(contentType);
             requestSpecBuilder.setBody(Files.readAllBytes(Paths.get(filePath)));
             Loggers.log.info("Set body as file located at [{}]", filePath);
         } catch (IOException e) {
@@ -169,15 +152,17 @@ public class APIRequestBuilder {
         }
     }
 
-    public void setBodyAsString(String body){
+    public void setBodyAsString(String body) {
         requestSpecBuilder.setBody(body);
-        Loggers.log.info("Set body as string: [{}]",body);
+        Loggers.log.info("Set body as string: [{}]", body);
     }
-    public void setBodyAsObject(Object body){
+
+    public void setBodyAsObject(Object body) {
         requestSpecBuilder.setBody(body);
-        Loggers.log.info("Set body as current object [{}]",body);
+        Loggers.log.info("Set body as current object [{}]", body);
     }
-    public void addFormParams(HashMap<String,String> header){
+
+    public void addFormParams(HashMap<String, String> header) {
         requestSpecBuilder.addFormParams(header);
     }
 }

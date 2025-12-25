@@ -9,37 +9,58 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class APIHelpers {
-    protected static int convertObjectIntoInt(Object data){
-        int newData=0;
-        try{
-            newData= (Integer) data;
-            Loggers.log.info("Convert object into integer");
+
+    protected static int castObjectToIntOrDefault(Object data, int defaultValue){
+
+        if (data == null) return defaultValue;
+        try {
+            if (data instanceof Number n) return n.intValue();
+            if (data instanceof String s) return Integer.parseInt(s.trim());
+            Loggers.log.warn("Cannot convert type [{}] to int; returning default {}", data.getClass(), defaultValue);
+        } catch (NumberFormatException ex) {
+            Loggers.log.warn("Failed to parse integer from [{}]; returning default {}", data, defaultValue);
         }
-        catch (Exception e){
-            Loggers.log.info("Can't Convert object into integer");
-        }
-        return newData;
+        return defaultValue;
+
     }
 
-    /**
-     first string is always the type of authorization
-     **/
-    protected static AuthenticationScheme setAuthorizationScheme(String... info){
-        if(info[0].equalsIgnoreCase("basic")){
-            Loggers.log.info("set basic authorization with user name {} and password {}",info[1],info[2]);
-            return RestAssured.basic(info[1],info[2]);
+
+    public enum AuthType { BASIC, BEARER, DIGEST, OAUTH1 }
+
+    protected static AuthenticationScheme setAuthorizationScheme(AuthType type, String... parts){
+        try{
+            return switch (type) {
+                case BASIC -> {
+                    guardAuthorization(parts, 2);
+                    Loggers.log.info("Setting BASIC authorization for user [{}]", parts[0]);
+                    yield RestAssured.preemptive().basic(parts[0], parts[1]);
+                }
+                case BEARER -> {
+                    guardAuthorization(parts, 1);
+                    Loggers.log.info("Setting BEARER authorization");
+                    yield RestAssured.oauth2(parts[0]);
+                }
+                case DIGEST -> {
+                    guardAuthorization(parts, 2);
+                    Loggers.log.info("Setting DIGEST authorization for user [{}]", parts[0]);
+                    yield RestAssured.digest(parts[0], parts[1]);
+                }
+                case OAUTH1 -> {
+                    guardAuthorization(parts, 4);
+                    Loggers.log.info("Setting OAUTH1 authorization ");
+                    yield RestAssured.oauth(parts[0], parts[1], parts[2], parts[3]);
+                }
+            }; }
+        catch (IllegalArgumentException ex) {
+            Loggers.log.error("Invalid auth configuration: {}", ex.getMessage());
+            return null;
         }
-        else if(info[0].equalsIgnoreCase("bearer")){
-            Loggers.log.info("set bearer authorization with token {}",info[1]);
-            return RestAssured.oauth2(info[1]);
+    }
+
+    private static void guardAuthorization(String[] parts, int expected) {
+        if (parts == null || parts.length < expected) {
+            throw new IllegalArgumentException("Insufficient auth parts; expected " + expected);
         }
-        else if(info[0].equalsIgnoreCase("digest")){
-            return RestAssured.digest(info[1],info[2]);
-        }
-        else if(info[0].equalsIgnoreCase("outh1")){
-            return RestAssured.oauth(info[1],info[2],info[3],info[4]);
-        }
-        return null;
     }
 
 
