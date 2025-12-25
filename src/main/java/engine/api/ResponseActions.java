@@ -2,6 +2,7 @@ package engine.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import engine.reporters.Loggers;
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Headers;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.ExtractableResponse;
