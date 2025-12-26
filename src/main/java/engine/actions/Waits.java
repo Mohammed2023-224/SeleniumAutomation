@@ -47,42 +47,28 @@ public class Waits {
 
 
     public static void waitToBeVisible(WebDriver driver, By locator ){
-        if(ElementActions.checkIfElementVisible(driver,locator)){
-         Loggers.log.info("Element located at "+locator+" is visible");
-        }
-        else {
             explicitWaitLongTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locator));
          Loggers.log.info("wait for element located at "+locator+" to be visible for {}",Constants.longWaitTime);
-        }
+
     }
 
     public static void waitToBeInvisible(WebDriver driver, By locator ){
-        if(!ElementActions.checkIfElementVisible(driver,locator)){
-         Loggers.log.info("element located at {} is invisible", locator);
-        }
-        else {
             explicitWaitLongTime(driver).until(ExpectedConditions.invisibilityOfElementLocated(locator));
          Loggers.log.info("wait for element located at {} to be invisible for {}", locator,Constants.longWaitTime);
-        }
+
     }
 
 
     public static void waitToBeClickable(WebDriver driver, By locator  ) {
-        if (!ElementActions.checkIfElementClickable(driver, locator)) {
             explicitWaitLongTime(driver).until(ExpectedConditions.elementToBeClickable(locator));
             Loggers.log.info("wait for element located at " + locator + " to be clickable for " + Constants.longWaitTime);
-        }
     }
 
 
     public static void waitToExist(WebDriver driver, By locator){
-        if(ElementActions.checkIfElementExists(driver,locator)){
-         Loggers.log.info("element located at {} exists", locator);
-        }
-        else {
             explicitWaitLongTime(driver).until(ExpectedConditions.presenceOfElementLocated(locator));
          Loggers.log.info("wait for element located at {} to exist for {}", locator,Constants.longWaitTime);
-        }
+
     }
 
     public static void waitElementToContainText(WebDriver driver, By locator,String text){
