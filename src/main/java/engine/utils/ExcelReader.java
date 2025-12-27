@@ -37,6 +37,7 @@ public class ExcelReader {
         changeSheet(sheetName);
         int numberOfRowsMeetingCondition=0;
         int conditionColumnNumber=getColumnNumFromHeaderName(colName);
+        Loggers.log.info("condition was found at column number " + conditionColumnNumber);
         for(int i=1 ;i<getNumberOfRows();i++){
             if(getCellByColumnNumAndRowNum(i,conditionColumnNumber).equalsIgnoreCase(condition)){
              Loggers.log.info("Increase rows meeting condition by 1");
@@ -53,7 +54,7 @@ public class ExcelReader {
                     String currentKey=getCellByColumnNumAndRowNum(0,j);
                     String currentValue=getCellByColumnNumAndRowNum(i,j);
                     linkedHashMap.put(currentKey,currentValue);
-                   Loggers.log.info("Read data Key: {} --> Value: {}",currentKey,currentValue);
+                   Loggers.log.info("Read data Key: {} --> Value: {} from row {} and column  {}",currentKey,currentValue,i,j);
                 }
                 dataObj[num++][0]=linkedHashMap;
             }
@@ -74,7 +75,7 @@ public class ExcelReader {
     private static void changeSheet(String sheetName) {
         if (!(workbook == null)) {
             sheet = workbook.getSheet(sheetName);
-         Loggers.log.info("found  sheet {}", sheetName);
+         Loggers.log.info("found  sheet {} and changed to it", sheetName);
         } else {
          Loggers.log.error("Can't find sheet {}", sheetName);
         }
@@ -90,56 +91,40 @@ public class ExcelReader {
 
     private static String getCellByColumnNameAndRowNum(int rowNum, String colName) {
         int colNum = getColumnNumFromHeaderName(colName);
-
-        // ✅ EDIT: Null-check for row
         XSSFRow targetRow = sheet.getRow(rowNum);
         if (targetRow == null) {
          Loggers.log.error("Row {} not found in sheet {}", rowNum, sheet.getSheetName());
             return "";
         }
-
         // ✅ EDIT: Null-check for cell
         XSSFCell targetCell = targetRow.getCell(colNum);
         if (targetCell == null) {
          Loggers.log.error("Cell not found at row {}, column {}", rowNum, colNum);
             return "";
         }
-
         String data = getCellData(targetCell);
-     Loggers.log.info("read data '{}' from row {} and column '{}'", data, rowNum, colName);
         return data;
     }
 
     private static String getCellByColumnNumAndRowNum(int rowNum, int colNum) {
-        // ✅ EDIT: Null-check for row
         XSSFRow targetRow = sheet.getRow(rowNum);
         if (targetRow == null) {
          Loggers.log.error("Row {} not found in sheet {}", rowNum, sheet.getSheetName());
             return "";
         }
 
-        // ✅ EDIT: Null-check for cell
         XSSFCell targetCell = targetRow.getCell(colNum);
         if (targetCell == null) {
          Loggers.log.error("Cell not found at row {}, column {}", rowNum, colNum);
             return "";
         }
-
         String data = getCellData(targetCell);
-     Loggers.log.info("read '{}' from row {} and column {}", data, rowNum, colNum);
         return data;
     }
-
-//    private static String getCellByColumnNumAndRowNum(int rowNum, int colNum) {
-//        String data=getCellData(sheet.getRow(rowNum).getCell(colNum));
-//     Loggers.log.info("read {} from row {} and column {}", data,rowNum,colNum);
-//        return data;
-//    }
 
     private static int getColumnNumFromHeaderName(String columnName) {
         for (int i = 0; i < getNumberOfColumnsByHeaders(); i++) {
             if (getCellData(sheet.getRow(0).getCell(i)).equals(columnName)) {
-             Loggers.log.info("Getting the header column number: {}", i);
                 return i;
             }
         }
@@ -150,7 +135,6 @@ public class ExcelReader {
 
     private static int getNumberOfColumnsByHeaders() {
         int numOfColumns=sheet.getRow(0).getLastCellNum();
-//     Loggers.log.info("get number of columns: {}",numOfColumns);
         return numOfColumns;
     }
 
@@ -162,13 +146,11 @@ public class ExcelReader {
     private static String getCellData(XSSFCell cel) {
         String data="";
         if((cel==null)) {
-//         Loggers.log.info("cell is null");
            return "";
         }else {
             switch (cel.getCellType()) {
                 case STRING:
                     data = cel.getStringCellValue();
-//                 Loggers.log.info("read string data: {}", data);
                     return data;
                 case NUMERIC:
                 case FORMULA:
@@ -179,16 +161,13 @@ public class ExcelReader {
                     }
                         else{
                             data = String.valueOf(cel.getNumericCellValue());
-//                 Loggers.log.info(" convert number into string and read data: {}", data);
                         }
                     return data;
                 case BLANK:
                 case _NONE:
-//                 Loggers.log.info("cell is blank");
                     return "";
                 case BOOLEAN:
                     data = String.valueOf(cel.getBooleanCellValue());
-//                 Loggers.log.info(" convert boolean into string and read data: {}", data);
                     return data;
             }
         }
