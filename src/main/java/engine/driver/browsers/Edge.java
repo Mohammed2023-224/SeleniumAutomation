@@ -1,11 +1,9 @@
 package engine.driver.browsers;
 
-import engine.constants.Constants;
+import engine.constants.FrameworkConfigs;
 import engine.driver.DriverOptions;
 import engine.reporters.Loggers;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -40,7 +38,7 @@ public class Edge {
     }
 
     private void setLocalDriver(){
-        if(Constants.localDriver.equalsIgnoreCase("true")){
+        if(FrameworkConfigs.localPathDriver()){
             System.setProperty("webdriver.edge.driver", "src/main/resources/driver/msedgedriver.exe");
             Loggers.log.info("Edge driver is found at path: "+System.getProperty("webdriver.edge.driver"));
 

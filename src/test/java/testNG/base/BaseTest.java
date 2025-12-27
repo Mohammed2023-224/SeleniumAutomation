@@ -3,7 +3,7 @@ package testNG.base;
 
 
 import engine.actions.JSActions;
-import engine.constants.Constants;
+import engine.constants.FrameworkConfigs;
 import engine.driver.SetupDriver;
 import engine.listeners.AllureListener;
 import engine.listeners.TestExecutionListener;
@@ -27,13 +27,13 @@ public class BaseTest {
     @Parameters("browser")
     @BeforeClass
     protected void InitDriver(ITestContext con, @Optional String browser) {
-        browser = browser == null || browser.isEmpty() ? Constants.browser : browser;
+        browser = browser == null || browser.isEmpty() ? FrameworkConfigs.browser() : browser;
         String port=System.getProperty("port");
-        port = port == null || port.isEmpty() ? Constants.proxyURL :port;
-        if (Constants.executionType.equalsIgnoreCase("local")) {
+        port = port == null || port.isEmpty() ? FrameworkConfigs.proxy() :port;
+        if (FrameworkConfigs.executionType().equalsIgnoreCase("local")) {
             driver = new SetupDriver().startDriver(browser);
-        } else if (Constants.executionType.equalsIgnoreCase("remote")) {
-            if(Constants.seleniumGridRun.equalsIgnoreCase("true")){
+        } else if (FrameworkConfigs.executionType().equalsIgnoreCase("remote")) {
+            if(FrameworkConfigs.gridEnabled()){
                 waitForGrid(port,15);
             }
             driver = new SetupDriver().startDriverRemotely(browser,port);
@@ -63,7 +63,7 @@ public class BaseTest {
     @AfterMethod
     protected void attachLogs() {
         AllureListener.saveTextLog(ThreadContext.get("testLogFileName") + ".log",
-                Constants.reportsPath + ThreadContext.get("testLogFileName") + ".log");
+                FrameworkConfigs.reportsPath() + ThreadContext.get("testLogFileName") + ".log");
         AllureListener.saveScreensShot(driver,"test");
     }
     @AfterMethod

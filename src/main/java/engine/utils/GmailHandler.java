@@ -15,7 +15,7 @@ import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePart;
-import engine.constants.Constants;
+import engine.constants.FrameworkConfigs;
 import engine.reporters.Loggers;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -41,8 +41,8 @@ public class GmailHandler {
     private   String applicationName ;
     private   JsonFactory jsonFactory ;
     private  List<String> scopes;
-    private  String credentialsFilePath= Constants.gmailCredential;
-    private  String tokensPath = Constants.gmailToken;
+    private  String credentialsFilePath= FrameworkConfigs.gmailCredentials();
+    private  String tokensPath = FrameworkConfigs.gmailToken();
     Gmail service = null;
     private String currentUser="me";
 

@@ -1,0 +1,148 @@
+package engine.constants;
+
+import engine.utils.PropertyReader;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class FrameworkConfigs {
+
+        private static final Map<String, String> CACHE = new ConcurrentHashMap<>();
+
+    /* ======================
+       Core resolver
+       ====================== */
+
+        private static String get(String key) {
+            return CACHE.computeIfAbsent(key, k -> {
+                String sys = System.getProperty(k);
+                if (sys != null && !sys.isBlank()) {
+                    return sys;
+                }
+                return PropertyReader.readProp(k);
+            });
+        }
+
+    /* ======================
+       Typed accessors
+       ====================== */
+
+        public static int shortWait() {
+            return Integer.parseInt(get("shortWaitTime"));
+        }
+
+        public static int longWait() {
+            return Integer.parseInt(get("longWaitTime"));
+        }
+
+        public static int retryCount() {
+            return Integer.parseInt(get("RetryCount"));
+        }
+
+        public static String baseUrl() {
+            return get("mainurl");
+        }
+    public static String automationPlayGroundURL() {
+        return get("testAutomationPlayGroundLink");
+    }
+        public static String browser() {
+            return get("Browser");
+        }
+
+        public static boolean headless() {
+            return Boolean.parseBoolean(get("headless"));
+        }
+        public static boolean popupBlocker() {
+            return Boolean.parseBoolean(get("headless"));
+        }
+
+        public static boolean maximized() {
+            return Boolean.parseBoolean(get("maximized"));
+        }
+
+        public static String executionType() {
+            return get("execution");
+        }
+        public static String testDataPath() {
+            return get("test_data_path");
+        }
+
+        public static boolean gridEnabled() {
+            return Boolean.parseBoolean(get("seleniumGrid"));
+        }
+
+        public static boolean localPathDriver() {
+            return Boolean.parseBoolean(get("localDriver"));
+        }
+
+        public static String proxy() {
+            return get("proxy");
+        }
+
+        public static String downloadsPath() {
+            return get("downloaded_files_Path");
+        }
+
+    /* ======================
+       Reporting
+       ====================== */
+
+        public static boolean openAllure() {
+            return Boolean.parseBoolean(get("openAllureAfterTest"));
+        }
+
+        public static String allureBat() {
+            return get("allure_bat_file_path");
+        }
+
+        public static String allureGenerationPath() {
+            return get("allure_generation_path");
+        }
+
+        public static String allureCompressionPath() {
+            return get("allure_compression_path");
+        }
+
+        public static String reportsPath() {
+            return get("report_logs_path");
+        }
+
+    /* ======================
+       Email
+       ====================== */
+
+        public static String emailTo() {
+            return get("Email_to");
+        }
+
+        public static String emailCc() {
+            return get("Email_CC");
+        }
+
+        public static String emailSubject() {
+            return get("Email_subject");
+        }
+
+        public static String emailBody() {
+            return get("Email_body");
+        }
+
+        public static String emailAttachmentPath() {
+            return get("Email_attachment_path");
+        }
+
+        public static boolean sendReportEmail() {
+            return Boolean.parseBoolean(get("generateAndSendReport"));
+        }
+
+        // Gmail
+        public static String gmailToken() {
+            return get("gmail_token_path");
+        }
+    public static String gmailCredentials() {
+        return get("gmail_credentials");
+    }
+
+    }
+
+//}

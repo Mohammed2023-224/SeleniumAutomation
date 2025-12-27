@@ -1,7 +1,7 @@
 package cucumber.stepDefinitions;
 
 import engine.actions.SystemMethods;
-import engine.constants.Constants;
+import engine.constants.FrameworkConfigs;
 import engine.driver.SetupDriver;
 import engine.listeners.AllureListener;
 import engine.listeners.ListenerHelper;
@@ -22,10 +22,10 @@ public class Hooks {
 
     @Before
     public void InitDriver(Scenario scenario) {
-        String browser = !Constants.browser.isEmpty() ? Constants.browser : "edge";
-        if (Constants.executionType.equalsIgnoreCase("local")) {
+        String browser = !FrameworkConfigs.browser().isEmpty() ? FrameworkConfigs.browser() : "edge";
+        if (FrameworkConfigs.executionType().equalsIgnoreCase("local")) {
             driver = new SetupDriver().startDriver(browser);
-        } else if (Constants.executionType.equalsIgnoreCase("remote")) {
+        } else if (FrameworkConfigs.executionType().equalsIgnoreCase("remote")) {
             driver = new SetupDriver().startDriverRemotely(browser,"ADD PROXY HERE");
         }
         DriverFactory.setDriver(driver);
@@ -53,22 +53,22 @@ public class Hooks {
     @After
     public void tearDriver() {
         AllureListener.saveTextLog(System.getProperty("testLogFileName") + ".log",
-                Constants.reportsPath + System.getProperty("testLogFileName") + ".log");
+                FrameworkConfigs.reportsPath() + System.getProperty("testLogFileName") + ".log");
         DriverFactory.getDriver().quit();
         DriverFactory.unload();
     }
 
     @AfterAll
     public static void generateAllure(){
-        if(Constants.generateAndSendReport.equalsIgnoreCase("true")){
-            SystemMethods.runFile(Constants.generateAllureReport);
+        if(FrameworkConfigs.sendReportEmail()){
+            SystemMethods.runFile(FrameworkConfigs.allureGenerationPath());
             GmailHandler gmailHandler=new GmailHandler("test");
-            gmailHandler.sendEmail(Constants.emailRecipient,Constants.emailCopied,Constants.emailSubject
-                    ,Constants.emailBody,Constants.emailAttachmentPath);
+            gmailHandler.sendEmail(FrameworkConfigs.emailTo(), FrameworkConfigs.emailCc(), FrameworkConfigs.emailSubject()
+                    , FrameworkConfigs.emailBody(), FrameworkConfigs.emailAttachmentPath());
         }
-        if (Constants.openAllure.equalsIgnoreCase("true")) {
+        if (FrameworkConfigs.openAllure()) {
             Loggers.log.info("start allure report pls don't stop the execution");
-            SystemMethods.runFile(Constants.allureFile);
+            SystemMethods.runFile(FrameworkConfigs.allureBat());
         }
     }
 }

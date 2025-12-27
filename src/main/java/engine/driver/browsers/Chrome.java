@@ -1,6 +1,6 @@
 package engine.driver.browsers;
 
-import engine.constants.Constants;
+import engine.constants.FrameworkConfigs;
 import engine.driver.DriverOptions;
 import engine.reporters.Loggers;
 import org.openqa.selenium.WebDriver;
@@ -42,7 +42,7 @@ public class Chrome {
     }
 
     private void setLocalDriver(){
-        if(Constants.localDriver.equalsIgnoreCase("true")){
+        if(FrameworkConfigs.localPathDriver()){
             System.setProperty("webdriver.chrome.driver", "src/main/resources/driver/chromedriver.exe");
             Loggers.log.info("chrome driver is found at path: "+System.getProperty("webdriver.chrome.driver"));
 

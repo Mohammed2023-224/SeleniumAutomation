@@ -1,10 +1,7 @@
 package engine.driver;
 
-import engine.actions.SystemMethods;
-import engine.constants.Constants;
 import engine.driver.browsers.Chrome;
 import engine.driver.browsers.Edge;
-import engine.reporters.Loggers;
 import org.openqa.selenium.WebDriver;
 
 public class SetupDriver {

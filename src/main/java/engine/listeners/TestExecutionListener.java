@@ -1,20 +1,15 @@
 package engine.listeners;
 
 import engine.actions.SystemMethods;
-import engine.constants.Constants;
+import engine.constants.FrameworkConfigs;
 import engine.reporters.Loggers;
 import engine.utils.GmailHandler;
-import engine.utils.ReadExecutionFlow;
+import engine.utils.PropertyReader;
 import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.*;
-import org.testng.annotations.ITestAnnotation;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -83,19 +78,19 @@ public class TestExecutionListener extends AllureListener implements ITestListen
      Loggers.log.info("Name of failed tests: {}", Arrays.deepToString(failedTests.toArray()));
      Loggers.log.info("Number of skipped tests: {}", numberOfSkippedTests.get());
      Loggers.log.info("Name of skipped tests: {}", Arrays.deepToString(skippedTests.toArray()));
-        if(Constants.generateAndSendReport.equalsIgnoreCase("true")){
-            SystemMethods.runFile(Constants.generateAllureReport);
+        if(FrameworkConfigs.sendReportEmail()){
+            SystemMethods.runFile(FrameworkConfigs.allureGenerationPath());
             GmailHandler gmailHandler=new GmailHandler("test");
-            gmailHandler.sendEmail(Constants.emailRecipient,Constants.emailCopied,Constants.emailSubject
-                    ,Constants.emailBody,Constants.emailAttachmentPath);
+            gmailHandler.sendEmail(FrameworkConfigs.emailTo(), FrameworkConfigs.emailCc(), FrameworkConfigs.emailSubject()
+                    , FrameworkConfigs.emailBody(), FrameworkConfigs.emailAttachmentPath());
         }
-        if (Constants.openAllure.equalsIgnoreCase("true")) {
+        if (FrameworkConfigs.openAllure()) {
          Loggers.log.info("start allure report pls don't stop the execution");
-            SystemMethods.runFile(Constants.allureFile);
+            SystemMethods.runFile(FrameworkConfigs.allureGenerationPath());
         }
     ListenerHelper.stopAppenderRootLog("PerTestRouting");
         SystemMethods.deleteFile("reports/log4j/perTest/${ctx");
-        if (Constants.seleniumGridRun.equalsIgnoreCase("true")) {
+        if (FrameworkConfigs.gridEnabled()) {
             System.out.println("Test execution finished. Cleaning up Selenium Grid...");
             SystemMethods.killProcessesByPort(4444,5555);
             System.out.println("Cleanup completed.");
@@ -103,7 +98,8 @@ public class TestExecutionListener extends AllureListener implements ITestListen
     }
     @Override
     public void onExecutionStart() {
-        if(Constants.seleniumGridRun.equalsIgnoreCase("true")){
+        PropertyReader.readAllProperties();
+        if(FrameworkConfigs.gridEnabled()){
             SystemMethods.startBatAsync("src/main/resources/grid/startHub.bat");
             SystemMethods.startBatAsync("src/main/resources/grid/startNode.bat");
         }
