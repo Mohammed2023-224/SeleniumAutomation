@@ -11,7 +11,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class Chrome {
+public class Chrome implements  BrowserDriver{
 // Can always download using webdriver manager as it gives more control then manual downloads
     // get driver options
     private ChromeOptions getDriverOptions() {
