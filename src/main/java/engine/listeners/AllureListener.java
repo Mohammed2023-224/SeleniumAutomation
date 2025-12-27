@@ -15,16 +15,18 @@ import java.io.*;
 public class AllureListener {
 
     public static void saveTextLog(String name, String filePath) {
+        Allure.step( "Save text log",()-> {
         try (FileInputStream fis = new FileInputStream(filePath)) {
             Allure.addAttachment(name,fis);
          Loggers.log.info("attached to report {}", filePath);
         } catch (FileNotFoundException e) {
          Loggers.log.warn("File can't be attached to report: {}", filePath);
         } catch (IOException e) {
-         Loggers.log.warn("Error closing file stream for AllureListener: {}", filePath);
-}
+            Loggers.log.warn("Error closing file stream for AllureListener: {}", filePath);
+        }
+    });
     }
-//@Step("Adding screen shot")
+
     public static void  saveScreensShot(WebDriver driver, String name){
         Allure.step( "Save screen shot",()-> {
             try {

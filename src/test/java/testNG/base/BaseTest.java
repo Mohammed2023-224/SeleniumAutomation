@@ -12,6 +12,7 @@ import engine.reporters.Loggers;
 import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.annotations.*;
 
 import java.net.HttpURLConnection;
@@ -61,10 +62,10 @@ public class BaseTest {
     }
 
     @AfterMethod
-    protected void attachLogs() {
+    protected void attachLogs(ITestResult result) {
         AllureListener.saveTextLog(ThreadContext.get("testLogFileName") + ".log",
                 FrameworkConfigs.reportsPath() + ThreadContext.get("testLogFileName") + ".log");
-        AllureListener.saveScreensShot(driver,"test");
+        if(!result.isSuccess()) AllureListener.saveScreensShot(driver,"test");
     }
     @AfterMethod
     protected void startNewTab() {

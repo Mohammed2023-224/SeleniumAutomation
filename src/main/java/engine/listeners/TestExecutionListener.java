@@ -53,7 +53,7 @@ public class TestExecutionListener extends AllureListener implements ITestListen
      Loggers.log.info("Test failed: {}", result.getName());
         numberOfFailedTests.incrementAndGet();
         failedTests.add(result.getName());
-//        saveScreensShot(driver, "failed test screenshot");
+
     }
 
     @Override

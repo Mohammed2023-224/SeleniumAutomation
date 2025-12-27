@@ -60,8 +60,6 @@ waitActionsPage.handleWaitForFrame(maxWait);
 
     @Test()
     public void formPageTests() {
-
-        int t=1/0;
         homePage.clickPage("Forms");
         formPage.userFillsExperience("6");
         formPage.userFillsProgrammingLanguagesCheckboxes();
