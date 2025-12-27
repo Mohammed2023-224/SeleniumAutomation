@@ -52,8 +52,7 @@ public class APIHelpers {
                 }
             }; }
         catch (IllegalArgumentException ex) {
-            Loggers.log.error("Invalid auth configuration: {}", ex.getMessage());
-            return null;
+            throw new IllegalStateException("Invalid auth configuration");
         }
     }
 
@@ -64,7 +63,7 @@ public class APIHelpers {
     }
 
 
-    public static Response convertFutureResponseToResponse(CompletableFuture<Response> res){
+    public static Response waitForResponse(CompletableFuture<Response> res){
         Response response;
         try {
             response = res.get();

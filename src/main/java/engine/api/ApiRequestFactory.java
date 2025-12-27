@@ -16,16 +16,16 @@ public class ApiRequestFactory {
 
     public APIRequestBuilder newRequest() {
         AuthSession session = tokenProvider.getSession();
-        APIRequestBuilder builder = new APIRequestBuilder(baseUrl, session.cookies());
+        APIRequestBuilder builder = new APIRequestBuilder(baseUrl, session.cookies(),session.headers());
         builder.setHeaders( session.headers());
         return builder;
     }
 
 
-    public Response executeWithRetry(Function<APIRequestBuilder, Response> fn) {
+    public Response executeWithRetry(Function<APIRequestBuilder, Response> fn, int expectedStatusCode) {
         APIRequestBuilder req1 = newRequest();
         Response res = fn.apply(req1);
-        if (res.getStatusCode() == 401) {
+        if (res.getStatusCode() == expectedStatusCode) {
             tokenProvider.refreshSession();
             APIRequestBuilder req2 = newRequest();
             res = fn.apply(req2);

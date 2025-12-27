@@ -4,6 +4,7 @@ import engine.reporters.Loggers;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.awaitility.Awaitility;
 
 import java.io.IOException;
@@ -22,29 +23,37 @@ public class APIRequestBuilder {
     private LinkedHashMap<String, String> headers = new LinkedHashMap<>();
     private RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
 
-    public APIRequestBuilder(APIRequestBuilder api) {
+    public APIRequestBuilder(APIRequestBuilder api,boolean url,boolean cookies,boolean headers) {
         this.requestSpecBuilder = new RequestSpecBuilder();
-        setURL(api.url); // copy base URL
-        setCookies(api.cookies); // copy cookies
-        setHeaders(api.headers); // copy cookies
+        if (url) setURL(api.url);
+        if (cookies) setCookies(api.cookies);
+        if (headers) setHeaders(api.headers);
     }
 
     public APIRequestBuilder() {
     }
-
+    public APIRequestBuilder(String url) {
+        setURL(url);
+    }
     public APIRequestBuilder(String url, Map<String, String> cookies) {
         setURL(url);
         setCookies(cookies);
     }
+    public APIRequestBuilder(String url, Map<String, String> cookies,Map<String, String>  headers) {
+        setURL(url);
+        setCookies(cookies);
+        setHeaders(headers);
+    }
 
 
     private Response sendRequest(HttpMethods method) {
+        RequestSpecification spec = RestAssured.given().spec(requestSpecBuilder.build());
         return switch (method) {
-            case GET -> RestAssured.given().spec(requestSpecBuilder.build()).when().get();
-            case POST -> RestAssured.given().spec(requestSpecBuilder.build()).when().post();
-            case PUT -> RestAssured.given().spec(requestSpecBuilder.build()).when().put();
-            case PATCH -> RestAssured.given().spec(requestSpecBuilder.build()).when().patch();
-            case DELETE -> RestAssured.given().spec(requestSpecBuilder.build()).when().delete();
+            case GET ->spec.when().get();
+            case POST -> spec.when().post();
+            case PUT -> spec.when().put();
+            case PATCH -> spec.when().patch();
+            case DELETE -> spec.when().delete();
         };
     }
 
@@ -116,7 +125,7 @@ public class APIRequestBuilder {
         Loggers.log.info("Set base path parameter to [{}]", path);
     }
 
-    public void setProxy(int proxy) {
+    public void setProxy(String proxy) {
         requestSpecBuilder.setProxy(proxy);
         Loggers.log.info("Set proxy to [{}]", proxy);
     }
@@ -131,9 +140,9 @@ public class APIRequestBuilder {
         }
     }
 
-    public void setCookies(String cookies) {
-        requestSpecBuilder.addCookie(cookies);
-        Loggers.log.info("Add cookie to [{}]", cookies);
+    public void setCookies(String cookies,String value) {
+        requestSpecBuilder.addCookie(cookies,value);
+        Loggers.log.info("Add cookie {} with value {}", cookies,value);
     }
 
     public void setContentTypeAndAccept(String contentType) {

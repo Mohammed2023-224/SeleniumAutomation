@@ -108,13 +108,4 @@ public class ResponseActions {
             throw new RuntimeException(e);
         }
     }
-
-    public static <T> void assertEquals(T expected, T actual ){
-        if( expected.equals(actual) ){
-            Loggers.log.info("Value {} is equal to actual {}",expected,actual);
-        }
-        else {
-            Loggers.log.info("Value {} is not equal to actual {}",expected,actual);
-        }
-    }
 }
