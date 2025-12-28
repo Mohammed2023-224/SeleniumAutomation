@@ -5,6 +5,7 @@ package testNG.base;
 import engine.actions.JSActions;
 import engine.constants.FrameworkConfigs;
 import engine.driver.SetupDriver;
+import engine.enums.Browsers;
 import engine.listeners.AllureListener;
 import engine.listeners.TestExecutionListener;
 import engine.listeners.TransformListener;
@@ -30,15 +31,9 @@ public class BaseTest {
     protected void InitDriver(ITestContext con, @Optional String browser) {
         browser = browser == null || browser.isEmpty() ? FrameworkConfigs.browser() : browser;
         String port=System.getProperty("port");
-        port = port == null || port.isEmpty() ? FrameworkConfigs.proxy() :port;
-        if (FrameworkConfigs.executionType().equalsIgnoreCase("local")) {
-            driver = new SetupDriver().startDriver(browser);
-        } else if (FrameworkConfigs.executionType().equalsIgnoreCase("remote")) {
-            if(FrameworkConfigs.gridEnabled()){
-                waitForGrid(port,15);
-            }
-            driver = new SetupDriver().startDriverRemotely(browser,port);
-        }
+        port = FrameworkConfigs.localExecution()?"":port == null || port.isEmpty()? FrameworkConfigs.proxy():port;
+        if(FrameworkConfigs.gridEnabled())waitForGrid(port,20);
+        driver = new SetupDriver().startDriver(Browsers.valueOf(browser.toUpperCase()),FrameworkConfigs.localExecution(),port);
         con.setAttribute("driver", driver);
     }
     public static void waitForGrid(String gridUrl, int timeoutSeconds) {
@@ -46,7 +41,7 @@ public class BaseTest {
         while (System.currentTimeMillis() < end) {
             try {
                 HttpURLConnection con =
-                        (HttpURLConnection) new URL(gridUrl + "/status").openConnection();
+                        (HttpURLConnection) new URL(gridUrl ).openConnection();
                 con.setConnectTimeout(1000);
                 if (con.getResponseCode() == 200) {
                     return;
@@ -63,12 +58,14 @@ public class BaseTest {
 
     @AfterMethod
     protected void attachLogs(ITestResult result) {
+        if(driver ==null) return;
         AllureListener.saveTextLog(ThreadContext.get("testLogFileName") + ".log",
                 FrameworkConfigs.reportsPath() + ThreadContext.get("testLogFileName") + ".log");
         if(!result.isSuccess()) AllureListener.saveScreensShot(driver,"test");
     }
     @AfterMethod
     protected void startNewTab() {
+        if (driver==null) return;
         JSActions.executeScript(driver,"window.open();");
         List<String> handles = new ArrayList<>(driver.getWindowHandles());
         System.out.println(handles);

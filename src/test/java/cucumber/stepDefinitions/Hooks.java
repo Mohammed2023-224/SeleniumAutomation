@@ -3,6 +3,7 @@ package cucumber.stepDefinitions;
 import engine.actions.SystemMethods;
 import engine.constants.FrameworkConfigs;
 import engine.driver.SetupDriver;
+import engine.enums.Browsers;
 import engine.listeners.AllureListener;
 import engine.listeners.ListenerHelper;
 import engine.reporters.Loggers;
@@ -23,13 +24,10 @@ public class Hooks {
     @Before
     public void InitDriver(Scenario scenario) {
         String browser = !FrameworkConfigs.browser().isEmpty() ? FrameworkConfigs.browser() : "edge";
-        if (FrameworkConfigs.executionType().equalsIgnoreCase("local")) {
-            driver = new SetupDriver().startDriver(browser);
-        } else if (FrameworkConfigs.executionType().equalsIgnoreCase("remote")) {
-            driver = new SetupDriver().startDriverRemotely(browser,"ADD PROXY HERE");
-        }
+        String port=System.getProperty("port");
+        port = FrameworkConfigs.localExecution()?"":port == null || port.isEmpty()? FrameworkConfigs.proxy():port;
+        driver = new SetupDriver().startDriver(Browsers.valueOf(browser.toUpperCase()),FrameworkConfigs.localExecution(),port);
         DriverFactory.setDriver(driver);
-
         String name = scenario.getName();
         WebDriver driver = DriverFactory.getDriver();
         String browserName = getBrowserName(driver);

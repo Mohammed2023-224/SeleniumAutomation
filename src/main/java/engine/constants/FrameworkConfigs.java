@@ -60,8 +60,8 @@ public class FrameworkConfigs {
             return Boolean.parseBoolean(get("maximized"));
         }
 
-        public static String executionType() {
-            return get("execution");
+        public static boolean localExecution() {
+            return Boolean.parseBoolean(get("local_execution"));
         }
         public static String testDataPath() {
             return get("test_data_path");
