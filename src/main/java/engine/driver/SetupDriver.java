@@ -10,8 +10,6 @@ import static engine.driver.DriverHelper.waitForRemoteUrl;
 
 public class SetupDriver {
 
-//    public WebDriver driver;
-
     public  WebDriver startDriver(String browser ,boolean local) {
         Browsers enumBrowser =Browsers.valueOf((browser == null || browser.isEmpty() ? FrameworkConfigs.browser() : browser).toUpperCase());
         String port=System.getProperty("port");
@@ -22,14 +20,6 @@ public class SetupDriver {
             case EDGE -> local?new Edge().initiateDriver(): new Edge().initiateRemoteDriver(port);
             case CHROME -> local? new Chrome().initiateDriver(): new Chrome().initiateRemoteDriver(port);
             default -> throw new IllegalArgumentException("Unsupported browser: " + browser);
-        };
-    }
-
-    public WebDriver startDriverRemotely(String browser,String proxy) {
-        return switch (browser.toLowerCase()) {
-            case "edge" -> new Edge().initiateRemoteDriver(proxy);
-            case "chrome" -> new Chrome().initiateRemoteDriver(proxy);
-            default -> throw new IllegalArgumentException("Unsupported remote browser: " + browser);
         };
     }
 }
