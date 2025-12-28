@@ -24,9 +24,7 @@ public class Hooks {
     @Before
     public void InitDriver(Scenario scenario) {
         String browser = !FrameworkConfigs.browser().isEmpty() ? FrameworkConfigs.browser() : "edge";
-        String port=System.getProperty("port");
-        port = FrameworkConfigs.localExecution()?"":port == null || port.isEmpty()? FrameworkConfigs.proxy():port;
-        driver = new SetupDriver().startDriver(Browsers.valueOf(browser.toUpperCase()),FrameworkConfigs.localExecution(),port);
+        driver = new SetupDriver().startDriver(browser,FrameworkConfigs.localExecution());
         DriverFactory.setDriver(driver);
         String name = scenario.getName();
         WebDriver driver = DriverFactory.getDriver();

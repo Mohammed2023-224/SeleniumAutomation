@@ -29,28 +29,10 @@ public class BaseTest {
     @Parameters("browser")
     @BeforeClass
     protected void InitDriver(ITestContext con, @Optional String browser) {
-        browser = browser == null || browser.isEmpty() ? FrameworkConfigs.browser() : browser;
-        String port=System.getProperty("port");
-        port = FrameworkConfigs.localExecution()?"":port == null || port.isEmpty()? FrameworkConfigs.proxy():port;
-        if(FrameworkConfigs.gridEnabled())waitForGrid(port,20);
-        driver = new SetupDriver().startDriver(Browsers.valueOf(browser.toUpperCase()),FrameworkConfigs.localExecution(),port);
+        driver = new SetupDriver().startDriver(browser,FrameworkConfigs.localExecution());
         con.setAttribute("driver", driver);
     }
-    public static void waitForGrid(String gridUrl, int timeoutSeconds) {
-        long end = System.currentTimeMillis() + timeoutSeconds * 1000;
-        while (System.currentTimeMillis() < end) {
-            try {
-                HttpURLConnection con =
-                        (HttpURLConnection) new URL(gridUrl ).openConnection();
-                con.setConnectTimeout(1000);
-                if (con.getResponseCode() == 200) {
-                    return;
-                }
-            } catch (Exception ignored) {}
-            try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
-        }
-        throw new RuntimeException("Grid not ready");
-    }
+
     @AfterClass
     protected void tearDriver() {
         driver.quit();
