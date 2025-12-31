@@ -7,7 +7,7 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class FrameworkConfigs {
-    static final Properties PROPS = PropertyReader.readAllProperties();
+
 
         private static final Map<String, String> CACHE = new ConcurrentHashMap<>();
 
@@ -17,7 +17,6 @@ public class FrameworkConfigs {
 
     private static String resolve(String key) {
         return CACHE.computeIfAbsent(key, k -> {
-
             String sysValue = System.getProperty(k);
             if (sysValue != null && !sysValue.isBlank()) {
                 return sysValue;

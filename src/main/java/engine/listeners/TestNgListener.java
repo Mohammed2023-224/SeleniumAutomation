@@ -98,6 +98,7 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
     }
     @Override
     public void onExecutionStart() {
+        PropertyReader.readAllProperties();
         SystemMethods.deleteDirectory("reports");
         SystemMethods.deleteDirectory("allure-results");
         if(FrameworkConfigs.gridEnabled()){
