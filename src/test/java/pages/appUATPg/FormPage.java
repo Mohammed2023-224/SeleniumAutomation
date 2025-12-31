@@ -73,10 +73,10 @@ private void clickOption(String text){
 }
 
 private void assertText(By element,String text){
-    Loggers.log.info(ElementActions.getText(driver,element));
-    Loggers.log.info(text);
+    Loggers.getLogger().info(ElementActions.getText(driver,element));
+    Loggers.getLogger().info(text);
     Assert.assertTrue(ElementActions.getText(driver,element).contains(text));
-    Loggers.log.info("Assertion successful where "+ElementActions.getText(driver,element)+" contains "+ text);
+    Loggers.getLogger().info("Assertion successful where "+ElementActions.getText(driver,element)+" contains "+ text);
 }
 
 public void userFillsExperience(String text){

@@ -39,7 +39,7 @@ public class Hooks {
         System.setProperty("testLogFileName", fileName);
         ListenerHelper.reconfigureLogs();
 
-        Loggers.log.info("Start test: {}", name);
+        Loggers.getLogger().info("Start test: {}", name);
     }
     private String getBrowserName(WebDriver driver) {
         // Implement logic to get browser name from driver capabilities
@@ -62,7 +62,7 @@ public class Hooks {
                     , FrameworkConfigs.emailBody(), FrameworkConfigs.emailAttachmentPath());
         }
         if (FrameworkConfigs.openAllure()) {
-            Loggers.log.info("start allure report pls don't stop the execution");
+            Loggers.getLogger().info("start allure report pls don't stop the execution");
             SystemMethods.runFile(FrameworkConfigs.allureBat());
         }
     }

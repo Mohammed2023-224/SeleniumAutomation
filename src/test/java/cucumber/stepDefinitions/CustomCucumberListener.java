@@ -33,7 +33,7 @@ public class CustomCucumberListener implements ConcurrentEventListener {
 
         System.setProperty("testLogFileName", fileName);
         ListenerHelper.reconfigureLogs();
-        Loggers.log.info("Start test: {}", name);
+        Loggers.getLogger().info("Start test: {}", name);
     };
 
     private String getBrowserName(WebDriver driver) {

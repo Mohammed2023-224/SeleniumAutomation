@@ -28,15 +28,15 @@ public class PropertyReader {
                     .forEach(p -> {
                         try (FileReader fr = new FileReader(p.toFile())) {
                             prop.load(fr);
-                            Loggers.log.info("Loaded properties file: {}", p.toFile());
+//                            Loggers.getLogger().info("Loaded properties file: {}", p.toFile());
                         } catch (IOException e) {
-                            Loggers.log.error("Failed to load file {}", p, e);
+//                            Loggers.getLogger().error("Failed to load file {}", p, e);
                         }
                     });
         } catch (IOException e) {
             throw new RuntimeException("Failed to read config directory: " + configDir, e);
         }
-
+        System.setProperty("readPropertyPath", path+"/"+env);
         return prop;
     }
 

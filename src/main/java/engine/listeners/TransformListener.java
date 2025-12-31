@@ -19,10 +19,10 @@ public class TransformListener implements IAnnotationTransformer {
         String testSignature = (className + "." + testMethod.getName()).trim().toLowerCase();
         if (!runningTests.contains(testSignature.toLowerCase())) {
             annotation.setEnabled(false);
-            Loggers.log.info("⛔ Skipping: " + testSignature);
+            Loggers.getLogger().info("⛔ Skipping: " + testSignature);
         } else {
             annotation.setRetryAnalyzer(RetryListener.class);
-            Loggers.log.info("✅ Executing: " + testSignature);
+            Loggers.getLogger().info("✅ Executing: " + testSignature);
         }
     }
 }

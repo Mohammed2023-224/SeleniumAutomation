@@ -15,15 +15,15 @@ public class DriverOptions {
         if(FrameworkConfigs.headless()){
             opts.add("--headless=new");
             opts.add("--window-size=1920,1080");
-         Loggers.log.info("Activate Headless mode");
+         Loggers.getLogger().info("Activate Headless mode");
         }
         if(FrameworkConfigs.maximized()){
             opts.add("start-maximized");
-         Loggers.log.info("Start maximized");
+         Loggers.getLogger().info("Start maximized");
         }
         if(FrameworkConfigs.popupBlocker()){
             opts.add("--disable-popup-blocking");
-         Loggers.log.info("disable popup blocking");
+         Loggers.getLogger().info("disable popup blocking");
         }
         Collections.addAll(opts,
                 "--disable-save-password-bubble",

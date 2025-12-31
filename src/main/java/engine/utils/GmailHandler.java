@@ -80,9 +80,9 @@ public class GmailHandler {
                     .setAccessType("offline")
                     .build();
         } catch (IOException e) {
-         Loggers.log.error("Error with token file ", e );
+         Loggers.getLogger().error("Error with token file ", e );
         } catch (GeneralSecurityException e) {
-         Loggers.log.warn("gmail security issue ", e );
+         Loggers.getLogger().warn("gmail security issue ", e );
         }
 
         try {
@@ -127,12 +127,12 @@ public class GmailHandler {
                     .setQ(query)
                     .execute();
         } catch (IOException e) {
-         Loggers.log.warn("Failed to fetch messages through API call");
+         Loggers.getLogger().warn("Failed to fetch messages through API call");
         }
         assert response != null;
         List<Message> messages = response.getMessages();
         if (messages == null || messages.isEmpty()) {
-         Loggers.log.warn("No messages found.");
+         Loggers.getLogger().warn("No messages found.");
         }
         return messages;
     }
@@ -233,25 +233,25 @@ public class GmailHandler {
             message.setRaw(encodedEmail);
 
             message = service.users().messages().send(currentUser, message).execute();
-         Loggers.log.info("Email sent successfully: {}", message.getId());
+         Loggers.getLogger().info("Email sent successfully: {}", message.getId());
         }catch (GoogleJsonResponseException e) {
             int statusCode = e.getStatusCode();
             String details = e.getDetails() != null ? e.getDetails().getMessage() : "No error details";
             switch (statusCode) {
                 case 403:
-                 Loggers.log.error("Permission denied. Check Gmail scopes and API access: {}", details);
+                 Loggers.getLogger().error("Permission denied. Check Gmail scopes and API access: {}", details);
                     break;
                 case 400:
-                 Loggers.log.error("Bad Request - possibly invalid email or message format: {}", details);
+                 Loggers.getLogger().error("Bad Request - possibly invalid email or message format: {}", details);
                     break;
                 case 401:
-                 Loggers.log.error("Unauthorized - token may have expired or is invalid: {}", details);
+                 Loggers.getLogger().error("Unauthorized - token may have expired or is invalid: {}", details);
                     break;
                 default:
-                 Loggers.log.error("Google API error {}: {}", statusCode, details);
+                 Loggers.getLogger().error("Google API error {}: {}", statusCode, details);
             }
         }catch (Exception e) {
-         Loggers.log.error("Failed to send email", e);
+         Loggers.getLogger().error("Failed to send email", e);
         }
     }
 

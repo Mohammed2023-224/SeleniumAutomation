@@ -26,13 +26,13 @@ public class Chrome implements  BrowserDriver{
     // initiate chrome driver
     public WebDriver initiateDriver() {
         setLocalDriver();
-        Loggers.log.info("Start chrome driver " );
+        Loggers.getLogger().info("Start chrome driver " );
         return new ChromeDriver(getDriverOptions());
     }
 
 
     public WebDriver initiateRemoteDriver(String proxyURl) {
-     Loggers.log.info("Start chrome on remote driver port: "+proxyURl);
+     Loggers.getLogger().info("Start chrome on remote driver port: "+proxyURl);
         try {
             return new RemoteWebDriver(new URL(proxyURl), getDriverOptions());
         } catch (MalformedURLException e) {
@@ -44,7 +44,7 @@ public class Chrome implements  BrowserDriver{
     private void setLocalDriver(){
         if(FrameworkConfigs.localPathDriver()){
             System.setProperty("webdriver.chrome.driver", "src/main/resources/driver/chromedriver.exe");
-            Loggers.log.info("chrome driver is found at path: "+System.getProperty("webdriver.chrome.driver"));
+            Loggers.getLogger().info("chrome driver is found at path: "+System.getProperty("webdriver.chrome.driver"));
 
         }
     }

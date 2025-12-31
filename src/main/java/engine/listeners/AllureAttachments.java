@@ -17,11 +17,11 @@ public class AllureAttachments {
         Allure.step( "Save text log",()-> {
         try (FileInputStream fis = new FileInputStream(filePath)) {
             Allure.addAttachment(name,fis);
-         Loggers.log.info("attached to report {}", filePath);
+         Loggers.getLogger().info("attached to report {}", filePath);
         } catch (FileNotFoundException e) {
-         Loggers.log.warn("File can't be found at: {}", filePath);
+         Loggers.getLogger().warn("File can't be found at: {}", filePath);
         } catch (IOException e) {
-            Loggers.log.warn("Failed attaching log file: {}", filePath, e);
+            Loggers.getLogger().warn("Failed attaching log file: {}", filePath, e);
         }
     });
     }
@@ -31,12 +31,12 @@ public class AllureAttachments {
             try {
                 if (driver == null) return;
                 byte[] ss = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-                Loggers.log.info("Screen shot taken");
+                Loggers.getLogger().info("Screen shot taken");
                 Allure.addAttachment(name, "img/png", new ByteArrayInputStream(ss), ".png");
-                Loggers.log.info("Screen shot attached to report");
+                Loggers.getLogger().info("Screen shot attached to report");
 
             } catch (Exception e) {
-                Loggers.log.warn("⚠ Unable to capture screenshot for Allure: {}", e.getMessage());
+                Loggers.getLogger().warn("⚠ Unable to capture screenshot for Allure: {}", e.getMessage());
             }
         } );
     }

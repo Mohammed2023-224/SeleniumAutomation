@@ -39,6 +39,10 @@
         </Routing>
     </Appenders>
     <Loggers>
+        <Logger level="info" additivity="false" name="All_tests">
+            <AppenderRef ref="allTestsLogs"/>
+            <AppenderRef ref="console"/>
+        </Logger>
         <Root level="info" additivity="false">
             <AppenderRef ref="PerTestRouting"/>
             <AppenderRef ref="allTestsLogs"/>

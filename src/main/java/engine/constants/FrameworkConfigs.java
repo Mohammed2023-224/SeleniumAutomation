@@ -3,17 +3,19 @@ package engine.constants;
 import engine.utils.PropertyReader;
 
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class FrameworkConfigs {
 
         private static final Map<String, String> CACHE = new ConcurrentHashMap<>();
-
+        private static Properties properties;
     /* ======================
        Core resolver
        ====================== */
 
         private static String get(String key) {
+            if(properties ==null) properties= PropertyReader.readAllProperties();
             return CACHE.computeIfAbsent(key, k -> {
                 String sys = System.getProperty(k);
                 if (sys != null && !sys.isBlank()) {
@@ -21,6 +23,12 @@ public class FrameworkConfigs {
                 }
                 return PropertyReader.readProp(k);
             });
+        }
+        private static boolean getBoolean(String key){
+            return Boolean.parseBoolean(get(key));
+        }
+        private static int getInt(String key){
+            return Integer.getInteger(get(key));
         }
 
     /* ======================
@@ -81,6 +89,9 @@ public class FrameworkConfigs {
 
         public static String downloadsPath() {
             return get("downloaded_files_Path");
+        }
+        public static boolean per_test_log() {
+            return getBoolean("per_test_log");
         }
 
     /* ======================

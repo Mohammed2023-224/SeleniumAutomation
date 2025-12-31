@@ -21,13 +21,13 @@ public class DragAndDropActions {
                 .scrollToElement(target)
                 .moveToElement(target)
                 .release(target).build().perform();
-        Loggers.log.info(" drag element from "+locatorSource+" to "+locatorTarget+" by mouse");
+        Loggers.getLogger().info(" drag element from "+locatorSource+" to "+locatorTarget+" by mouse");
     }
 
     public static void dragAndDropByLocation(WebDriver driver, By locatorSource ,int horizontal, int vertical){
         Waits.explicitWaitShortTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locatorSource));
         new Actions(driver).dragAndDropBy(driver.findElement(locatorSource),horizontal,vertical).perform();
-        Loggers.log.info(" drag element from "+locatorSource+" to "+horizontal+" , " +vertical);
+        Loggers.getLogger().info(" drag element from "+locatorSource+" to "+horizontal+" , " +vertical);
     }
     public static void JSDragAndDrop(WebDriver driver, By locator,By position) {
         String logs = "drag "+locator+" to  " + position;
@@ -42,7 +42,7 @@ public class DragAndDropActions {
         triggerDragAndDrop(arguments[0], arguments[1]);
     """;
         ((JavascriptExecutor) driver).executeScript(script, driver.findElement(locator), driver.findElement(position));
-        Loggers.log.info(logs);
+        Loggers.getLogger().info(logs);
     }
 
     public static void JSDragAndDropAsHTML(WebDriver driver, By locator,By position) {
@@ -66,13 +66,13 @@ public class DragAndDropActions {
        fireEvent('dragend', src);
     """;
         ((JavascriptExecutor) driver).executeScript(script, driver.findElement(locator), driver.findElement(position));
-        Loggers.log.info(logs);
+        Loggers.getLogger().info(logs);
     }
     public static void dragAndDrop(WebDriver driver, By locator,By position) {
         String logs = "drag "+locator+" to  " + position;
         Waits.waitToBeClickable(driver, locator);
         new Actions(driver).dragAndDrop(driver.findElement(locator),driver.findElement(position) ).perform();
-        Loggers.log.info(logs);
+        Loggers.getLogger().info(logs);
     }
 
     public static void manualDragAndDrop(WebDriver driver, By locator,By position) {
@@ -87,6 +87,6 @@ public class DragAndDropActions {
                 .release(driver.findElement(position))
                 .build()
                 .perform();
-        Loggers.log.info(logs);
+        Loggers.getLogger().info(logs);
     }
 }

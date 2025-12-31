@@ -37,7 +37,7 @@ public class TestNgCucumber extends AllureAttachments implements ITestListener, 
 
     public void onFinish(ITestContext context) {
         ListenerHelper.stopAppenderRootLog("PerTestRouting");
-     Loggers.log.info("finished Execution");
+     Loggers.getLogger().info("finished Execution");
     }
 
     @Override
@@ -46,7 +46,7 @@ public class TestNgCucumber extends AllureAttachments implements ITestListener, 
         if (counter < retryLimit) {
             counter++;
             mainDriver.manage().deleteAllCookies();
-         Loggers.log.info("ended retry number: {}", counter);
+         Loggers.getLogger().info("ended retry number: {}", counter);
             return true;
         }
         return false;

@@ -39,7 +39,7 @@ public class DragAndDrop extends HomePage{
                     c=i;
                     break;
                 } catch (Exception e) {
-                        Loggers.log.warn("Drag-and-drop failed, retrying...");
+                        Loggers.getLogger().warn("Drag-and-drop failed, retrying...");
                 }
             }
                 System.out.println(ElementActions.getElementAttribute(driver, targetAssertion(String.valueOf(c)), "class"));

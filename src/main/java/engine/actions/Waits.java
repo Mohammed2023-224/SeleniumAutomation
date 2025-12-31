@@ -17,21 +17,21 @@ public class Waits {
 
     public static void implicitWait(WebDriver driver, int time){
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(time));
-     Loggers.log.info("Add implicit wait by {} seconds", time);
+     Loggers.getLogger().info("Add implicit wait by {} seconds", time);
     }
     public static void waitForAlert(WebDriver driver,int time){
         explicitWaitShortTime(driver).until(ExpectedConditions.alertIsPresent());
-     Loggers.log.info("Waited for alert to be present for [{}]",time);
+     Loggers.getLogger().info("Waited for alert to be present for [{}]",time);
     }
     public static WebDriverWait explicitWaitLongTime(WebDriver driver){
         WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(FrameworkConfigs.shortWait()));
-     Loggers.log.info(" explicit wait for {} sec" , FrameworkConfigs.shortWait());
+     Loggers.getLogger().info(" explicit wait for {} sec" , FrameworkConfigs.shortWait());
         return wait;
     }
 
     public static WebDriverWait explicitWaitShortTime(WebDriver driver){
         WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(FrameworkConfigs.shortWait()));
-     Loggers.log.info(" explicit wait for {} seconds" , FrameworkConfigs.shortWait());
+     Loggers.getLogger().info(" explicit wait for {} seconds" , FrameworkConfigs.shortWait());
         return wait;
     }
 
@@ -48,39 +48,39 @@ public class Waits {
 
     public static void waitToBeVisible(WebDriver driver, By locator ){
             explicitWaitLongTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locator));
-         Loggers.log.info("wait for element located at "+locator+" to be visible for {}", FrameworkConfigs.longWait());
+         Loggers.getLogger().info("wait for element located at "+locator+" to be visible for {}", FrameworkConfigs.longWait());
 
     }
 
     public static void waitToBeInvisible(WebDriver driver, By locator ){
             explicitWaitLongTime(driver).until(ExpectedConditions.invisibilityOfElementLocated(locator));
-         Loggers.log.info("wait for element located at {} to be invisible for {}", locator, FrameworkConfigs.longWait());
+         Loggers.getLogger().info("wait for element located at {} to be invisible for {}", locator, FrameworkConfigs.longWait());
 
     }
 
 
     public static void waitToBeClickable(WebDriver driver, By locator  ) {
             explicitWaitLongTime(driver).until(ExpectedConditions.elementToBeClickable(locator));
-            Loggers.log.info("wait for element located at " + locator + " to be clickable for " + FrameworkConfigs.longWait());
+            Loggers.getLogger().info("wait for element located at " + locator + " to be clickable for " + FrameworkConfigs.longWait());
     }
 
 
     public static void waitToExist(WebDriver driver, By locator){
             explicitWaitLongTime(driver).until(ExpectedConditions.presenceOfElementLocated(locator));
-         Loggers.log.info("wait for element located at {} to exist for {}", locator, FrameworkConfigs.longWait());
+         Loggers.getLogger().info("wait for element located at {} to exist for {}", locator, FrameworkConfigs.longWait());
 
     }
 
     public static void waitElementToContainText(WebDriver driver, By locator,String text){
         explicitWaitLongTime(driver).until(x-> x.findElement(locator).getText().contains(text));
-     Loggers.log.info("wait for element located at {} to contain text {} for {}", locator,text, FrameworkConfigs.longWait());
+     Loggers.getLogger().info("wait for element located at {} to contain text {} for {}", locator,text, FrameworkConfigs.longWait());
     }
 
 
     public static void waitForFileToBeDownloaded(WebDriver driver,String path){
         File file = new File(path);
             explicitWaitLongTime(driver).until(x ->file.exists() && file.canRead());
-         Loggers.log.info("Waited for file [{}] to appear for [{}]",path, FrameworkConfigs.longWait());
+         Loggers.getLogger().info("Waited for file [{}] to appear for [{}]",path, FrameworkConfigs.longWait());
     }
 
 }

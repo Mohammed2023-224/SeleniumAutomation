@@ -25,11 +25,11 @@ public class Edge  implements  BrowserDriver{
     // initiate edge driver
     public WebDriver initiateDriver() {
         setLocalDriver();
-     Loggers.log.info("Start edge driver ");
+     Loggers.getLogger().info("Start edge driver ");
         return new EdgeDriver(getDriverOptions());
     }
     public WebDriver initiateRemoteDriver(String proxyURl) {
-     Loggers.log.info("Start edge on remote driver port: "+proxyURl);
+     Loggers.getLogger().info("Start edge on remote driver port: "+proxyURl);
         try {
             return new RemoteWebDriver(new URL(proxyURl), getDriverOptions());
         } catch (MalformedURLException e) {
@@ -40,7 +40,7 @@ public class Edge  implements  BrowserDriver{
     private void setLocalDriver(){
         if(FrameworkConfigs.localPathDriver()){
             System.setProperty("webdriver.edge.driver", "src/main/resources/driver/msedgedriver.exe");
-            Loggers.log.info("Edge driver is found at path: "+System.getProperty("webdriver.edge.driver"));
+            Loggers.getLogger().info("Edge driver is found at path: "+System.getProperty("webdriver.edge.driver"));
 
         }
     }

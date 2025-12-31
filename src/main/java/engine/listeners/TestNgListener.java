@@ -40,18 +40,18 @@ static {
         fileName = fileName.replaceAll("[^a-zA-Z0-9\\-_]", "_");
         ThreadContext.put("testLogFileName", fileName); // ✅ thread-local
 //        ListenerHelper.reconfigureLogs();
-     Loggers.log.info("Start test: {}", result.getName());
+     Loggers.getLogger().info("Start test: {}", result.getName());
 
     }
     @Override
     public void onTestSuccess(ITestResult result) {
-     Loggers.log.info("Test succeeded: {}", result.getName());
+     Loggers.getLogger().info("Test succeeded: {}", result.getName());
         numberOfSuccessTest.incrementAndGet();
         successfulTests.add(result.getName());
     }
     @Override
     public void onTestFailure(ITestResult result) {
-     Loggers.log.info("Test failed: {}", result.getName());
+     Loggers.getLogger().info("Test failed: {}", result.getName());
         numberOfFailedTests.incrementAndGet();
         failedTests.add(result.getName());
 
@@ -59,7 +59,7 @@ static {
 
     @Override
     public void onTestSkipped(ITestResult result) {
-     Loggers.log.info("Test skipped: {}", result.getName());
+     Loggers.getLogger().info("Test skipped: {}", result.getName());
         numberOfSkippedTests.incrementAndGet();
         skippedTests.add(result.getName());
     }
@@ -68,17 +68,17 @@ static {
     }
     @Override
     public void onFinish(ITestContext context) {
-     Loggers.log.info("finished Execution");
+     Loggers.getLogger().info("finished Execution");
     }
     @Override
     public void onExecutionFinish() {
-     Loggers.log.info("Number of all tests: {}", (numberOfSuccessTest.get()+numberOfFailedTests.get()+numberOfSkippedTests.get()));
-     Loggers.log.info("Number of successful tests: {}", numberOfSuccessTest.get());
-     Loggers.log.info("Name of successful tests: {}", Arrays.deepToString(successfulTests.toArray()));
-     Loggers.log.info("Number of failed tests: {}", numberOfFailedTests.get());
-     Loggers.log.info("Name of failed tests: {}", Arrays.deepToString(failedTests.toArray()));
-     Loggers.log.info("Number of skipped tests: {}", numberOfSkippedTests.get());
-     Loggers.log.info("Name of skipped tests: {}", Arrays.deepToString(skippedTests.toArray()));
+     Loggers.getLogger().info("Number of all tests: {}", (numberOfSuccessTest.get()+numberOfFailedTests.get()+numberOfSkippedTests.get()));
+     Loggers.getLogger().info("Number of successful tests: {}", numberOfSuccessTest.get());
+     Loggers.getLogger().info("Name of successful tests: {}", Arrays.deepToString(successfulTests.toArray()));
+     Loggers.getLogger().info("Number of failed tests: {}", numberOfFailedTests.get());
+     Loggers.getLogger().info("Name of failed tests: {}", Arrays.deepToString(failedTests.toArray()));
+     Loggers.getLogger().info("Number of skipped tests: {}", numberOfSkippedTests.get());
+     Loggers.getLogger().info("Name of skipped tests: {}", Arrays.deepToString(skippedTests.toArray()));
         if(FrameworkConfigs.sendReportEmail()){
             SystemMethods.runFile(FrameworkConfigs.allureGenerationPath());
             GmailHandler gmailHandler=new GmailHandler("test");
@@ -86,7 +86,7 @@ static {
                     , FrameworkConfigs.emailBody(), FrameworkConfigs.emailAttachmentPath());
         }
         if (FrameworkConfigs.openAllure()) {
-         Loggers.log.info("start allure report pls don't stop the execution");
+         Loggers.getLogger().info("start allure report pls don't stop the execution");
             SystemMethods.runFile(FrameworkConfigs.allureGenerationPath());
         }
         if (FrameworkConfigs.gridEnabled()) {
@@ -100,7 +100,7 @@ static {
     @Override
     public void onExecutionStart() {
 
-        PropertyReader.readAllProperties();
+//        PropertyReader.readAllProperties();
         if(FrameworkConfigs.gridEnabled()){
             SystemMethods.startBatAsync("src/main/resources/grid/startHub.bat");
             SystemMethods.startBatAsync("src/main/resources/grid/startNode.bat");

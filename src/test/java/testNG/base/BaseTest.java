@@ -36,9 +36,9 @@ public class BaseTest {
     }
 
     @AfterMethod
-    protected void attachLogs(ITestResult result) {
+    protected void attachLogsAndScreenshot(ITestResult result) {
         if(driver ==null) return;
-        AllureAttachments.saveTextLog(ThreadContext.get("testLogFileName") + ".log",
+        if(FrameworkConfigs.per_test_log())AllureAttachments.saveTextLog(ThreadContext.get("testLogFileName") + ".log",
                 FrameworkConfigs.reportsPath() + ThreadContext.get("testLogFileName") + ".log");
         if(!result.isSuccess()) AllureAttachments.saveScreensShot(driver,"test");
     }
@@ -58,13 +58,13 @@ public class BaseTest {
                 if ( isBlank) {
                     validTab = handle;
                 } else if (isEdgeDownloader) {
-                 Loggers.log.info("edge download tab can't be closed");
+                 Loggers.getLogger().info("edge download tab can't be closed");
                 } else {
                     driver.close();
                 }
 
             } catch (Exception e) {
-             Loggers.log.info("Error handling tab: " + e.getMessage());
+             Loggers.getLogger().info("Error handling tab: " + e.getMessage());
             }
         }
         driver.switchTo().window(validTab);

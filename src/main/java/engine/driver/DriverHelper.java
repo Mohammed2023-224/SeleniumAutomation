@@ -7,7 +7,7 @@ import java.net.URL;
 
 public class DriverHelper {
     public static void waitForRemoteUrl(String url, int timeoutSeconds) {
-        Loggers.log.info("Checking url: "+url);
+        Loggers.getLogger().info("Checking url: "+url);
         long end = System.currentTimeMillis() + timeoutSeconds * 1000;
         while (System.currentTimeMillis() < end) {
             try {
