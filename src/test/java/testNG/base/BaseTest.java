@@ -47,7 +47,6 @@ public class BaseTest {
         if (driver==null) return;
         JSActions.executeScript(driver,"window.open();");
         List<String> handles = new ArrayList<>(driver.getWindowHandles());
-        System.out.println(handles);
         String validTab = null;
         for (String handle : handles) {
             try {

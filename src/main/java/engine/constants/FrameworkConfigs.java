@@ -22,7 +22,7 @@ public class FrameworkConfigs {
             if (sysValue != null && !sysValue.isBlank()) {
                 return sysValue;
             }
-            String fileValue = PROPS.getProperty(k);
+            String fileValue = PropertyReader.readProp(k);
 
             if (fileValue == null) {
                 throw new IllegalStateException(
