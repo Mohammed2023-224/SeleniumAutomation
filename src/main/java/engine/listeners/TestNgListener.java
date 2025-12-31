@@ -26,10 +26,7 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
     private static final AtomicInteger numberOfSuccessTest = new AtomicInteger(0);
     private static final AtomicInteger numberOfFailedTests = new AtomicInteger(0);
     private static final AtomicInteger numberOfSkippedTests = new AtomicInteger(0);
-static {
-    SystemMethods.deleteDirectory("reports");
-    SystemMethods.deleteDirectory("allure-results");
-}
+
     @Override
     public void onTestStart(ITestResult result) {
         String browserName = getBrowserName((WebDriver) result.getTestContext().getAttribute("driver"));
@@ -94,16 +91,18 @@ static {
             SystemMethods.killProcessesByPort(4444,5555);
             System.out.println("Cleanup completed.");
         }
-//        ListenerHelper.stopAppenderRootLog("PerTestRouting");
-//        SystemMethods.deleteFile("reports/log4j/perTest/${ctx");
+        if(FrameworkConfigs.per_test_log()) {
+            ListenerHelper.stopAppenderRootLog("PerTestRouting");
+            SystemMethods.deleteFile(FrameworkConfigs.extraLogFileToDelete());
+        }
     }
     @Override
     public void onExecutionStart() {
-
-//        PropertyReader.readAllProperties();
+        SystemMethods.deleteDirectory("reports");
+        SystemMethods.deleteDirectory("allure-results");
         if(FrameworkConfigs.gridEnabled()){
-            SystemMethods.startBatAsync("src/main/resources/grid/startHub.bat");
-            SystemMethods.startBatAsync("src/main/resources/grid/startNode.bat");
+            SystemMethods.startBatAsync(FrameworkConfigs.gridPath()+"startHub.bat");
+            SystemMethods.startBatAsync(FrameworkConfigs.gridPath()+"startNode.bat");
         }
     }
 

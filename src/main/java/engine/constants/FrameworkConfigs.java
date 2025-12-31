@@ -93,6 +93,12 @@ public class FrameworkConfigs {
         public static boolean per_test_log() {
             return getBoolean("per_test_log");
         }
+        public static String gridPath() {
+            return get("gridPath");
+        }
+        public static String extraLogFileToDelete() {
+            return get("extra_log_file_to_delete");
+        }
 
     /* ======================
        Reporting
