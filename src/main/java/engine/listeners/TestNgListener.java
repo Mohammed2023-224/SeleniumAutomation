@@ -9,6 +9,7 @@ import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.*;
+import org.testng.annotations.BeforeMethod;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,7 +17,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class TestExecutionListener extends AllureListener implements ITestListener , IExecutionListener  {
+public class TestNgListener implements ITestListener , IExecutionListener ,IInvokedMethodListener {
 
 
     private static final List<String> successfulTests = Collections.synchronizedList(new ArrayList<>());
@@ -25,13 +26,13 @@ public class TestExecutionListener extends AllureListener implements ITestListen
     private static final AtomicInteger numberOfSuccessTest = new AtomicInteger(0);
     private static final AtomicInteger numberOfFailedTests = new AtomicInteger(0);
     private static final AtomicInteger numberOfSkippedTests = new AtomicInteger(0);
-    static {
-        SystemMethods.deleteDirectory("reports");
-        SystemMethods.deleteDirectory("allure-results");
-    }
+static {
+    SystemMethods.deleteDirectory("reports");
+    SystemMethods.deleteDirectory("allure-results");
+}
     @Override
     public void onTestStart(ITestResult result) {
-        String browserName = getBrowserName((WebDriver) result.getTestContext().getAttribute("driver")); // You'll define this method
+        String browserName = getBrowserName((WebDriver) result.getTestContext().getAttribute("driver"));
         String timestamp = LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy_MM_dd-HH_mm_ss"));
         String name = result.getMethod().getMethodName();
@@ -88,16 +89,17 @@ public class TestExecutionListener extends AllureListener implements ITestListen
          Loggers.log.info("start allure report pls don't stop the execution");
             SystemMethods.runFile(FrameworkConfigs.allureGenerationPath());
         }
-    ListenerHelper.stopAppenderRootLog("PerTestRouting");
-        SystemMethods.deleteFile("reports/log4j/perTest/${ctx");
         if (FrameworkConfigs.gridEnabled()) {
             System.out.println("Test execution finished. Cleaning up Selenium Grid...");
             SystemMethods.killProcessesByPort(4444,5555);
             System.out.println("Cleanup completed.");
         }
+//        ListenerHelper.stopAppenderRootLog("PerTestRouting");
+//        SystemMethods.deleteFile("reports/log4j/perTest/${ctx");
     }
     @Override
     public void onExecutionStart() {
+
         PropertyReader.readAllProperties();
         if(FrameworkConfigs.gridEnabled()){
             SystemMethods.startBatAsync("src/main/resources/grid/startHub.bat");
@@ -112,6 +114,7 @@ public class TestExecutionListener extends AllureListener implements ITestListen
         }
         return "unknown";
     }
+
 
 }
 

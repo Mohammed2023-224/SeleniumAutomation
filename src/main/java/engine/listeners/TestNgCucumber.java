@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.*;
 
 
-public class TestNgCucumber extends AllureListener implements ITestListener, IRetryAnalyzer,IHookable , IExecutionListener ,IAnnotationTransformer {
+public class TestNgCucumber extends AllureAttachments implements ITestListener, IRetryAnalyzer,IHookable , IExecutionListener ,IAnnotationTransformer {
 
     int counter = 0;
     int retryLimit = FrameworkConfigs.retryCount();

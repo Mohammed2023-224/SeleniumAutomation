@@ -3,8 +3,7 @@ package cucumber.stepDefinitions;
 import engine.actions.SystemMethods;
 import engine.constants.FrameworkConfigs;
 import engine.driver.SetupDriver;
-import engine.enums.Browsers;
-import engine.listeners.AllureListener;
+import engine.listeners.AllureAttachments;
 import engine.listeners.ListenerHelper;
 import engine.reporters.Loggers;
 import engine.utils.GmailHandler;
@@ -48,7 +47,7 @@ public class Hooks {
     }
     @After
     public void tearDriver() {
-        AllureListener.saveTextLog(System.getProperty("testLogFileName") + ".log",
+        AllureAttachments.saveTextLog(System.getProperty("testLogFileName") + ".log",
                 FrameworkConfigs.reportsPath() + System.getProperty("testLogFileName") + ".log");
         DriverFactory.getDriver().quit();
         DriverFactory.unload();

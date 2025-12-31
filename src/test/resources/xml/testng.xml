@@ -2,7 +2,7 @@
  <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Practice Suite" parallel="tests" thread-count="2">
     <listeners>
-        <listener class-name="engine.listeners.TestExecutionListener"/>
+        <listener class-name="engine.listeners.TestNgListener"/>
         <listener class-name="engine.listeners.TransformListener"/>
     </listeners>
     <test name="edge tests">

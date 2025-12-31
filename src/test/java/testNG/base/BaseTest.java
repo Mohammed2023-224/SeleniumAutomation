@@ -5,9 +5,8 @@ package testNG.base;
 import engine.actions.JSActions;
 import engine.constants.FrameworkConfigs;
 import engine.driver.SetupDriver;
-import engine.enums.Browsers;
-import engine.listeners.AllureListener;
-import engine.listeners.TestExecutionListener;
+import engine.listeners.AllureAttachments;
+import engine.listeners.TestNgListener;
 import engine.listeners.TransformListener;
 import engine.reporters.Loggers;
 import org.apache.logging.log4j.ThreadContext;
@@ -16,13 +15,11 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 
-@Listeners({TestExecutionListener.class, TransformListener.class})
+@Listeners({TestNgListener.class, TransformListener.class})
 public class BaseTest {
     public WebDriver driver;
 
@@ -41,9 +38,9 @@ public class BaseTest {
     @AfterMethod
     protected void attachLogs(ITestResult result) {
         if(driver ==null) return;
-        AllureListener.saveTextLog(ThreadContext.get("testLogFileName") + ".log",
+        AllureAttachments.saveTextLog(ThreadContext.get("testLogFileName") + ".log",
                 FrameworkConfigs.reportsPath() + ThreadContext.get("testLogFileName") + ".log");
-        if(!result.isSuccess()) AllureListener.saveScreensShot(driver,"test");
+        if(!result.isSuccess()) AllureAttachments.saveScreensShot(driver,"test");
     }
     @AfterMethod
     protected void startNewTab() {

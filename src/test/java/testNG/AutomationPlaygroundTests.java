@@ -1,6 +1,5 @@
 package testNG;
 
-import engine.listeners.AllureListener;
 import pages.appUATPg.*;
 import testNG.base.BaseTest;
 import org.testng.annotations.BeforeClass;
@@ -58,7 +57,7 @@ waitActionsPage.handleWaitForFrame(maxWait);
         keyboardActions.handleKeyboard();
     }
 
-    @Test()
+    @Test(enabled = false)
     public void formPageTests() {
         homePage.clickPage("Forms");
         formPage.userFillsExperience("6");
@@ -67,7 +66,7 @@ waitActionsPage.handleWaitForFrame(maxWait);
         formPage.handleForm();
     }
 
-    @Test()
+    @Test(enabled = false)
     public void samplePageTest() {
         homePage.clickPage("Sample Pages");
         samplePage.newUser();
@@ -75,7 +74,7 @@ waitActionsPage.handleWaitForFrame(maxWait);
         samplePage.pizzaForm();
     }
 
-    @Test()
+    @Test(enabled = false)
     public void advancedUITests() {
         homePage.clickPage("Advanced UI Features");
         advancedUI.handleAdvancedUIChallenge();

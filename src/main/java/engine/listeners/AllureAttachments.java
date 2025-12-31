@@ -3,7 +3,6 @@ package engine.listeners;
 import engine.reporters.Loggers;
 import io.qameta.allure.Allure;
 
-import io.qameta.allure.Step;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -12,7 +11,7 @@ import org.openqa.selenium.WebDriver;
 import java.io.*;
 
 
-public class AllureListener {
+public class AllureAttachments {
 
     public static void saveTextLog(String name, String filePath) {
         Allure.step( "Save text log",()-> {
@@ -20,9 +19,9 @@ public class AllureListener {
             Allure.addAttachment(name,fis);
          Loggers.log.info("attached to report {}", filePath);
         } catch (FileNotFoundException e) {
-         Loggers.log.warn("File can't be attached to report: {}", filePath);
+         Loggers.log.warn("File can't be found at: {}", filePath);
         } catch (IOException e) {
-            Loggers.log.warn("Error closing file stream for AllureListener: {}", filePath);
+            Loggers.log.warn("Failed attaching log file: {}", filePath, e);
         }
     });
     }
@@ -32,9 +31,9 @@ public class AllureListener {
             try {
                 if (driver == null) return;
                 byte[] ss = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-                Loggers.log.warn("Screen shot taken");
+                Loggers.log.info("Screen shot taken");
                 Allure.addAttachment(name, "img/png", new ByteArrayInputStream(ss), ".png");
-                Loggers.log.warn("attached to report");
+                Loggers.log.info("Screen shot attached to report");
 
             } catch (Exception e) {
                 Loggers.log.warn("⚠ Unable to capture screenshot for Allure: {}", e.getMessage());
