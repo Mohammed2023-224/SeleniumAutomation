@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class FrameworkConfigs {
 
-
         private static final Map<String, String> CACHE = new ConcurrentHashMap<>();
 
     /* ======================

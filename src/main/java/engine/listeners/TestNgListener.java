@@ -26,6 +26,10 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
     private static final AtomicInteger numberOfSuccessTest = new AtomicInteger(0);
     private static final AtomicInteger numberOfFailedTests = new AtomicInteger(0);
     private static final AtomicInteger numberOfSkippedTests = new AtomicInteger(0);
+static {
+    SystemMethods.deleteDirectory("reports");
+    SystemMethods.deleteDirectory("allure-results");
+}
 
     @Override
     public void onTestStart(ITestResult result) {
@@ -98,9 +102,7 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
     }
     @Override
     public void onExecutionStart() {
-        PropertyReader.readAllProperties();
-        SystemMethods.deleteDirectory("reports");
-        SystemMethods.deleteDirectory("allure-results");
+
         if(FrameworkConfigs.gridEnabled()){
             SystemMethods.startBatAsync(FrameworkConfigs.gridPath()+"startHub.bat");
             SystemMethods.startBatAsync(FrameworkConfigs.gridPath()+"startNode.bat");

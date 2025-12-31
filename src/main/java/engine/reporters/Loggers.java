@@ -8,7 +8,9 @@ import org.apache.logging.log4j.core.Logger;
 public class Loggers {
 
 private static Logger logger;
-
+    static {
+        PropertyReader.readAllProperties();
+    }
     public static Logger getLogger() {
 
         if (logger == null) {
