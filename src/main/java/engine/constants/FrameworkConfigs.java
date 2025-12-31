@@ -7,97 +7,132 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class FrameworkConfigs {
+    static final Properties PROPS = PropertyReader.readAllProperties();
 
         private static final Map<String, String> CACHE = new ConcurrentHashMap<>();
-        private static Properties properties;
+
     /* ======================
        Core resolver
        ====================== */
 
-        private static String get(String key) {
-            if(properties ==null) properties= PropertyReader.readAllProperties();
-            return CACHE.computeIfAbsent(key, k -> {
-                String sys = System.getProperty(k);
-                if (sys != null && !sys.isBlank()) {
-                    return sys;
-                }
-                return PropertyReader.readProp(k);
-            });
-        }
-        private static boolean getBoolean(String key){
-            return Boolean.parseBoolean(get(key));
-        }
-        private static int getInt(String key){
-            return Integer.getInteger(get(key));
-        }
+    private static String resolve(String key) {
+        return CACHE.computeIfAbsent(key, k -> {
 
+            String sysValue = System.getProperty(k);
+            if (sysValue != null && !sysValue.isBlank()) {
+                return sysValue;
+            }
+            String fileValue = PROPS.getProperty(k);
+
+            if (fileValue == null) {
+                throw new IllegalStateException(
+                        "Missing configuration key: " + k
+                );
+            }
+
+            return fileValue.trim();
+        });
+    }
+    public static <T> T get(String key, Class<T> type) {
+        String value = resolve(key);
+        if (value == null) {
+            throw new IllegalStateException("Missing config key: " + key);
+        }
+        try {
+            if (type == String.class) {
+                return type.cast(value);
+            }
+            if (type == Integer.class) {
+                return type.cast(Integer.parseInt(value));
+            }
+            if (type == Boolean.class) {
+                return type.cast(Boolean.parseBoolean(value));
+            }
+            if (type == Long.class) {
+                return type.cast(Long.parseLong(value));
+            }
+            if (type == Double.class) {
+                return type.cast(Double.parseDouble(value));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(
+                    "Failed to parse config key '" + key +
+                            "' as " + type.getSimpleName() +
+                            " (value=" + value + ")",
+                    e
+            );
+        }
+        throw new IllegalArgumentException(
+                "Unsupported type: " + type.getName()
+        );
+    }
     /* ======================
        Typed accessors
        ====================== */
 
         public static int shortWait() {
-            return Integer.parseInt(get("shortWaitTime"));
+            return get("shortWaitTime", Integer.class);
         }
 
         public static int longWait() {
-            return Integer.parseInt(get("longWaitTime"));
+            return get("longWaitTime", Integer.class);
         }
 
         public static int retryCount() {
-            return Integer.parseInt(get("RetryCount"));
+            return get("RetryCount", Integer.class);
         }
 
         public static String baseUrl() {
-            return get("mainurl");
+            return get("mainurl", String.class);
         }
     public static String automationPlayGroundURL() {
-        return get("testAutomationPlayGroundLink");
+        return get("testAutomationPlayGroundLink", String.class);
     }
         public static String browser() {
-            return get("Browser");
+            return get("Browser", String.class);
         }
 
         public static boolean headless() {
-            return Boolean.parseBoolean(get("headless"));
+            return get("headless", Boolean.class);
         }
         public static boolean popupBlocker() {
-            return Boolean.parseBoolean(get("headless"));
+            return get("headless", Boolean.class);
         }
 
         public static boolean maximized() {
-            return Boolean.parseBoolean(get("maximized"));
+            return get("maximized", Boolean.class);
         }
 
         public static boolean localExecution() {
-            return Boolean.parseBoolean(get("local_execution"));
+            return get("local_execution", Boolean.class);
         }
         public static String testDataPath() {
-            return get("test_data_path");
+            return get("test_data_path", String.class);
         }
 
         public static boolean gridEnabled() {
-            return Boolean.parseBoolean(get("seleniumGrid"));
+            return get("seleniumGrid", Boolean.class);
         }
 
         public static boolean localPathDriver() {
-            return Boolean.parseBoolean(get("localDriver"));
+            return get("localDriver", Boolean.class);
         }
 
         public static String proxy() {
-            return get("proxy");
+            return get("proxy", String.class);
         }
 
         public static String downloadsPath() {
-            return get("downloaded_files_Path");
+            return get("downloaded_files_Path", String.class);
         }
         public static boolean per_test_log() {
-            return getBoolean("per_test_log");
+            return get("per_test_log", Boolean.class);
         }
         public static String gridPath() {
-            return get("gridPath");
+            return get("gridPath", String.class);
         }
         public static String extraLogFileToDelete() {
-            return get("extra_log_file_to_delete");
+            return get("extra_log_file_to_delete", String.class);
         }
 
     /* ======================
@@ -105,23 +140,23 @@ public class FrameworkConfigs {
        ====================== */
 
         public static boolean openAllure() {
-            return Boolean.parseBoolean(get("openAllureAfterTest"));
+            return get("openAllureAfterTest", Boolean.class);
         }
 
         public static String allureBat() {
-            return get("allure_bat_file_path");
+            return get("allure_bat_file_path", String.class);
         }
 
         public static String allureGenerationPath() {
-            return get("allure_generation_path");
+            return get("allure_generation_path", String.class);
         }
 
         public static String allureCompressionPath() {
-            return get("allure_compression_path");
+            return get("allure_compression_path", String.class);
         }
 
         public static String reportsPath() {
-            return get("report_logs_path");
+            return get("report_logs_path", String.class);
         }
 
     /* ======================
@@ -129,37 +164,36 @@ public class FrameworkConfigs {
        ====================== */
 
         public static String emailTo() {
-            return get("Email_to");
+            return get("Email_to", String.class);
         }
 
         public static String emailCc() {
-            return get("Email_CC");
+            return get("Email_CC", String.class);
         }
 
         public static String emailSubject() {
-            return get("Email_subject");
+            return get("Email_subject", String.class);
         }
 
         public static String emailBody() {
-            return get("Email_body");
+            return get("Email_body", String.class);
         }
 
         public static String emailAttachmentPath() {
-            return get("Email_attachment_path");
+            return get("Email_attachment_path", String.class);
         }
 
         public static boolean sendReportEmail() {
-            return Boolean.parseBoolean(get("generateAndSendReport"));
+            return get("generateAndSendReport", Boolean.class);
         }
 
         // Gmail
         public static String gmailToken() {
-            return get("gmail_token_path");
+            return get("gmail_token_path", String.class);
         }
     public static String gmailCredentials() {
-        return get("gmail_credentials");
+        return get("gmail_credentials", String.class);
     }
 
     }
 
-//}
