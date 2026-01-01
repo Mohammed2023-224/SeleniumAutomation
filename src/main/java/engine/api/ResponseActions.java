@@ -66,7 +66,7 @@ public class ResponseActions {
         return response.getHeaders();
     }
     public static String getCertainHeader(Response response,String header){
-        Loggers.getLogger().info("get header: "+header);
+        Loggers.getLogger().info("get header with the name : "+header);
         return response.getHeader(header);
     }
 
