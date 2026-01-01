@@ -21,11 +21,16 @@ public class ApiRequestFactory {
         return builder;
     }
 
+    public Response executeWithoutRetry(Function<APIRequestBuilder, Response> fn) {
+        APIRequestBuilder req1 = newRequest();
+        return fn.apply(req1);
+    }
+
 
     public Response executeWithRetry(Function<APIRequestBuilder, Response> fn, int expectedStatusCode) {
         APIRequestBuilder req1 = newRequest();
         Response res = fn.apply(req1);
-        if (res.getStatusCode() == expectedStatusCode) {
+        if (res.getStatusCode() != expectedStatusCode) {
             tokenProvider.refreshSession();
             APIRequestBuilder req2 = newRequest();
             res = fn.apply(req2);
