@@ -16,8 +16,6 @@
         <jackson.version>2.15.2</jackson.version>
         <lombok.version>1.18.38</lombok.version>
         <RestAssured.version>5.3.0</RestAssured.version>
-        <cucumberJava.version>7.24.0</cucumberJava.version>
-        <cucumberTestng.version>7.23.0</cucumberTestng.version>
         <aspectJ.version>1.9.7</aspectJ.version>
         <allure.version>2.32.0</allure.version>
         <!--    <allureMavenPlugin.version>2.11.2</allureMavenPlugin.version>-->
@@ -121,35 +119,12 @@
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-testng -->
-    <dependency>
-      <groupId>io.cucumber</groupId>
-      <artifactId>cucumber-testng</artifactId>
-      <version>${cucumberTestng.version}</version>
-    </dependency>
 
       <dependency>
           <groupId>io.rest-assured</groupId>
           <artifactId>rest-assured</artifactId>
           <version>${RestAssured.version}</version>
       </dependency>
-      <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-cucumber-jvm -->
-      <dependency>
-          <groupId>io.qameta.allure</groupId>
-          <artifactId>allure-cucumber7-jvm</artifactId>
-          <version>${allure.version}</version>
-      </dependency>
-    <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
-    <dependency>
-      <groupId>io.cucumber</groupId>
-      <artifactId>cucumber-java</artifactId>
-      <version>${cucumberJava.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.java.dev.jna</groupId>
-      <artifactId>jna</artifactId>
-      <version>5.13.0</version>
-    </dependency>
 
     <!-- https://mvnrepository.com/artifact/com.mailosaur/mailosaur-java -->
     <dependency>
