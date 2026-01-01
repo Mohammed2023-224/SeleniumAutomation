@@ -1,22 +1,20 @@
 package engine.utils;
 
-import engine.reporters.Loggers;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 public class PropertyReader {
     static Properties prop;
-    static FileReader fr;
     static String path="src/test/resources/properties/";
+    private static final Map<String, String> CACHE = new ConcurrentHashMap<>();
 
     public static Properties readAllProperties(){
         String env= System.getProperty("env", "default");
@@ -28,9 +26,7 @@ public class PropertyReader {
                     .forEach(p -> {
                         try (FileReader fr = new FileReader(p.toFile())) {
                             prop.load(fr);
-//                            Loggers.getLogger().info("Loaded properties file: {}", p.toFile());
                         } catch (IOException e) {
-//                            Loggers.getLogger().error("Failed to load file {}", p, e);
                         }
                     });
         } catch (IOException e) {
@@ -42,6 +38,57 @@ public class PropertyReader {
 
     public static String readProp(String key){
         return prop.getProperty(key);
+    }
+
+    private static String resolve(String key) {
+        return CACHE.computeIfAbsent(key, k -> {
+            String sysValue = System.getProperty(k);
+            if (sysValue != null && !sysValue.isBlank()) {
+                return sysValue;
+            }
+            String fileValue = readProp(k);
+
+            if (fileValue == null) {
+                throw new IllegalStateException(
+                        "Missing configuration key: " + k
+                );
+            }
+
+            return fileValue.trim();
+        });
+    }
+    public static <T> T get(String key, Class<T> type) {
+        String value = resolve(key);
+        if (value == null) {
+            throw new IllegalStateException("Missing config key: " + key);
+        }
+        try {
+            if (type == String.class) {
+                return type.cast(value);
+            }
+            if (type == Integer.class) {
+                return type.cast(Integer.parseInt(value));
+            }
+            if (type == Boolean.class) {
+                return type.cast(Boolean.parseBoolean(value));
+            }
+            if (type == Long.class) {
+                return type.cast(Long.parseLong(value));
+            }
+            if (type == Double.class) {
+                return type.cast(Double.parseDouble(value));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(
+                    "Failed to parse config key '" + key +
+                            "' as " + type.getSimpleName() +
+                            " (value=" + value + ")",
+                    e
+            );
+        }
+        throw new IllegalArgumentException(
+                "Unsupported type: " + type.getName()
+        );
     }
 
 }
