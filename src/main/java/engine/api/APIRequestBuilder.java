@@ -3,16 +3,16 @@ package engine.api;
 import engine.reporters.Loggers;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.LogDetail;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.apache.logging.log4j.Marker;
 import org.awaitility.Awaitility;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -114,6 +114,11 @@ public class APIRequestBuilder {
             });
         }
     }
+    public void addQueryParam(String name, List<String> queryParams) {
+        if (queryParams != null) {
+            requestSpecBuilder.addQueryParam(name,queryParams);
+        }
+    }
 
     public void addQueryParam(String queryName, String value) {
         requestSpecBuilder.addQueryParam(queryName, value);
@@ -148,6 +153,11 @@ public class APIRequestBuilder {
     public void setContentTypeAndAccept(String contentType) {
         requestSpecBuilder.setContentType(contentType).setAccept(contentType);
         Loggers.getLogger().info("Set content type to [{}]", contentType);
+    }
+
+    public Marker logRequest() {
+        requestSpecBuilder.log(LogDetail.ALL);
+        return null;
     }
 
     public void setBodyAsFile(String filePath, String contentType) {
