@@ -1,4 +1,4 @@
-package testNG.base;
+package tests.base;
 
 
 

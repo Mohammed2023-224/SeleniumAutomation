@@ -1,8 +1,8 @@
-package testNG;
+package tests;
 
 import engine.driver.DriverFactory;
 import pages.expand.*;
-import testNG.base.BaseTest;
+import tests.base.BaseTest;
 import engine.actions.BrowserActions;
 import engine.actions.DevToolsActions;
 import engine.utils.Faker;

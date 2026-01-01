@@ -1,7 +1,7 @@
-package testNG;
+package tests;
 
 import pages.appUATPg.*;
-import testNG.base.BaseTest;
+import tests.base.BaseTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
