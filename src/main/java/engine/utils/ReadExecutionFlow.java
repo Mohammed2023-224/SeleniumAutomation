@@ -9,6 +9,7 @@ public class ReadExecutionFlow {
         private  final String SHEET_NAME = "control";
 
     public Set<String> readExecutionControl(){
+        if(!PropertyReader.get("file_control", Boolean.class)) return null ;
        Object [][] obj=
                new ExcelReader().readRowAsLinkedHashMapThroughCondition
                        (CONTROL_FILE,SHEET_NAME,"Run","TRUE");
