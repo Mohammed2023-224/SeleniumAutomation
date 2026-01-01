@@ -97,7 +97,7 @@ static {
         }
         if(FrameworkConfigs.per_test_log()) {
             ListenerHelper.stopAppenderRootLog("PerTestRouting");
-            SystemMethods.deleteFile(PropertyReader.get("reports/log4j/perTest/${ctx", String.class));
+            SystemMethods.deleteFile(PropertyReader.get("extra_log_file_to_delete", String.class));
         }
     }
     @Override
