@@ -2,12 +2,11 @@ package pages.reqresAPI;
 
 import engine.api.ApiRequestFactory;
 import engine.api.HttpMethods;
-import engine.reporters.Loggers;
+import engine.api.ResponseActions;
+import engine.assertions.HardAssertions;
 import engine.utils.PropertyReader;
 import io.restassured.response.Response;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ReqresApiCalls {
@@ -21,10 +20,14 @@ public class ReqresApiCalls {
             req.setBasePathParameter(idPath==null?PropertyReader.get("objectsEndPoint", String.class)
                     :PropertyReader.get("objectsEndPoint", String.class)+idPath);
             req.addQueryParam("id",queryIds);
-            Loggers.getLogger().info(req.logRequest());
             return req.performRequest(HttpMethods.GET);
         });
     }
 
-
+public void validateResponseSuccessfully(Response res){
+    ResponseActions.checkResponseStatus(res,200);
+}
+public void validateBodyContainsText(String actualText,String text){
+    HardAssertions.assertTextContains(actualText,text);
+}
 }
