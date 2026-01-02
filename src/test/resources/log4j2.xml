@@ -29,7 +29,7 @@
             <Routes pattern="${ctx:testLogFileName}">
                 <Route>
                     <File name="PerTestLog"
-                          fileName="reports/log4j/perTest/${ctx:testLogFileName}.log"
+                          fileName="reports/log4j/perTest/${ctx:testLogFileName:-configs}.log"
                           append="false"
                           ignoreExceptions="true">
                         <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
