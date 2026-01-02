@@ -90,7 +90,7 @@ static {
          Loggers.getLogger().info("start allure report pls don't stop the execution");
             SystemMethods.runFile(FrameworkConfigs.allureGenerationPath());
         }
-        if (FrameworkConfigs.gridEnabled()) {
+        if (PropertyReader.get("kill_processes", Boolean.class)) {
             Loggers.getLogger().info("Test execution finished. cleaning up proccesses...");
             String portsValue = PropertyReader.get("portsToCloseBeforeFinishingExecution", String.class);
             int[] ports = Arrays.stream(portsValue.split(","))
