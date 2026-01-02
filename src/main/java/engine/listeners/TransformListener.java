@@ -11,7 +11,8 @@ import java.lang.reflect.Method;
 import java.util.Set;
 
 public class TransformListener implements IAnnotationTransformer {
-    Set<String> runningTests = new ReadExecutionFlow().readExecutionControl();
+    private static final Set<String> runningTests =
+            ReadExecutionFlow.getExecutionControl();
 
     @Override
     public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {
