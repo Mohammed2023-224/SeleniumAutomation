@@ -103,8 +103,7 @@ static {
     }
     @Override
     public void onExecutionStart() {
-
-        if(FrameworkConfigs.gridEnabled()){
+        if(!FrameworkConfigs.localExecution()&&FrameworkConfigs.gridEnabled()){
             SystemMethods.startBatAsync(FrameworkConfigs.gridPath()+"startHub.bat");
             SystemMethods.startBatAsync(FrameworkConfigs.gridPath()+"startNode.bat");
         }

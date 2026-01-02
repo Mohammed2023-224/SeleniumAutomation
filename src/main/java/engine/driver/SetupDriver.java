@@ -14,7 +14,7 @@ public class SetupDriver {
         Browsers enumBrowser =Browsers.valueOf((browser == null || browser.isEmpty() ? FrameworkConfigs.browser() : browser).toUpperCase());
         String port=System.getProperty("port");
         port = local?"":port == null || port.isEmpty()? FrameworkConfigs.proxy():port;
-        if(FrameworkConfigs.gridEnabled()) waitForRemoteUrl(port,10);
+        if(!local &&FrameworkConfigs.gridEnabled()) waitForRemoteUrl(port,10);
         if(!local && (port==null||port.isEmpty()))  throw new IllegalStateException("Port or grid URL must be specified for remote execution");
         return switch (enumBrowser) {
             case EDGE -> local?new Edge().initiateDriver(): new Edge().initiateRemoteDriver(port);
