@@ -40,7 +40,7 @@ public class ExcelReader {
         Loggers.getLogger().info("condition was found at column number " + conditionColumnNumber);
         for(int i=1 ;i<getNumberOfRows();i++){
             if(getCellByColumnNumAndRowNum(i,conditionColumnNumber).equalsIgnoreCase(condition)){
-             Loggers.getLogger().info("Increase rows meeting condition by 1");
+             Loggers.getLogger().debug("Increase rows meeting condition by 1");
                 numberOfRowsMeetingCondition++;
             }
         }
@@ -54,7 +54,7 @@ public class ExcelReader {
                     String currentKey=getCellByColumnNumAndRowNum(0,j);
                     String currentValue=getCellByColumnNumAndRowNum(i,j);
                     linkedHashMap.put(currentKey,currentValue);
-                   Loggers.getLogger().info("Read data Key: {} --> Value: {} from row {} and column  {}",currentKey,currentValue,i,j);
+                   Loggers.getLogger().debug("Read data Key: {} --> Value: {} from row {} and column  {}",currentKey,currentValue,i,j);
                 }
                 dataObj[num++][0]=linkedHashMap;
             }
