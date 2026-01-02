@@ -95,10 +95,6 @@ static {
             SystemMethods.killProcessesByPort(4444,5555);
             System.out.println("Cleanup completed.");
         }
-        if(FrameworkConfigs.per_test_log()) {
-            ListenerHelper.stopAppenderRootLog("PerTestRouting");
-            SystemMethods.deleteFile(PropertyReader.get("extra_log_file_to_delete", String.class));
-        }
     }
     @Override
     public void onExecutionStart() {
