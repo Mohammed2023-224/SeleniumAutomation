@@ -23,7 +23,7 @@
         <faker.version>1.0.2</faker.version>
         <jakarta.version>2.0.1</jakarta.version>
         <awaitility.version>4.2.0</awaitility.version>
-        <testng.xml>src/test/resources/xml/testng.xml</testng.xml>
+        <testng.xml>src/main/resources/xml/testng.xml</testng.xml>
         <javax.version>1.6.2</javax.version>
         <javaxActivation.version>1.1.1</javaxActivation.version>
         <googleAPIClient.version>1.31.5</googleAPIClient.version>

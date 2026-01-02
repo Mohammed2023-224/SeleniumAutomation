@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 public class PropertyReader {
     static Properties prop;
-    static String path="src/test/resources/properties/";
+    static String path="src/main/resources/properties/";
     private static final Map<String, String> CACHE = new ConcurrentHashMap<>();
 
     public static Properties readAllProperties(){
