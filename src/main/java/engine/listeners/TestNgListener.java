@@ -91,9 +91,14 @@ static {
             SystemMethods.runFile(FrameworkConfigs.allureGenerationPath());
         }
         if (FrameworkConfigs.gridEnabled()) {
-            System.out.println("Test execution finished. Cleaning up Selenium Grid...");
-            SystemMethods.killProcessesByPort(4444,5555);
-            System.out.println("Cleanup completed.");
+            Loggers.getLogger().info("Test execution finished. cleaning up proccesses...");
+            String portsValue = PropertyReader.get("portsToCloseBeforeFinishingExecution", String.class);
+            int[] ports = Arrays.stream(portsValue.split(","))
+                    .map(String::trim)
+                    .mapToInt(Integer::parseInt)
+                    .toArray();
+            SystemMethods.killProcessesByPort(ports);
+            Loggers.getLogger().info("Cleanup completed.");
         }
     }
     @Override

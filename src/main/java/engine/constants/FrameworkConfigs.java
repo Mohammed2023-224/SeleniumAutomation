@@ -59,7 +59,7 @@ public class FrameworkConfigs {
         }
 
         public static boolean gridEnabled() {
-            return PropertyReader.get("seleniumGrid", Boolean.class);
+            return PropertyReader.get("localSeleniumGrid", Boolean.class);
         }
 
         public static boolean localPathDriver() {
