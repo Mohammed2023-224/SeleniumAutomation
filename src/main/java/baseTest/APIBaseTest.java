@@ -1,4 +1,4 @@
-package tests.api_tests;
+package baseTest;
 
 import engine.listeners.TestNgListener;
 import engine.listeners.TransformListener;
