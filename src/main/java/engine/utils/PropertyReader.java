@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,26 +15,35 @@ import java.util.stream.Stream;
 
 public class PropertyReader {
     static Properties prop;
-    static String path="src/main/resources/properties/";
+    static String path = "src/main/resources/properties/";
+    static String path2 = "src/test/resources/properties/";
     private static final Map<String, String> CACHE = new ConcurrentHashMap<>();
 
-    public static Properties readAllProperties(){
-        String env= System.getProperty("env", "default");
-        Path configDir = Paths.get(path, env);
-        prop=new Properties();
-        try (Stream<Path> paths = Files.list(configDir)) {
-            paths
-                    .filter(p -> p.toString().endsWith(".properties"))
-                    .forEach(p -> {
-                        try (FileReader fr = new FileReader(p.toFile())) {
-                            prop.load(fr);
-                        } catch (IOException e) {
-                        }
-                    });
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read config directory: " + configDir, e);
+    public static Properties readAllProperties() {
+        String env = System.getProperty("env", "default");
+        List<Path> configDirs = Arrays.asList(
+                Paths.get(path, env),
+                Paths.get(path2, env));
+        String log= "";
+        prop = new Properties();
+        for (Path configDir : configDirs) {
+            if (Files.exists(configDir) && Files.isDirectory(configDir)) {
+                log= log.isEmpty()?log+configDir:log+" and "+configDir;
+                try (Stream<Path> paths = Files.list(configDir)) {
+                    paths
+                            .filter(p -> p.toString().endsWith(".properties"))
+                            .forEach(p -> {
+                                try (FileReader fr = new FileReader(p.toFile())) {
+                                    prop.load(fr);
+                                } catch (IOException e) {
+                                }
+                            });
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to read config directory: " + configDir, e);
+                }
+            }
         }
-        System.setProperty("readPropertyPath", path+"/"+env);
+        System.setProperty("readPropertyPath", log);
         return prop;
     }
 
