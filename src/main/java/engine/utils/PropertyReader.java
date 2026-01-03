@@ -15,15 +15,17 @@ import java.util.stream.Stream;
 
 public class PropertyReader {
     static Properties prop;
-    static String path = "src/main/resources/properties/";
-    static String path2 = "src/test/resources/properties/";
+    static String path = "src/main/resources/properties";
+    static String path2 = "src/test/resources/properties";
     private static final Map<String, String> CACHE = new ConcurrentHashMap<>();
 
     public static Properties readAllProperties() {
         String env = System.getProperty("env", "default");
         List<Path> configDirs = Arrays.asList(
-                Paths.get(path, env),
-                Paths.get(path2, env));
+                Paths.get(path),
+                Paths.get(path,"/", env),
+                Paths.get(path2),
+                Paths.get(path2,"/", env));
         String log= "";
         prop = new Properties();
         for (Path configDir : configDirs) {

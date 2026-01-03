@@ -19,7 +19,7 @@ private static Logger logger;
             boolean perTestLog = FrameworkConfigs.per_test_log();
             logger = (Logger) (perTestLog ? LogManager.getRootLogger() : LogManager.getLogger("All_tests"));
             logger.info("Initialized logger where per test logger is "+ perTestLog);
-            logger.info("Read all property files found at path "+System.getProperty("readPropertyPath"));
+            logger.info("Read all property files found at path "+System.getProperty("readPropertyPath")+ " where properties inside folders override outside properties");
         }
         return logger;
     }
