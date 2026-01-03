@@ -49,7 +49,7 @@ public class PropertyReader {
         return prop;
     }
 
-    public static String readProp(String key){
+    private static String readProp(String key){
         return prop.getProperty(key);
     }
 
