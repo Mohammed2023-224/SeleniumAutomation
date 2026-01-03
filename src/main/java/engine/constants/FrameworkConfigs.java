@@ -15,7 +15,7 @@ public class FrameworkConfigs {
 
   
     /* ======================
-       Typed accessors
+       Configs
        ====================== */
 
         public static int shortWait() {
@@ -30,12 +30,6 @@ public class FrameworkConfigs {
             return PropertyReader.get("RetryCount", Integer.class);
         }
 
-        public static String baseUrl() {
-            return PropertyReader.get("mainurl", String.class);
-        }
-    public static String automationPlayGroundURL() {
-        return PropertyReader.get("testAutomationPlayGroundLink", String.class);
-    }
         public static String browser() {
             return PropertyReader.get("Browser", String.class);
         }
@@ -44,10 +38,17 @@ public class FrameworkConfigs {
             return PropertyReader.get("headless", Boolean.class);
         }
         public static boolean popupBlocker() {
-            return PropertyReader.get("headless", Boolean.class);
+            return PropertyReader.get("popup_blocker", Boolean.class);
         }
+    public static boolean openAllure() {
+        return PropertyReader.get("openAllureAfterTest", Boolean.class);
+    }
+    public static boolean sendReportEmail() {
+        return PropertyReader.get("generateAndSendReport", Boolean.class);
+    }
 
-        public static boolean maximized() {
+
+    public static boolean maximized() {
             return PropertyReader.get("maximized", Boolean.class);
         }
 
@@ -73,6 +74,9 @@ public class FrameworkConfigs {
         public static String downloadsPath() {
             return PropertyReader.get("downloaded_files_Path", String.class);
         }
+        public static String xmlFilesPath() {
+            return PropertyReader.get("xml_files_path", String.class);
+        }
         public static boolean per_test_log() {
             return PropertyReader.get("per_test_log", Boolean.class);
         }
@@ -81,12 +85,9 @@ public class FrameworkConfigs {
         }
 
     /* ======================
-       Reporting
+       path
        ====================== */
 
-        public static boolean openAllure() {
-            return PropertyReader.get("openAllureAfterTest", Boolean.class);
-        }
 
         public static String allureBat() {
             return PropertyReader.get("allure_bat_file_path", String.class);
@@ -128,9 +129,6 @@ public class FrameworkConfigs {
             return PropertyReader.get("Email_attachment_path", String.class);
         }
 
-        public static boolean sendReportEmail() {
-            return PropertyReader.get("generateAndSendReport", Boolean.class);
-        }
 
         // Gmail
         public static String gmailToken() {
@@ -139,6 +137,9 @@ public class FrameworkConfigs {
     public static String gmailCredentials() {
         return PropertyReader.get("gmail_credentials", String.class);
     }
+
+
+    //Paths
 
     }
 

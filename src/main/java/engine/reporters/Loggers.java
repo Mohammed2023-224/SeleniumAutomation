@@ -10,8 +10,8 @@ public class Loggers {
 
 private static Logger logger;
     static {
-        Configurator.initialize(null,"src/main/resources/xml/log4j2.xml");
         PropertyReader.readAllProperties();
+        Configurator.initialize(null,FrameworkConfigs.xmlFilesPath()+"log4j2.xml");
     }
     public static Logger getLogger() {
 

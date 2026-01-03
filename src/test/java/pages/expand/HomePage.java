@@ -4,6 +4,7 @@ import engine.actions.BrowserActions;
 import engine.actions.ElementActions;
 import engine.actions.JSActions;
 import engine.constants.FrameworkConfigs;
+import engine.utils.PropertyReader;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -19,7 +20,7 @@ public class HomePage {
         }
 
     public void navigateHomePage(){
-        BrowserActions.navigateTo(driver, FrameworkConfigs.baseUrl());
+        BrowserActions.navigateTo(driver, PropertyReader.get("mainurl", String.class));
         JavascriptExecutor js = (JavascriptExecutor) driver;
 // Remove elements by class or ID
         js.executeScript("document.querySelectorAll('.ad, .popup, .overlay, #ad-banner').forEach(el => el.remove());");
