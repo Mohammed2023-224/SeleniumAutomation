@@ -1,10 +1,8 @@
 package engine.constants;
 
 import engine.utils.PropertyReader;
+import engine.utils.PropertyReader.*;
 
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class FrameworkConfigs {
 
@@ -38,7 +36,7 @@ public class FrameworkConfigs {
             return PropertyReader.get("headless", Boolean.class);
         }
         public static boolean popupBlocker() {
-            return PropertyReader.get("popup_blocker", Boolean.class);
+            return PropertyReader.get("headless", Boolean.class);
         }
     public static boolean openAllure() {
         return PropertyReader.get("openAllureAfterTest", Boolean.class);
