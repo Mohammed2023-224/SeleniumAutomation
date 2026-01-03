@@ -3,50 +3,92 @@ package engine.utils;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.jar.JarFile;
 import java.util.stream.Stream;
 
 public class PropertyReader {
-    static Properties prop;
-    static String path = "src/main/resources/properties";
-    static String path2 = "src/test/resources/properties";
+    static Properties prop =new Properties();
     private static final Map<String, String> CACHE = new ConcurrentHashMap<>();
+public static Properties readAllProperties() {
+    String env = System.getProperty("env", "default");
+    List<String> resourcePaths = List.of(
+            "properties",
+            "properties/" + env
+    );
+    ClassLoader cl = Thread.currentThread().getContextClassLoader();
+    StringBuilder log = new StringBuilder();
+    for (String basePath : resourcePaths) {
+        try {
+            Enumeration<URL> resources = cl.getResources(basePath);
+            List<URL> urls = Collections.list(resources);
 
-    public static Properties readAllProperties() {
-        String env = System.getProperty("env", "default");
-        List<Path> configDirs = Arrays.asList(
-                Paths.get(path),
-                Paths.get(path,"/", env),
-                Paths.get(path2),
-                Paths.get(path2,"/", env));
-        String log= "";
-        prop = new Properties();
-        for (Path configDir : configDirs) {
-            if (Files.exists(configDir) && Files.isDirectory(configDir)) {
-                log= log.isEmpty()?log+configDir:log+" and "+configDir;
-                try (Stream<Path> paths = Files.list(configDir)) {
-                    paths
-                            .filter(p -> p.toString().endsWith(".properties"))
-                            .forEach(p -> {
-                                try (FileReader fr = new FileReader(p.toFile())) {
-                                    prop.load(fr);
-                                } catch (IOException e) {
-                                }
-                            });
-                } catch (IOException e) {
-                    throw new RuntimeException("Failed to read config directory: " + configDir, e);
+            urls.sort(Comparator.comparing(
+                    u -> u.getProtocol().equals("jar") ? 0 : 1
+            ));
+            for (URL url : urls){
+                log.append(url).append(" ");
+
+                try {
+                    if (url.getProtocol().equals("jar")) {
+                        loadFromJar(url);
+                    }
+                    if (url.getProtocol().equals("file")) {
+                        Path dir = Paths.get(url.toURI());
+                        try (Stream<Path> paths = Files.list(dir)) {
+                            loadPropertyFiles(paths);
+                        }
+                    }
+
+                } catch (Exception e) {
+                    throw new RuntimeException("Failed loading configs from " + url, e);
                 }
             }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to scan classpath: " + basePath, e);
         }
-        System.setProperty("readPropertyPath", log);
-        return prop;
+    }
+    System.setProperty("readPropertyPath", log.toString());
+    return prop;
+}
+
+    private static void loadPropertyFiles(Stream<Path> paths) {
+        paths.filter(p -> p.toString().endsWith(".properties"))
+                .forEach(p -> {
+                    try (InputStream is = Files.newInputStream(p)) {
+                        prop.load(is);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+    }
+
+    private static void loadFromJar(URL dirUrl) throws IOException {
+        String jarPath = dirUrl.getPath().substring(5, dirUrl.getPath().indexOf("!"));
+        try (JarFile jar = new JarFile(URLDecoder.decode(jarPath, StandardCharsets.UTF_8))) {
+
+            String baseEntry = dirUrl.getPath().substring(dirUrl.getPath().indexOf("!") + 2);
+
+            jar.stream()
+                    .filter(e -> !e.isDirectory())
+                    .filter(e -> e.getName().startsWith(baseEntry))
+                    .filter(e -> e.getName().endsWith(".properties"))
+                    .forEach(e -> {
+                        try (InputStream is = jar.getInputStream(e)) {
+                            prop.load(is);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    });
+        }
     }
 
     private static String readProp(String key){
