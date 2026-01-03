@@ -1,7 +1,7 @@
 package tests;
 
 import pages.appUATPg.*;
-import tests.base.BaseTest;
+import baseTest.BaseTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

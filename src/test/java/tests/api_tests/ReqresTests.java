@@ -1,5 +1,6 @@
 package tests.api_tests;
 
+import baseTest.APIBaseTest;
 import engine.api.ApiRequestFactory;
 import engine.api.NoAuthTokenProvider;
 import engine.api.ResponseActions;
@@ -12,7 +13,7 @@ import pages.reqresAPI.ReqresApiCalls;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReqresTests extends APIBaseTest{
+public class ReqresTests extends APIBaseTest {
     private ReqresApiCalls apiCalls;
     @Test
     public void getAllObjects(){
