@@ -44,7 +44,7 @@ public class Edge  implements  BrowserDriver{
             throw new RuntimeException(e);
         }
     }
-//TODO Move class loader to utility class
+//TODO Move class loader to utility class 4 instances property reader- edge-chrome - logger
     private void setLocalDriver(){
         if(FrameworkConfigs.localPathDriver()){
             if(FrameworkConfigs.edgeLocalDriverPath().isEmpty()){
