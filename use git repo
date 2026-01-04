@@ -1,0 +1,121 @@
+Step 1: Update Your pom.xml
+Add this INSIDE the <project> tag:
+
+xml
+<project>
+    <!-- Your existing pom.xml above... -->
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/Mohammed2023-224/SeleniumAutomation</url>
+        </repository>
+    </distributionManagement>
+
+    <!-- Make sure you have these coordinates -->
+    <groupId>com.yourcompany</groupId>  <!-- NOT io.github! -->
+    <artifactId>selenium-framework</artifactId>
+    <version>1.0.0</version>
+
+    <!-- Rest of your pom.xml... -->
+</project>
+
+Step 2: Get GitHub Token
+Go to GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)
+
+Click "Generate new token (classic)"
+
+Name: "Maven Deployment"
+
+Select scopes: ✅ repo ✅ write:packages ✅ read:packages
+
+Generate token → COPY IT! (you won't see it again)
+
+Step 3: Set Token as Environment Variable
+bash
+# Mac/Linux
+export GITHUB_TOKEN=ghp_your_copied_token_here
+
+# Windows (Command Prompt)
+set GITHUB_TOKEN=ghp_your_copied_token_here
+
+# Windows (PowerShell)
+$env:GITHUB_TOKEN="ghp_your_copied_token_here"
+
+Step 4: Deploy Your Framework
+bash
+# Go to your framework project
+cd /path/to/SeleniumAutomation
+
+# Deploy to GitHub Packages
+mvn clean deploy
+
+Step 5: Verify Deployment
+Go to: https://github.com/Mohammed2023-224/SeleniumAutomation/packages
+
+You should see: selenium-framework 1.0.0
+
+YOU'RE DONE! Now tell your team.
+
+📋 PART 2: WHAT YOUR TEAM DOES (Framework Users)
+Step 1: Team Updates Their pom.xml
+Add this to THEIR project's pom.xml:
+
+xml
+<project>
+    <!-- Inside the <project> tag, add: -->
+
+    <!-- 1. Add GitHub repository -->
+    <repositories>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/Mohammed2023-224/SeleniumAutomation</url>
+        </repository>
+    </repositories>
+
+    <!-- 2. Add your framework dependency -->
+    <dependencies>
+        <dependency>
+            <groupId>com.yourcompany</groupId>
+            <artifactId>selenium-framework</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
+
+    <!-- Rest of their pom.xml... -->
+</project>
+Step 2: Team Gets GitHub Token
+Each team member needs their OWN token:
+
+Each person goes to their GitHub → Settings → Developer settings
+
+Generate token with: ✅ read:packages
+
+Save token
+
+Step 3: Team Sets Up Authentication
+Create ~/.m2/settings.xml (for each team member):
+
+Mac/Linux: vim ~/.m2/settings.xml
+Windows: C:\Users\Username\.m2\settings.xml
+
+xml
+<settings>
+    <servers>
+        <server>
+            <id>github</id>
+            <username>Mohammed2023-224</username>  <!-- YOUR username -->
+            <password>ghp_their_personal_token_here</password>  <!-- THEIR token -->
+        </server>
+    </servers>
+</settings>
+OR Use Environment Variable (easier):
+
+bash
+# Team sets this once
+export GITHUB_TOKEN=ghp_their_personal_token_here
+Step 4: Team Uses Your Framework
+bash
+# Just normal Maven commands!
+mvn clean compile    # Downloads your framework automatically
