@@ -1,11 +1,48 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.example</groupId>
-  <artifactId>ExpandTesting</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <name>Archetype - ExpandTesting</name>
-  <url>http://maven.apache.org</url>
+  <groupId>io.github.Mohammed2023-224</groupId>
+  <artifactId>automation-engine</artifactId>
+  <version>0.1.0-beta.1</version>
+  <name>Selenium Automation Engine</name>
+  <url>https://github.com/Mohammed2023-224/SeleniumAutomation</url>
+    <description>
+        A comprehensive Selenium-based test automation framework with
+        property management, email testing, API testing, and reporting capabilities.
+        Includes utilities for WebDriver management, configuration reading,
+        and test data generation.
+    </description>
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Mohammed</name>
+            <email>mohamed.abdelhakim.ahmed1@gmail.com</email>
+            <roles>
+                <role>Developer</role>
+                <role>Maintainer</role>
+            </roles>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git://github.com/Mohammed2023-224/SeleniumAutomation.git</connection>
+        <developerConnection>scm:git:ssh://github.com:Mohammed2023-224/SeleniumAutomation.git</developerConnection>
+        <url>https://github.com/Mohammed2023-224/SeleniumAutomation</url>
+        <tag>HEAD</tag>
+    </scm>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/Mohammed2023-224/SeleniumAutomation</url>
+        </repository>
+    </distributionManagement>
 
     <properties>
         <selenium.version>4.38.0</selenium.version>
@@ -27,8 +64,8 @@
         <javax.version>1.6.2</javax.version>
         <javaxActivation.version>1.1.1</javaxActivation.version>
         <googleAPIClient.version>1.31.5</googleAPIClient.version>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>24</maven.compiler.source>
+        <maven.compiler.target>24</maven.compiler.target>
     </properties>
 
   <build>
@@ -48,8 +85,8 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.11.0</version>
           <configuration>
-              <source>17</source>
-              <target>17</target>
+              <source>24</source>
+              <target>24</target>
           </configuration>
       </plugin>
   </plugins>
