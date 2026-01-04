@@ -2,7 +2,7 @@ package tests;
 
 import engine.driver.DriverFactory;
 import pages.expand.*;
-import baseTest.BaseTest;
+import tests.baseTest.BaseTest;
 import engine.actions.BrowserActions;
 import engine.actions.DevToolsActions;
 import engine.utils.Faker;

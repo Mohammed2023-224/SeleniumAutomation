@@ -1,6 +1,6 @@
 package tests.api_tests;
 
-import baseTest.APIBaseTest;
+import tests.baseTest.APIBaseTest;
 import engine.api.ApiRequestFactory;
 import engine.api.NoAuthTokenProvider;
 import engine.api.ResponseActions;
@@ -19,7 +19,6 @@ public class ReqresTests extends APIBaseTest {
     public void getAllObjects(){
     Response res=apiCalls.getObjectsEndPoint(null,null);
         apiCalls.validateResponseSuccessfully(res);
-        System.out.println( ResponseActions.getValueByPath(res,"id",ArrayList.class));
         apiCalls.validateBodyContainsText((String) (ResponseActions.getValueByPath(res,"name",ArrayList.class)).get(2),"Apple iPhone 12 Pro Max");
     }
     @Test

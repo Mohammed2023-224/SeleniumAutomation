@@ -1,4 +1,4 @@
-package baseTest;
+package tests.baseTest;
 
 import engine.actions.JSActions;
 import engine.constants.FrameworkConfigs;

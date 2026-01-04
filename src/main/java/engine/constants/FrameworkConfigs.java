@@ -64,6 +64,12 @@ public class FrameworkConfigs {
         public static boolean localPathDriver() {
             return PropertyReader.get("localDriver", Boolean.class);
         }
+        public static String edgeLocalDriverPath() {
+            return PropertyReader.get("edge_driver_path", String.class);
+        }
+        public static String chromeLocalDriverPath() {
+            return PropertyReader.get("chrome_driver_path", String.class);
+        }
 
         public static String proxy() {
             return PropertyReader.get("proxy", String.class);
