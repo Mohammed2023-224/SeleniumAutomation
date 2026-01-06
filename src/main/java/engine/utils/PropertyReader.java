@@ -1,7 +1,6 @@
 package engine.utils;
 
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -9,7 +8,6 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarFile;
@@ -86,42 +84,18 @@ public class PropertyReader {
                     "properties",
                     "properties/" + env
             );
-
-            ClassLoader cl = Thread.currentThread().getContextClassLoader();
-            StringBuilder log = new StringBuilder();
-
-            for (String basePath : resourcePaths) {
-                try {
-                    Enumeration<URL> resources = cl.getResources(basePath);
-                    List<URL> urls = Collections.list(resources);
-
-                    urls.sort(Comparator.comparing(
-                            u -> u.getProtocol().equals("jar") ? 0 : 1
-                    ));
-
-                    for (URL url : urls) {
-                        log.append(url).append(" ");
-
+            ClassPathLoading.loadFromDirectories(
+                    resourcePaths,
+                    is -> {
                         try {
-                            if (url.getProtocol().equals("jar")) {
-                                loadFromJar(url, properties);
-                            }
-                            if (url.getProtocol().equals("file")) {
-                                Path dir = Paths.get(url.toURI());
-                                try (Stream<Path> paths = Files.list(dir)) {
-                                    loadPropertyFiles(paths, properties);
-                                }
-                            }
-                        } catch (Exception e) {
-                            throw new RuntimeException("Failed loading configs from " + url, e);
+                            properties.load(is);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
                     }
-                } catch (IOException e) {
-                    throw new RuntimeException("Failed to scan classpath: " + basePath, e);
-                }
-            }
+            );
 
-            System.setProperty("readPropertyPath", log.toString());
+            System.setProperty("readPropertyPath", resourcePaths.toString());
             return properties;
         }
 
