@@ -1,6 +1,5 @@
 package engine.utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -55,14 +54,13 @@ public class ClassPathLoading {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        if(executable) {
+
             try (InputStream in = url.openStream()) {
                 Files.copy(in, temp, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }
-            temp.toFile().setExecutable(true);
         }
+        if(executable)  temp.toFile().setExecutable(true);
         temp.toFile().deleteOnExit();
         return temp;
     }
@@ -112,7 +110,7 @@ public class ClassPathLoading {
         }
     }
 
-    private static void loadFromFileDirectory(URL url, Consumer<InputStream> consumer,String extension) {
+    private static void loadFromFileDirectory(URL url, Consumer<InputStream> consumer, String extension) {
         try {
             Path dir = Paths.get(url.toURI());
 
@@ -132,7 +130,7 @@ public class ClassPathLoading {
         }
     }
 
-    private static void loadFromJarDirectory(URL dirUrl, Consumer<InputStream> consumer,String extension)
+    private static void loadFromJarDirectory(URL dirUrl, Consumer<InputStream> consumer,String extension )
             throws IOException {
 
         String jarPath = dirUrl.getPath().substring(5, dirUrl.getPath().indexOf("!"));
