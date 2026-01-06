@@ -37,7 +37,7 @@ public class ClassPathLoading {
             }
 
             if ("file".equals(url.getProtocol())) {
-                return Paths.get(url.toURI());
+                return extractFromFilePath(url,executable);
             }
 
             throw new RuntimeException("Unsupported protocol: " + url.getProtocol());
@@ -47,17 +47,26 @@ public class ClassPathLoading {
         }
     }
 
-    private static Path extractFromJar(URL url, String resourcePath,Boolean executable) throws IOException {
+    private static Path extractFromJar(URL url, String resourcePath,Boolean executable)  {
         String suffix = resourcePath.substring(resourcePath.lastIndexOf('.'));
-        Path temp = Files.createTempFile(resourcePath.replace('/', '_'), suffix);
-        try (InputStream in = url.openStream()) {
-            Files.copy(in, temp, StandardCopyOption.REPLACE_EXISTING);
+        Path temp = null;
+        try {
+            temp = Files.createTempFile(resourcePath.replace('/', '_'), suffix);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        if(executable) temp.toFile().setExecutable(true);
+        if(executable) {
+            try (InputStream in = url.openStream()) {
+                Files.copy(in, temp, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            temp.toFile().setExecutable(true);
+        }
         temp.toFile().deleteOnExit();
         return temp;
     }
-    private static Path extractFromFilePath(URL url,Boolean executable) throws IOException {
+    private static Path extractFromFilePath(URL url,Boolean executable)  {
         Path driverPath = null;
         try {
             driverPath = Paths.get(url.toURI());
@@ -75,6 +84,7 @@ public class ClassPathLoading {
     public static void loadFromDirectories(
             List<String> classPathDirs,
             Consumer<InputStream> consumer
+            ,String extension
     ) {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
 
@@ -90,9 +100,9 @@ public class ClassPathLoading {
 
                 for (URL url : urls) {
                     if ("jar".equals(url.getProtocol())) {
-                        loadFromJarDirectory(url, consumer);
+                        loadFromJarDirectory(url, consumer,extension);
                     } else if ("file".equals(url.getProtocol())) {
-                        loadFromFileDirectory(url, consumer);
+                        loadFromFileDirectory(url, consumer,extension);
                     }
                 }
 
@@ -102,12 +112,12 @@ public class ClassPathLoading {
         }
     }
 
-    private static void loadFromFileDirectory(URL url, Consumer<InputStream> consumer) {
+    private static void loadFromFileDirectory(URL url, Consumer<InputStream> consumer,String extension) {
         try {
             Path dir = Paths.get(url.toURI());
 
             try (Stream<Path> files = Files.list(dir)) {
-                files.filter(p -> p.toString().endsWith(".properties"))
+                files.filter(p -> p.toString().endsWith(extension))
                         .forEach(p -> {
                             try (InputStream is = Files.newInputStream(p)) {
                                 consumer.accept(is);
@@ -122,7 +132,7 @@ public class ClassPathLoading {
         }
     }
 
-    private static void loadFromJarDirectory(URL dirUrl, Consumer<InputStream> consumer)
+    private static void loadFromJarDirectory(URL dirUrl, Consumer<InputStream> consumer,String extension)
             throws IOException {
 
         String jarPath = dirUrl.getPath().substring(5, dirUrl.getPath().indexOf("!"));
@@ -135,7 +145,7 @@ public class ClassPathLoading {
             jar.stream()
                     .filter(e -> !e.isDirectory())
                     .filter(e -> e.getName().startsWith(baseEntry))
-                    .filter(e -> e.getName().endsWith(".properties"))
+                    .filter(e -> e.getName().endsWith(extension))
                     .forEach(e -> {
                         try (InputStream is = jar.getInputStream(e)) {
                             consumer.accept(is);

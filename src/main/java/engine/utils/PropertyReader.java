@@ -92,7 +92,7 @@ public class PropertyReader {
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
-                    }
+                    },".properties"
             );
 
             System.setProperty("readPropertyPath", resourcePaths.toString());
