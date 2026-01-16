@@ -7,8 +7,8 @@ import java.util.Set;
 public class ReadExecutionFlow {
     private static volatile Set<String> CACHED_TESTS;
 
-    private static final String CONTROL_FILE = "src/test/resources/ExecutionFlow.xlsx";
-    private static final String SHEET_NAME = "control";
+    private static final String CONTROL_FILE = PropertyReader.get("file_path", String.class);
+    private static final String SHEET_NAME = PropertyReader.get("sheet_name", String.class);
 
     public static Set<String> getExecutionControl() {
 

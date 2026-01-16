@@ -22,7 +22,7 @@ public FormPage(WebDriver driver){
     this.driver=driver;
 }
 String path=  System.getProperty("user.dir")+"/"+FrameworkConfigs.downloadsPath();
-String firstFile="test.text";
+String firstFile="test.txt";
 String secondFile="pom.txt";
 String thirdFile="sample_text.txt";
     By expField= By.id("exp");
