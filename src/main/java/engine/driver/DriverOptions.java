@@ -3,6 +3,7 @@ package engine.driver;
 import engine.constants.FrameworkConfigs;
 import engine.reporters.Loggers;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,12 +36,16 @@ public class DriverOptions {
 
     public  Map<String,Object> definePreferences(){
         Map<String, Object> prefs = new HashMap<>();
-        prefs.put("download.default_directory", FrameworkConfigs.downloadsPath());
+        prefs.put("download.default_directory", Paths.get(
+                System.getProperty("user.dir"),
+                FrameworkConfigs.downloadsPath()
+        ).toAbsolutePath().toString());
         prefs.put("profile.default_content_settings.popups", 0);
+        prefs.put("download.manager.showWhenStarting", false);
         prefs.put("download.prompt_for_download", false);
         prefs.put("download.directory_upgrade", true);
-        prefs.put("profile.default_content_setting_values.automatic_downloads", 1);
-        prefs.put("safebrowsing.enabled", true); // sometimes affects prompts
+//        prefs.put("profile.default_content_setting_values.automatic_downloads", 1);
+//        prefs.put("safebrowsing.enabled", true); // sometimes affects prompts
 //        prefs.put("plugins.always_open_pdf_externally", true);
         return  prefs;
     }

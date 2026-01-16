@@ -57,7 +57,7 @@ waitActionsPage.handleWaitForFrame(maxWait);
         keyboardActions.handleKeyboard();
     }
 
-    @Test(enabled = false)
+    @Test()
     public void formPageTests() {
         homePage.clickPage("Forms");
         formPage.userFillsExperience("6");

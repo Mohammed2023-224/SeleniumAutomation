@@ -2,6 +2,7 @@ package pages.appUATPg;
 
 
 import engine.actions.*;
+import engine.constants.FrameworkConfigs;
 import engine.reporters.Loggers;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
@@ -20,8 +21,8 @@ private final WebDriver driver;
 public FormPage(WebDriver driver){
     this.driver=driver;
 }
-String path="C:\\Users\\USER\\Downloads\\";
-String firstFile="Nada_Ali_Resume_updated-4.pdf";
+String path=  System.getProperty("user.dir")+"/"+FrameworkConfigs.downloadsPath();
+String firstFile="test.text";
 String secondFile="pom.txt";
 String thirdFile="sample_text.txt";
     By expField= By.id("exp");
