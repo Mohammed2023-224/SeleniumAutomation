@@ -123,15 +123,10 @@ public class FrameworkConfigs {
             return PropertyReader.get("Email_attachment_path", String.class);
         }
 
-
         // Gmail
         public static String gmailToken() {
             return PropertyReader.get("gmail_token_path", String.class);
         }
-    public static String gmailCredentials() {
-        return PropertyReader.get("gmail_credentials", String.class);
-    }
-
 
     //Paths
 

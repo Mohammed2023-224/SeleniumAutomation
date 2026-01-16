@@ -41,7 +41,7 @@ public class GmailHandler {
     private   String applicationName ;
     private   JsonFactory jsonFactory ;
     private  List<String> scopes;
-    private  String credentialsFilePath= FrameworkConfigs.gmailCredentials();
+    private  String credentialsFilePath= PropertyReader.get("gmail_credentials", String.class);
     private  String tokensPath = FrameworkConfigs.gmailToken();
     Gmail service = null;
     private String currentUser="me";
@@ -60,7 +60,7 @@ public class GmailHandler {
 
     private  Credential authorize()  {
         // Load credentials.json
-        InputStream in = GmailHandler.class.getResourceAsStream(credentialsFilePath);
+        InputStream in = GmailHandler.class.getClassLoader().getResourceAsStream(credentialsFilePath);
         if (in == null) {
             throw new RuntimeException(credentialsFilePath+" not found in resources folder.");
         }
