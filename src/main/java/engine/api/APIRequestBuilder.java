@@ -35,9 +35,13 @@ public class APIRequestBuilder {
     public APIRequestBuilder(String url) {
         setURL(url);
     }
-    public APIRequestBuilder(String url, Map<String, String> cookies) {
+    public APIRequestBuilder(String url, Map<String, String> data,Boolean isCookies) {
         setURL(url);
-        setCookies(cookies);
+        if(isCookies) {
+            setCookies(data);}
+        else {
+            setHeaders(data);
+        }
     }
     public APIRequestBuilder(String url, Map<String, String> cookies,Map<String, String>  headers) {
         setURL(url);

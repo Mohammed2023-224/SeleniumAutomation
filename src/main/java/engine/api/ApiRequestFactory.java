@@ -16,9 +16,7 @@ public class ApiRequestFactory {
 
     public APIRequestBuilder newRequest() {
         AuthSession session = tokenProvider.getSession();
-        APIRequestBuilder builder = new APIRequestBuilder(baseUrl, session.cookies(),session.headers());
-        builder.setHeaders( session.headers());
-        return builder;
+        return new APIRequestBuilder(baseUrl, session.cookies(),session.headers());
     }
 
     public Response executeWithoutRetry(Function<APIRequestBuilder, Response> fn) {
