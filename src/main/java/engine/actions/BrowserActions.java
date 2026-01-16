@@ -5,8 +5,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class BrowserActions {
+    private BrowserActions(){}
     public static void navigateTo(WebDriver driver, String url) {
         String logs="Navigated to url: "+ url;
         driver.navigate().to(url);
@@ -50,10 +52,15 @@ public class BrowserActions {
         ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
         for(String t: windows){
             driver.switchTo().window(t);
-            if(driver.getTitle().equalsIgnoreCase(title)){
-                log="Switch to windows titled: "+ title;
-                break;
+            try {
+                if(Objects.requireNonNull(driver.getTitle()).equalsIgnoreCase(title)){
+                    log="Switch to windows titled: "+ title;
+                    break;
+                }
+            } catch (NullPointerException _) {
+                throw new NullPointerException();
             }
+
         }
         if(log.isEmpty()){
             log="No windows was found with title "+ title+" so switched to first window ";
@@ -66,8 +73,12 @@ public class BrowserActions {
         ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
         for(String u: windows){
             driver.switchTo().window(u);
-            if(driver.getCurrentUrl().equalsIgnoreCase(url)){
-                break;
+            try {
+                if (Objects.requireNonNull(driver.getCurrentUrl()).equalsIgnoreCase(url)) {
+                    break;
+                }
+            } catch (NullPointerException _) {
+                throw new NullPointerException();
             }
         }
         String log="Switch to windows url: "+ url;

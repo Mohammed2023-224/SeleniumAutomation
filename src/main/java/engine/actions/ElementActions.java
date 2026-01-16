@@ -6,6 +6,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
 public class ElementActions {
+    private ElementActions(){}
+    String elementLocatedText="";
 
     private static Actions actions(WebDriver driver) {
         return new Actions(driver);
@@ -121,7 +123,7 @@ public class ElementActions {
                 flag = true;
              Loggers.getLogger().info("Element located at "+locator+" exists");
             }
-        } catch (Exception e) {
+        } catch (Exception _) {
          Loggers.getLogger().warn("Element located at "+locator+" doesn't exist");
         }
         return flag;
@@ -134,7 +136,7 @@ public class ElementActions {
                 flag = true;
              Loggers.getLogger().info("Element located at: "+locator+" is visible");
             }
-        } catch (Exception e) {
+        } catch (Exception _) {
          Loggers.getLogger().warn("Element located at "+locator+" isn't visible");
         }
         return flag;
@@ -149,7 +151,7 @@ public class ElementActions {
                 flag = true;
              Loggers.getLogger().info("Element located at: "+locator+" is clickable");
             }
-        } catch (Exception e) {
+        } catch (Exception _) {
          Loggers.getLogger().warn("Element located at "+locator+" isn't clickable");
         }
         return flag;
@@ -162,7 +164,7 @@ public class ElementActions {
                 flag = true;
              Loggers.getLogger().info("Element located at "+locator+"is selected" );
             }
-        } catch (Exception e) {
+        } catch (Exception _) {
          Loggers.getLogger().warn("Element located at "+locator+" isn't selected");
         }
         return flag;

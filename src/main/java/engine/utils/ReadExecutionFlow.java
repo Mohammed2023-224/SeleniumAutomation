@@ -5,25 +5,27 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 public class ReadExecutionFlow {
-    private static volatile Set<String> CACHED_TESTS;
+    private ReadExecutionFlow(){}
+
+    private static volatile Set<String> cachedTests;
 
     private static final String CONTROL_FILE = PropertyReader.get("file_path", String.class);
     private static final String SHEET_NAME = PropertyReader.get("sheet_name", String.class);
 
     public static Set<String> getExecutionControl() {
 
-        if (!PropertyReader.get("file_control", Boolean.class)) {
+        if (Boolean.FALSE.equals(PropertyReader.get("file_control", Boolean.class))) {
             return Set.of(); // safe empty set
         }
 
-        if (CACHED_TESTS == null) {
+        if (cachedTests == null) {
             synchronized (ReadExecutionFlow.class) {
-                if (CACHED_TESTS == null) {
-                    CACHED_TESTS = loadFromExcel();
+                if (cachedTests == null) {
+                    cachedTests = loadFromExcel();
                 }
             }
         }
-        return CACHED_TESTS;
+        return cachedTests;
     }
 
     private static Set<String> loadFromExcel() {

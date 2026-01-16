@@ -36,7 +36,7 @@ public class BaseTest {
     @AfterMethod
     protected void attachLogsAndScreenshot(ITestResult result) {
         if(driver ==null) return;
-        if(FrameworkConfigs.per_test_log())AllureAttachments.saveTextLog(ThreadContext.get("testLogFileName") + ".log",
+        if(FrameworkConfigs.perTestLog())AllureAttachments.saveTextLog(ThreadContext.get("testLogFileName") + ".log",
                 FrameworkConfigs.reportsPath() + ThreadContext.get("testLogFileName") + ".log");
         if(!result.isSuccess()) AllureAttachments.saveScreensShot(driver,"test");
     }
