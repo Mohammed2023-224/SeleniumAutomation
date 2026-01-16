@@ -1,6 +1,7 @@
 package engine.utils;
 
 import engine.reporters.Loggers;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -59,6 +60,48 @@ public class ExcelReader {
                 dataObj[num++][0]=linkedHashMap;
             }
         }
+        return dataObj;
+    }
+
+    public  Object[][] readExcelSheet(String filePath, String sheetName) {
+        readExcel(filePath);
+        changeSheet(sheetName);
+        Object[][] dataObj=new Object[getNumberOfRows()][1];
+        int num=0;
+        for (int i=1;i<getNumberOfRows();i++){
+                LinkedHashMap<String,String> linkedHashMap=new LinkedHashMap<>();
+                for (int j=0; j<getNumberOfColumnsByHeaders();j++){
+                    String currentKey=getCellByColumnNumAndRowNum(0,j);
+                    String currentValue=getCellByColumnNumAndRowNum(i,j);
+                    linkedHashMap.put(currentKey,currentValue);
+                   Loggers.getLogger().debug("Read data Key: {} --> Value: {} from row {} and column  {}",currentKey,currentValue,i,j);
+                }
+                dataObj[num++][0]=linkedHashMap;
+            }
+
+        return dataObj;
+    }
+
+    public  Object[][] readExcelSheetWithCertainColumnReference(String filePath, String sheetName, String colName) {
+        readExcel(filePath);
+        changeSheet(sheetName);
+        Object[][] dataObj=new Object [getNumberOfRows()-1][2];
+        int num =0;
+        for (int i=1;i<getNumberOfRows();i++){
+            LinkedHashMap<String,String> linkedHashMap=new LinkedHashMap<>();
+            String referenceCall="";
+            for (int j=0; j<getNumberOfColumnsByHeaders();j++){
+                 referenceCall=getCellByColumnNumAndRowNum(0,j).equalsIgnoreCase(colName)?getCellByColumnNumAndRowNum(i,j)
+                            :referenceCall;
+                    String currentKey=getCellByColumnNumAndRowNum(0,j);
+                    String currentValue=getCellByColumnNumAndRowNum(i,j);
+                 linkedHashMap.put(currentKey,currentValue );
+                   Loggers.getLogger().debug("Read data Key: {} --> Value: {} from row {} and column  {}",currentKey,currentValue,i,j);
+                }
+            dataObj[num][0] =referenceCall;
+            dataObj[num++][1] =linkedHashMap;
+            }
+
         return dataObj;
     }
 
