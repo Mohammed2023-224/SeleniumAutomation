@@ -3,6 +3,7 @@ package engine.listeners;
 import engine.actions.SystemMethods;
 import engine.constants.FrameworkConfigs;
 import engine.reporters.Loggers;
+import engine.utils.ClassPathLoading;
 import engine.utils.GmailHandler;
 import engine.utils.PropertyReader;
 import org.apache.logging.log4j.ThreadContext;
@@ -80,15 +81,13 @@ static {
      Loggers.getLogger().info("Name of failed tests: {}", Arrays.deepToString(failedTests.toArray()));
      Loggers.getLogger().info("Number of skipped tests: {}", numberOfSkippedTests.get());
      Loggers.getLogger().info("Name of skipped tests: {}", Arrays.deepToString(skippedTests.toArray()));
-        if(FrameworkConfigs.sendReportEmail()){
-            SystemMethods.runFile(FrameworkConfigs.allureGenerationPath());
+        if(FrameworkConfigs.generateReport()) {
+            SystemMethods.runFile(ClassPathLoading.getResourceAsPath("batFiles/generateReport.bat", true).toString());
+        }
+            if(FrameworkConfigs.sendReportEmail()){
             GmailHandler gmailHandler=new GmailHandler("test");
             gmailHandler.sendEmail(FrameworkConfigs.emailTo(), FrameworkConfigs.emailCc(), FrameworkConfigs.emailSubject()
                     , FrameworkConfigs.emailBody(), FrameworkConfigs.emailAttachmentPath());
-        }
-        if (FrameworkConfigs.openAllure()) {
-         Loggers.getLogger().info("start allure report pls don't stop the execution");
-            SystemMethods.runFile(FrameworkConfigs.allureGenerationPath());
         }
         if (PropertyReader.get("kill_processes", Boolean.class)) {
             Loggers.getLogger().info("Test execution finished. cleaning up proccesses...");
@@ -100,12 +99,16 @@ static {
             SystemMethods.killProcessesByPort(ports);
             Loggers.getLogger().info("Cleanup completed.");
         }
+        if (FrameworkConfigs.openAllure()) {
+            Loggers.getLogger().info("start allure report pls don't stop the execution");
+            SystemMethods.runFile(ClassPathLoading.getResourceAsPath("batFiles/serve_allure_report.bat",true).toString());
+        }
     }
     @Override
     public void onExecutionStart() {
         if(!FrameworkConfigs.localExecution()&&FrameworkConfigs.gridEnabled()){
-            SystemMethods.startBatAsync(FrameworkConfigs.gridPath()+"startHub.bat");
-            SystemMethods.startBatAsync(FrameworkConfigs.gridPath()+"startNode.bat");
+            SystemMethods.startBatAsync(ClassPathLoading.getResourceAsPath("grid/startHub.bat",true).toString());
+            SystemMethods.startBatAsync(ClassPathLoading.getResourceAsPath("grid/startNode.bat",true).toString());
         }
     }
 

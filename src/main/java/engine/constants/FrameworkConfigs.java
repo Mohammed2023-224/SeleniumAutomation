@@ -41,8 +41,13 @@ public class FrameworkConfigs {
     public static boolean openAllure() {
         return PropertyReader.get("openAllureAfterTest", Boolean.class);
     }
+
     public static boolean sendReportEmail() {
-        return PropertyReader.get("generateAndSendReport", Boolean.class);
+        return PropertyReader.get("SendReport", Boolean.class);
+    }
+
+    public static boolean generateReport() {
+        return PropertyReader.get("generateReport", Boolean.class);
     }
 
 
@@ -84,26 +89,11 @@ public class FrameworkConfigs {
         public static boolean per_test_log() {
             return PropertyReader.get("per_test_log", Boolean.class);
         }
-        public static String gridPath() {
-            return PropertyReader.get("gridPath", String.class);
-        }
 
     /* ======================
        path
        ====================== */
 
-
-        public static String allureBat() {
-            return PropertyReader.get("allure_bat_file_path", String.class);
-        }
-
-        public static String allureGenerationPath() {
-            return PropertyReader.get("allure_generation_path", String.class);
-        }
-
-        public static String allureCompressionPath() {
-            return PropertyReader.get("allure_compression_path", String.class);
-        }
 
         public static String reportsPath() {
             return PropertyReader.get("report_logs_path", String.class);
