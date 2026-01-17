@@ -37,19 +37,19 @@ public class ReqresTests extends APIBaseTest {
     }
     @Test
     public void postObject(){
-        Response res=apiCalls.postObject("src/test/resources/postObject.json");
+        Response res=apiCalls.postObject("postObject.json");
         ResponseActions.checkResponseStatus(res,200);
          HardAssertions.assertTextContains((ResponseActions.getValueByPath(res,"name",String.class)),"Apple");
     }
     @Test
     public void updateObject(){
-        Response res=apiCalls.updateObject("src/test/resources/updateObject.json","ff8081819782e69e019b98e775176b6e");
+        Response res=apiCalls.updateObject("updateObject.json","ff8081819782e69e019b98e775176b6e");
         ResponseActions.checkResponseStatus(res,200);
          HardAssertions.assertTextContains((ResponseActions.getValueByPath(res,"name",String.class)),"nar");
     }
     @Test
     public void updateObjectPartially(){
-        Response res=apiCalls.updatePartialObject("src/test/resources/partialUpdate.json","ff8081819782e69e019b98e775176b6e");
+        Response res=apiCalls.updatePartialObject("partialUpdate.json","ff8081819782e69e019b98e775176b6e");
         ResponseActions.checkResponseStatus(res,200);
          HardAssertions.assertTextContains((ResponseActions.getValueByPath(res,"name",String.class)),"nar");
     }

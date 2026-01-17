@@ -1,5 +1,6 @@
 package engine.utils;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Set;
@@ -9,7 +10,7 @@ public class ReadExecutionFlow {
 
     private static volatile Set<String> cachedTests;
 
-    private static final String CONTROL_FILE = PropertyReader.get("file_path", String.class);
+    private static final String CONTROL_FILE = ClassPathLoading.getResourceAsPath(PropertyReader.get("file_path", String.class),false).toString();
     private static final String SHEET_NAME = PropertyReader.get("sheet_name", String.class);
 
     public static Set<String> getExecutionControl() {
