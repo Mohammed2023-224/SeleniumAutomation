@@ -2,11 +2,13 @@ package tests.baseTest;
 
 import engine.actions.JSActions;
 import engine.constants.FrameworkConfigs;
+import engine.driver.DriverFactory;
 import engine.driver.SetupDriver;
 import engine.listeners.AllureAttachments;
 import engine.listeners.TestNgListener;
 import engine.listeners.TransformListener;
 import engine.reporters.Loggers;
+import engine.utils.ClassPathLoading;
 import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
@@ -20,11 +22,13 @@ import java.util.List;
 @Listeners({TestNgListener.class, TransformListener.class})
 public class BaseTest {
     public WebDriver driver;
+    public String testDataPath= ClassPathLoading.getResourceAsPath("testData/data.xlsx",false).toString();
 
     @Parameters("browser")
     @BeforeClass
     protected void InitDriver(ITestContext con, @Optional String browser) {
         driver = new SetupDriver().startDriver(browser,FrameworkConfigs.localExecution());
+        DriverFactory.setDriver(driver);
         con.setAttribute("driver", driver);
     }
 
@@ -37,7 +41,7 @@ public class BaseTest {
     protected void attachLogsAndScreenshot(ITestResult result) {
         if(driver ==null) return;
         if(FrameworkConfigs.perTestLog())AllureAttachments.saveTextLog(ThreadContext.get("testLogFileName") + ".log",
-                FrameworkConfigs.reportsPath() + ThreadContext.get("testLogFileName") + ".log");
+                System.getProperty("user.dir")+"/"+FrameworkConfigs.reportsPath() + ThreadContext.get("testLogFileName") + ".log");
         if(!result.isSuccess()) AllureAttachments.saveScreensShot(driver,"test");
     }
     @AfterMethod
