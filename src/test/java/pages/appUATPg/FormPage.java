@@ -2,15 +2,17 @@ package pages.appUATPg;
 
 
 import engine.actions.*;
+import engine.assertions.HardAssertions;
 import engine.constants.FrameworkConfigs;
 import engine.reporters.Loggers;
+import engine.utils.ClassPathLoading;
 import io.qameta.allure.Allure;
-import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -21,7 +23,7 @@ private final WebDriver driver;
 public FormPage(WebDriver driver){
     this.driver=driver;
 }
-String path=  System.getProperty("user.dir")+"/"+FrameworkConfigs.downloadsPath();
+String path= ClassPathLoading.getResourceAsPath(FrameworkConfigs.downloadsPath(),false).toString()+File.separator;
 String firstFile="test.txt";
 String secondFile="pom.txt";
 String thirdFile="sample_text.txt";
@@ -74,10 +76,7 @@ private void clickOption(String text){
 }
 
 private void assertText(By element,String text){
-    Loggers.getLogger().info(ElementActions.getText(driver,element));
-    Loggers.getLogger().info(text);
-    Assert.assertTrue(ElementActions.getText(driver,element).contains(text));
-    Loggers.getLogger().info("Assertion successful where "+ElementActions.getText(driver,element)+" contains "+ text);
+    HardAssertions.assertTextContains(ElementActions.getText(driver,element),text);
 }
 
 public void userFillsExperience(String text){

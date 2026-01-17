@@ -57,7 +57,7 @@ public class BrowserActions {
                     log="Switch to windows titled: "+ title;
                     break;
                 }
-            } catch (NullPointerException _) {
+            } catch (NullPointerException e) {
                 throw new NullPointerException();
             }
 
@@ -77,7 +77,7 @@ public class BrowserActions {
                 if (Objects.requireNonNull(driver.getCurrentUrl()).equalsIgnoreCase(url)) {
                     break;
                 }
-            } catch (NullPointerException _) {
+            } catch (NullPointerException e) {
                 throw new NullPointerException();
             }
         }

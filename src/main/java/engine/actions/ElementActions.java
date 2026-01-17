@@ -123,7 +123,7 @@ public class ElementActions {
                 flag = true;
              Loggers.getLogger().info("Element located at "+locator+" exists");
             }
-        } catch (Exception _) {
+        } catch (Exception e) {
          Loggers.getLogger().warn("Element located at "+locator+" doesn't exist");
         }
         return flag;
@@ -136,7 +136,7 @@ public class ElementActions {
                 flag = true;
              Loggers.getLogger().info("Element located at: "+locator+" is visible");
             }
-        } catch (Exception _) {
+        } catch (Exception e) {
          Loggers.getLogger().warn("Element located at "+locator+" isn't visible");
         }
         return flag;
@@ -151,7 +151,7 @@ public class ElementActions {
                 flag = true;
              Loggers.getLogger().info("Element located at: "+locator+" is clickable");
             }
-        } catch (Exception _) {
+        } catch (Exception e) {
          Loggers.getLogger().warn("Element located at "+locator+" isn't clickable");
         }
         return flag;
@@ -164,7 +164,7 @@ public class ElementActions {
                 flag = true;
              Loggers.getLogger().info("Element located at "+locator+"is selected" );
             }
-        } catch (Exception _) {
+        } catch (Exception e) {
          Loggers.getLogger().warn("Element located at "+locator+" isn't selected");
         }
         return flag;
