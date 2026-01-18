@@ -124,7 +124,7 @@ public void handleForm(){
 //    Assert.assertTrue(ElementActions.getText(driver,fluencyValidate).contains("0"));
     typeField(path+firstFile,uploadCV);
     assertText(uploadCVValidate,firstFile);
-    typeField(path+secondFile+" \n "+path+firstFile,uploadFiles);
+    typeField(path+secondFile+"\n"+path+firstFile,uploadFiles);
     assertText(uploadFilesValidate,secondFile+" "+firstFile);
 
     Assert.assertTrue(driver.findElement(salary).getDomProperty("placeholder").contains("You should not provide this"));
