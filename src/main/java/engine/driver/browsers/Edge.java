@@ -7,6 +7,7 @@ import engine.utils.ClassPathLoading;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
@@ -34,7 +35,9 @@ public class Edge  implements  BrowserDriver{
     public WebDriver initiateRemoteDriver(String proxyURl) {
      Loggers.getLogger().info("Start edge on remote driver port: "+proxyURl);
         try {
-            return new RemoteWebDriver(new URL(proxyURl), getDriverOptions());
+            RemoteWebDriver remoteWebDriver= new RemoteWebDriver(new URL(proxyURl), getDriverOptions());
+            remoteWebDriver.setFileDetector(new LocalFileDetector());
+            return remoteWebDriver;
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }

@@ -7,6 +7,7 @@ import engine.utils.ClassPathLoading;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 
@@ -37,7 +38,9 @@ public class Chrome implements  BrowserDriver{
     public WebDriver initiateRemoteDriver(String proxyURl) {
      Loggers.getLogger().info("Start chrome on remote driver port: "+proxyURl);
         try {
-            return new RemoteWebDriver(new URL(proxyURl), getDriverOptions());
+            RemoteWebDriver remoteWebDriver= new RemoteWebDriver(new URL(proxyURl), getDriverOptions());
+            remoteWebDriver.setFileDetector(new LocalFileDetector());
+            return remoteWebDriver;
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
