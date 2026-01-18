@@ -12,7 +12,7 @@ public class DriverHelper {
         while (System.currentTimeMillis() < end) {
             try {
                 HttpURLConnection con =
-                        (HttpURLConnection) new URL(url).openConnection();
+                        (HttpURLConnection) new URL(url+"/status").openConnection();
                 con.setConnectTimeout(1000);
                 if (con.getResponseCode() == 200) {
                     return;
