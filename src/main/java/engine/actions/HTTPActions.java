@@ -40,11 +40,18 @@ public class HTTPActions {
     }
     public HTTPActions startConnection(){
         try {
-            connection.connect();
+             connection.connect();
         } catch (IOException e) {
             Loggers.getLogger().error("Failed to connect");
         }
         return this;
+    }
+
+    public String getContentDisposition(){
+      return  connection.getHeaderField("Content-Disposition");
+    }
+    public long getContentLength(){
+      return  connection.getContentLengthLong();
     }
 
 
