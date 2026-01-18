@@ -38,7 +38,7 @@ public class Chrome implements  BrowserDriver{
     public WebDriver initiateRemoteDriver(String proxyURl) {
      Loggers.getLogger().info("Start chrome on remote driver port: "+proxyURl);
         try {
-            RemoteWebDriver remoteWebDriver= new RemoteWebDriver(new URL(proxyURl), getDriverOptions());
+            RemoteWebDriver remoteWebDriver= new RemoteWebDriver(new URL(proxyURl), getDriverOptions().merge(new DriverOptions().defineDesiredCapabilities()));
             remoteWebDriver.setFileDetector(new LocalFileDetector());
             return remoteWebDriver;
         } catch (MalformedURLException e) {

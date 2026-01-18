@@ -2,6 +2,7 @@ package engine.driver;
 
 import engine.constants.FrameworkConfigs;
 import engine.reporters.Loggers;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -50,4 +51,14 @@ public class DriverOptions {
         return  prefs;
     }
 
+    public DesiredCapabilities defineDesiredCapabilities(){
+        DesiredCapabilities desiredCapabilities=new DesiredCapabilities();
+        Map<String, Object> bstackOptions = new HashMap<>();
+        bstackOptions.put("local", false);
+        bstackOptions.put("projectName", "test");
+        bstackOptions.put("buildName", "my build");
+        bstackOptions.put("sessionName", "Test Session");
+        desiredCapabilities.setCapability("bstack:options", bstackOptions);
+        return desiredCapabilities;
+    }
 }
