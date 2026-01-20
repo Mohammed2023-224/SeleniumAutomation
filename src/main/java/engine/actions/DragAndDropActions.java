@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.time.Duration;
 
 public class DragAndDropActions {
+    private DragAndDropActions(){}
     public static void dragAndDropByMouse(WebDriver driver, By locatorSource, By locatorTarget){
         Waits.explicitWaitLongTime(driver).until(ExpectedConditions.elementToBeClickable(locatorSource));
         Waits.explicitWaitShortTime(driver).until(ExpectedConditions.elementToBeClickable(locatorTarget));
@@ -21,15 +22,15 @@ public class DragAndDropActions {
                 .scrollToElement(target)
                 .moveToElement(target)
                 .release(target).build().perform();
-        Loggers.getLogger().info(" drag element from "+locatorSource+" to "+locatorTarget+" by mouse");
+        Loggers.getLogger().info(" drag element from {} to {} by mouse",locatorSource,locatorTarget);
     }
 
     public static void dragAndDropByLocation(WebDriver driver, By locatorSource ,int horizontal, int vertical){
         Waits.explicitWaitShortTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locatorSource));
         new Actions(driver).dragAndDropBy(driver.findElement(locatorSource),horizontal,vertical).perform();
-        Loggers.getLogger().info(" drag element from "+locatorSource+" to "+horizontal+" , " +vertical);
+        Loggers.getLogger().info(" drag element from {} to {} , {}",locatorSource,horizontal ,vertical);
     }
-    public static void JSDragAndDrop(WebDriver driver, By locator,By position) {
+    public static void jsDragAndDrop(WebDriver driver, By locator,By position) {
         String logs = "drag "+locator+" to  " + position;
         String script = """
         function triggerDragAndDrop(selectorDrag, selectorDrop) {
@@ -45,7 +46,7 @@ public class DragAndDropActions {
         Loggers.getLogger().info(logs);
     }
 
-    public static void JSDragAndDropAsHTML(WebDriver driver, By locator,By position) {
+    public static void jsDragAndDropAsHtml(WebDriver driver, By locator,By position) {
         String logs = "drag "+locator+" to  " + position;
         String script = """
         const src = arguments[0];

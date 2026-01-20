@@ -14,7 +14,7 @@ import java.io.File;
 import java.time.Duration;
 
 public class Waits {
-
+private Waits(){}
     public static void implicitWait(WebDriver driver, int time){
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(time));
      Loggers.getLogger().info("Add implicit wait by {} seconds", time);
@@ -48,7 +48,7 @@ public class Waits {
 
     public static void waitToBeVisible(WebDriver driver, By locator ){
             explicitWaitLongTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locator));
-         Loggers.getLogger().info("wait for element located at "+locator+" to be visible for {}", FrameworkConfigs.longWait());
+         Loggers.getLogger().info("wait for element located at {}} to be visible for {}", locator,FrameworkConfigs.longWait());
 
     }
 
@@ -61,7 +61,7 @@ public class Waits {
 
     public static void waitToBeClickable(WebDriver driver, By locator  ) {
             explicitWaitLongTime(driver).until(ExpectedConditions.elementToBeClickable(locator));
-            Loggers.getLogger().info("wait for element located at " + locator + " to be clickable for " + FrameworkConfigs.longWait());
+            Loggers.getLogger().info("wait for element located at {} to be clickable for {}" ,locator, FrameworkConfigs.longWait());
     }
 
 
