@@ -13,6 +13,8 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Edge  implements  BrowserDriver{
@@ -21,7 +23,7 @@ public class Edge  implements  BrowserDriver{
     private EdgeOptions getDriverOptions() {
         DriverOptions driverOptions = new DriverOptions();
         EdgeOptions edgeOptions = new EdgeOptions();
-        edgeOptions.addArguments(driverOptions.defineDriverOptions());
+        edgeOptions.addArguments( new ArrayList<>(driverOptions.defineDriverOptions()));
         edgeOptions.setExperimentalOption("prefs",driverOptions.definePreferences());
         return edgeOptions;
     }
