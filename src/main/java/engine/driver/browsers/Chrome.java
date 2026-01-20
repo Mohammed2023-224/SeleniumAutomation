@@ -7,6 +7,7 @@ import engine.utils.ClassPathLoading;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -16,6 +17,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Chrome implements  BrowserDriver{
 // Can always download using webdriver manager as it gives more control then manual downloads
@@ -37,10 +39,12 @@ public class Chrome implements  BrowserDriver{
     }
 
 
-    public WebDriver initiateRemoteDriver(String proxyURl) {
+    public WebDriver initiateRemoteDriver(String proxyURl, Map<String,Object> caps) {
      Loggers.getLogger().info("Start chrome on remote driver port: "+proxyURl);
         try {
-            RemoteWebDriver remoteWebDriver= new RemoteWebDriver(new URL(proxyURl), getDriverOptions().merge(new DriverOptions().defineDesiredCapabilities()));
+            ChromeOptions options=getDriverOptions();
+            if(!caps.isEmpty()) {caps.forEach(options::setCapability);}
+            RemoteWebDriver remoteWebDriver= new RemoteWebDriver(new URL(proxyURl), options);
             remoteWebDriver.setFileDetector(new LocalFileDetector());
             return remoteWebDriver;
         } catch (MalformedURLException e) {

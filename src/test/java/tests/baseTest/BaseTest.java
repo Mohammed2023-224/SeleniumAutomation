@@ -27,7 +27,7 @@ public class BaseTest {
     @Parameters("browser")
     @BeforeClass
     protected void InitDriver(ITestContext con, @Optional String browser) {
-        driver = new SetupDriver().startDriver(browser,FrameworkConfigs.localExecution());
+            driver = new SetupDriver().startDriver(browser,FrameworkConfigs.localExecution());
         DriverFactory.setDriver(driver);
         con.setAttribute("driver", driver);
     }

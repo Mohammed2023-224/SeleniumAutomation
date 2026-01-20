@@ -15,6 +15,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class Edge  implements  BrowserDriver{
@@ -34,10 +35,12 @@ public class Edge  implements  BrowserDriver{
      Loggers.getLogger().info("Start edge driver ");
         return new EdgeDriver(getDriverOptions());
     }
-    public WebDriver initiateRemoteDriver(String proxyURl) {
+    public WebDriver initiateRemoteDriver(String proxyURl, Map<String,Object> caps) {
      Loggers.getLogger().info("Start edge on remote driver port: "+proxyURl);
         try {
-            RemoteWebDriver remoteWebDriver= new RemoteWebDriver(new URL(proxyURl), getDriverOptions().merge(new DriverOptions().defineDesiredCapabilities()));
+            EdgeOptions options=getDriverOptions();
+            if(!caps.isEmpty()) {caps.forEach(options::setCapability);}
+            RemoteWebDriver remoteWebDriver= new RemoteWebDriver(new URL(proxyURl), options);
             remoteWebDriver.setFileDetector(new LocalFileDetector());
             return remoteWebDriver;
         } catch (MalformedURLException e) {
