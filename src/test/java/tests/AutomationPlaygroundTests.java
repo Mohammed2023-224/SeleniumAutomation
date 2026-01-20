@@ -17,7 +17,7 @@ FormPage formPage;
 SamplePage samplePage;
 AdvancedUI advancedUI;
 
-    @Test(enabled = false)
+    @Test()
     public void waitActionsTest() {
         int minWait=2; int maxWait=4;
         homePage.clickPage("Wait Conditions");
@@ -43,7 +43,7 @@ waitActionsPage.handleWaitForFrame(maxWait);
         frames.handleFrames();
     }
 
-    @Test(enabled = false)
+    @Test()
     public void mouseActionsTest() {
         homePage.clickPage("Mouse Actions");
         mouseActions.mouseActions();
@@ -51,7 +51,7 @@ waitActionsPage.handleWaitForFrame(maxWait);
     mouseActions.dragAndDrop();
     }
 
-    @Test(enabled = false)
+    @Test()
     public void keyboardActions() {
         homePage.clickPage("Keyboard Actions");
         keyboardActions.handleKeyboard();
@@ -66,7 +66,7 @@ waitActionsPage.handleWaitForFrame(maxWait);
         formPage.handleForm();
     }
 
-    @Test(enabled = false)
+    @Test()
     public void samplePageTest() {
         homePage.clickPage("Sample Pages");
         samplePage.newUser();
@@ -74,7 +74,7 @@ waitActionsPage.handleWaitForFrame(maxWait);
         samplePage.pizzaForm();
     }
 
-    @Test(enabled = false)
+    @Test()
     public void advancedUITests() {
         homePage.clickPage("Advanced UI Features");
         advancedUI.handleAdvancedUIChallenge();
