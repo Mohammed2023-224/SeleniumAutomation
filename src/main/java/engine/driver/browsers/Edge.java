@@ -14,7 +14,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 
@@ -36,7 +35,7 @@ public class Edge  implements  BrowserDriver{
         return new EdgeDriver(getDriverOptions());
     }
     public WebDriver initiateRemoteDriver(String proxyURl, Map<String,Object> caps) {
-     Loggers.getLogger().info("Start edge on remote driver port: "+proxyURl);
+     Loggers.getLogger().info("Start edge on remote driver port: {}",proxyURl);
         try {
             EdgeOptions options=getDriverOptions();
             if(!caps.isEmpty()) {caps.forEach(options::setCapability);}
@@ -49,14 +48,15 @@ public class Edge  implements  BrowserDriver{
     }
     private void setLocalDriver(){
         if(FrameworkConfigs.localPathDriver()){
+            String localEdgePath="webdriver.edge.driver";
             if(FrameworkConfigs.edgeLocalDriverPath().isEmpty()) {
                 Path path = ClassPathLoading.getResourceAsPath("driver/msedgedriver.exe", true);
-                System.setProperty("webdriver.edge.driver", path.toString());
+                System.setProperty(localEdgePath, path.toString());
             }
             else {
-                System.setProperty("webdriver.edge.driver", FrameworkConfigs.edgeLocalDriverPath());
+                System.setProperty(localEdgePath, FrameworkConfigs.edgeLocalDriverPath());
             }
-            Loggers.getLogger().info("Edge driver is found at path: "+System.getProperty("webdriver.edge.driver"));
+            Loggers.getLogger().info("Edge driver is found at path: {}",System.getProperty(localEdgePath));
 
         }
     }

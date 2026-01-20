@@ -7,7 +7,6 @@ import engine.utils.ClassPathLoading;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -16,7 +15,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class Chrome implements  BrowserDriver{
@@ -40,7 +38,7 @@ public class Chrome implements  BrowserDriver{
 
 
     public WebDriver initiateRemoteDriver(String proxyURl, Map<String,Object> caps) {
-     Loggers.getLogger().info("Start chrome on remote driver port: "+proxyURl);
+     Loggers.getLogger().info("Start chrome on remote driver port: {}",proxyURl);
         try {
             ChromeOptions options=getDriverOptions();
             if(!caps.isEmpty()) {caps.forEach(options::setCapability);}
@@ -54,15 +52,16 @@ public class Chrome implements  BrowserDriver{
     }
 
     private void setLocalDriver() {
+        String webDriverPropertyPath="webdriver.chrome.driver";
         if (FrameworkConfigs.localPathDriver()) {
             if(FrameworkConfigs.chromeLocalDriverPath().isEmpty()) {
                 Path path = ClassPathLoading.getResourceAsPath("driver/chromedriver.exe", true);
-                System.setProperty("webdriver.chrome.driver", path.toString());
+                System.setProperty(webDriverPropertyPath, path.toString());
             }
             else {
-                System.setProperty("webdriver.chrome.driver", FrameworkConfigs.chromeLocalDriverPath());
+                System.setProperty(webDriverPropertyPath, FrameworkConfigs.chromeLocalDriverPath());
             }
-            Loggers.getLogger().info("chrome driver is found at path: " + System.getProperty("webdriver.chrome.driver"));
+            Loggers.getLogger().info("chrome driver is found at path: {}" , System.getProperty(webDriverPropertyPath));
 
         }
     }
