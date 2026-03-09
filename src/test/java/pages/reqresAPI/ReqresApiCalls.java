@@ -2,8 +2,6 @@ package pages.reqresAPI;
 
 import engine.api.ApiRequestFactory;
 import engine.api.HttpMethods;
-import engine.api.ResponseActions;
-import engine.assertions.HardAssertions;
 import engine.utils.ClassPathLoading;
 import engine.utils.PropertyReader;
 import io.restassured.response.Response;

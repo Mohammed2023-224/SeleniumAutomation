@@ -80,8 +80,6 @@ public class ReqresTests extends APIBaseTest {
 
     @BeforeClass
     private void handleAuthorization(){
-        NoAuthTokenProvider noAuthTokenProvider = new NoAuthTokenProvider();
-        ApiRequestFactory apiRequestFactory=new ApiRequestFactory(PropertyReader.get("main_reqres_url", String.class),noAuthTokenProvider);
-        apiCalls=new ReqresApiCalls(apiRequestFactory);
+        apiCalls=new ReqresApiCalls(new ApiRequestFactory(PropertyReader.get("main_reqres_url", String.class),new NoAuthTokenProvider()));
     }
 }
