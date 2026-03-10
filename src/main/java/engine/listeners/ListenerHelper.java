@@ -1,16 +1,13 @@
 package engine.listeners;
 
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.appender.FileAppender;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
-import org.testng.ITestResult;
 
 public class ListenerHelper {
-
+private ListenerHelper(){}
 
     public static void stopAppenderRootLog(String appenderName) {
         LoggerContext ctx;

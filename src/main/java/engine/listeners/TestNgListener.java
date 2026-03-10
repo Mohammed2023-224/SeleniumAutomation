@@ -10,8 +10,6 @@ import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.*;
-import org.testng.annotations.BeforeMethod;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -41,7 +39,6 @@ static {
         String fileName = name +"-"+browserName+"-"+timestamp;
         fileName = fileName.replaceAll("[^a-zA-Z0-9\\-_]", "_");
         ThreadContext.put("testLogFileName", fileName); // ✅ thread-local
-//        ListenerHelper.reconfigureLogs();
      Loggers.getLogger().info("Start test: {}", result.getName());
 
     }
@@ -67,6 +64,7 @@ static {
     }
     @Override
     public void onStart(ITestContext context) {
+    //This method runs when starting tests
     }
     @Override
     public void onFinish(ITestContext context) {
@@ -76,11 +74,11 @@ static {
     public void onExecutionFinish() {
      Loggers.getLogger().info("Number of all tests: {}", (numberOfSuccessTest.get()+numberOfFailedTests.get()+numberOfSkippedTests.get()));
      Loggers.getLogger().info("Number of successful tests: {}", numberOfSuccessTest.get());
-     Loggers.getLogger().info("Name of successful tests: {}", Arrays.deepToString(successfulTests.toArray()));
+     Loggers.getLogger().info("Name of successful tests: {}", successfulTests);
      Loggers.getLogger().info("Number of failed tests: {}", numberOfFailedTests.get());
-     Loggers.getLogger().info("Name of failed tests: {}", Arrays.deepToString(failedTests.toArray()));
+     Loggers.getLogger().info("Name of failed tests: {}", failedTests);
      Loggers.getLogger().info("Number of skipped tests: {}", numberOfSkippedTests.get());
-     Loggers.getLogger().info("Name of skipped tests: {}", Arrays.deepToString(skippedTests.toArray()));
+     Loggers.getLogger().info("Name of skipped tests: {}",skippedTests);
         if(FrameworkConfigs.generateReport()) {
             SystemMethods.runFile(ClassPathLoading.getResourceAsPath("batFiles/generateReport.bat", true).toString());
         }
@@ -89,7 +87,7 @@ static {
             gmailHandler.sendEmail(FrameworkConfigs.emailTo(), FrameworkConfigs.emailCc(), FrameworkConfigs.emailSubject()
                     , FrameworkConfigs.emailBody(), FrameworkConfigs.emailAttachmentPath());
         }
-        if (PropertyReader.get("kill_processes", Boolean.class)) {
+        if (Boolean.TRUE.equals(PropertyReader.get("kill_processes", Boolean.class))) {
             Loggers.getLogger().info("Test execution finished. cleaning up proccesses...");
             String portsValue = PropertyReader.get("portsToCloseBeforeFinishingExecution", String.class);
             int[] ports = Arrays.stream(portsValue.split(","))
@@ -114,8 +112,8 @@ static {
 
 
     public static String getBrowserName(WebDriver driver) {
-        if (driver instanceof RemoteWebDriver) {
-            return ((RemoteWebDriver) driver).getCapabilities().getBrowserName().toLowerCase();
+        if (driver instanceof RemoteWebDriver remoteWebDriver) {
+            return remoteWebDriver.getCapabilities().getBrowserName().toLowerCase();
         }
         return "unknown";
     }

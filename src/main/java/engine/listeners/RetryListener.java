@@ -15,6 +15,7 @@ public class RetryListener implements IRetryAnalyzer {
             Loggers.getLogger().info("Retry {} for {}", current + 1, result.getName());
             return true;
         }
+        retryCount.remove();
         return false;
     }
 }

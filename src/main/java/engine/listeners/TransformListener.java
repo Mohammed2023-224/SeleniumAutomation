@@ -16,16 +16,16 @@ public class TransformListener implements IAnnotationTransformer {
 
     @Override
     public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {
-        if(PropertyReader.get("file_control", Boolean.class)) {
+        if(Boolean.TRUE.equals(PropertyReader.get("file_control", Boolean.class))) {
             if (testMethod == null) return;
             String className = testClass != null ? testClass.getSimpleName() : testMethod.getDeclaringClass().getSimpleName();
             String testSignature = (className + "." + testMethod.getName()).trim().toLowerCase();
             if (!runningTests.contains(testSignature.toLowerCase())) {
                 annotation.setEnabled(false);
-                Loggers.getLogger().info("⛔ Skipping: " + testSignature);
+                Loggers.getLogger().info("⛔ Skipping: {}",  testSignature);
             } else {
                 annotation.setRetryAnalyzer(RetryListener.class);
-                Loggers.getLogger().info("✅ Executing: " + testSignature);
+                Loggers.getLogger().info("✅ Executing: {}", testSignature);
             }
         }
     }
