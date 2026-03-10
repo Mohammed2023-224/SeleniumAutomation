@@ -7,23 +7,19 @@ import java.util.Set;
 public class ReadExecutionFlow {
     private ReadExecutionFlow(){}
 
-    private static volatile Set<String> cachedTests;
+    private static  Set<String> cachedTests;
 
     private static final String CONTROL_FILE = ClassPathLoading.getResourceAsPath(PropertyReader.get("file_path", String.class),false).toString();
     private static final String SHEET_NAME = PropertyReader.get("sheet_name", String.class);
 
-    public static Set<String> getExecutionControl() {
+    public static synchronized Set<String> getExecutionControl() {
 
         if (Boolean.FALSE.equals(PropertyReader.get("file_control", Boolean.class))) {
             return Set.of(); // safe empty set
         }
 
         if (cachedTests == null) {
-            synchronized (ReadExecutionFlow.class) {
-                if (cachedTests == null) {
-                    cachedTests = loadFromExcel();
-                }
-            }
+            cachedTests = loadFromExcel();
         }
         return cachedTests;
     }
