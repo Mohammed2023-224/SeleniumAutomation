@@ -5,8 +5,8 @@ import engine.reporters.Loggers;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Map;
 
@@ -16,7 +16,7 @@ public class HTTPActions {
 
     public HTTPActions (String url){
         try {
-            this.url = new URL(url);
+            this.url = URI.create(url).toURL();
             this.connection = (HttpURLConnection) this.url.openConnection();
         } catch (Exception e) {
             Loggers.getLogger().error("Failed to create HTTP connection");
@@ -40,11 +40,18 @@ public class HTTPActions {
     }
     public HTTPActions startConnection(){
         try {
-            connection.connect();
+             connection.connect();
         } catch (IOException e) {
             Loggers.getLogger().error("Failed to connect");
         }
         return this;
+    }
+
+    public String getContentDisposition(){
+      return  connection.getHeaderField("Content-Disposition");
+    }
+    public long getContentLength(){
+      return  connection.getContentLengthLong();
     }
 
 
@@ -64,7 +71,8 @@ public class HTTPActions {
             try {
                 return connection.getErrorStream();
             } catch (Exception ex) {
-                throw new RuntimeException("No response stream available", ex);
+                Loggers.getLogger().error("Not handled error ",ex);
+                return null;
             }
         }
     }

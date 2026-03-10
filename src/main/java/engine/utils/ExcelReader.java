@@ -1,14 +1,11 @@
 package engine.utils;
 
 import engine.reporters.Loggers;
-import org.apache.poi.ss.formula.functions.T;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -17,8 +14,6 @@ import java.util.*;
 public class ExcelReader {
     private static XSSFWorkbook workbook;
     private static XSSFSheet sheet;
-    private static XSSFRow row;
-    private static XSSFCell cell;
 
 
     public  String readSingleCell(String filePath,String sheetName, int rowNum,int colNum) {
@@ -38,7 +33,7 @@ public class ExcelReader {
         changeSheet(sheetName);
         int numberOfRowsMeetingCondition=0;
         int conditionColumnNumber=getColumnNumFromHeaderName(colName);
-        Loggers.getLogger().info("condition was found at column number " + conditionColumnNumber);
+        Loggers.getLogger().info("condition was found at column number {}", conditionColumnNumber);
         for(int i=1 ;i<getNumberOfRows();i++){
             if(getCellByColumnNumAndRowNum(i,conditionColumnNumber).equalsIgnoreCase(condition)){
              Loggers.getLogger().debug("Increase rows meeting condition by 1");
@@ -55,7 +50,7 @@ public class ExcelReader {
                     String currentKey=getCellByColumnNumAndRowNum(0,j);
                     String currentValue=getCellByColumnNumAndRowNum(i,j);
                     linkedHashMap.put(currentKey,currentValue);
-                   Loggers.getLogger().debug("Read data Key: {} --> Value: {} from row {} and column  {}",currentKey,currentValue,i,j);
+                   Loggers.getLogger().debug("Read data Key:{} --> Value: {} from row {} and column  {}",currentKey,currentValue,i,j);
                 }
                 dataObj[num++][0]=linkedHashMap;
             }
@@ -116,21 +111,13 @@ public class ExcelReader {
     }
 
     private static void changeSheet(String sheetName) {
-        if (!(workbook == null)) {
+        if (workbook != null) {
             sheet = workbook.getSheet(sheetName);
          Loggers.getLogger().info("found  sheet {} and changed to it", sheetName);
         } else {
          Loggers.getLogger().error("Can't find sheet {}", sheetName);
         }
     }
-
-//    private static String getCellByColumnNameAndRowNum(int rowNum, String colName) {
-//        int colNum = getColumnNumFromHeaderName(colName);
-//        String data=getCellData(sheet.getRow(rowNum).getCell(colNum));
-//     Loggers.log.info("read data {} from row {} and column {}", data,rowNum,colName);
-//        return data;
-//
-//    }
 
     private static String getCellByColumnNameAndRowNum(int rowNum, String colName) {
         int colNum = getColumnNumFromHeaderName(colName);
@@ -145,8 +132,7 @@ public class ExcelReader {
          Loggers.getLogger().error("Cell not found at row {}, column {}", rowNum, colNum);
             return "";
         }
-        String data = getCellData(targetCell);
-        return data;
+        return  getCellData(targetCell);
     }
 
     private static String getCellByColumnNumAndRowNum(int rowNum, int colNum) {
@@ -161,8 +147,7 @@ public class ExcelReader {
          Loggers.getLogger().error("Cell not found at row {}, column {}", rowNum, colNum);
             return "";
         }
-        String data = getCellData(targetCell);
-        return data;
+        return getCellData(targetCell);
     }
 
     private static int getColumnNumFromHeaderName(String columnName) {
@@ -177,13 +162,11 @@ public class ExcelReader {
 
 
     private static int getNumberOfColumnsByHeaders() {
-        int numOfColumns=sheet.getRow(0).getLastCellNum();
-        return numOfColumns;
+        return sheet.getRow(0).getLastCellNum();
     }
 
     private static int getNumberOfRows() {
-        int numOfRows= sheet.getPhysicalNumberOfRows();
-        return numOfRows;
+        return sheet.getPhysicalNumberOfRows();
     }
 
     private static String getCellData(XSSFCell cel) {
@@ -195,8 +178,7 @@ public class ExcelReader {
                 case STRING:
                     data = cel.getStringCellValue();
                     return data;
-                case NUMERIC:
-                case FORMULA:
+                case NUMERIC ,FORMULA :
                     if (DateUtil.isCellDateFormatted(cel)) {
                         // Convert date to string
                         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -206,14 +188,14 @@ public class ExcelReader {
                             data = String.valueOf(cel.getNumericCellValue());
                         }
                     return data;
-                case BLANK:
-                case _NONE:
+                case BLANK,_NONE:
                     return "";
                 case BOOLEAN:
                     data = String.valueOf(cel.getBooleanCellValue());
                     return data;
+                default:
+                    return "unknown cell type";
             }
         }
-        return "unknown cell type";
     }
 }

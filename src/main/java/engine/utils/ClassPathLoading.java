@@ -1,5 +1,7 @@
 package engine.utils;
 
+import engine.reporters.Loggers;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -28,9 +30,10 @@ public class ClassPathLoading {
             ClassLoader cl = Thread.currentThread().getContextClassLoader();
             URL url = cl.getResource(resourcePath);
             if (url == null) {
-                throw new RuntimeException("Resource not found: " + resourcePath);
+                Loggers.getLogger().error("resource doesn't exist");
             }
 
+            assert url != null;
             if ("jar".equals(url.getProtocol())) {
                 return extractFromJar(url, resourcePath,executable);
             }
@@ -38,11 +41,11 @@ public class ClassPathLoading {
             if ("file".equals(url.getProtocol())) {
                 return extractFromFilePath(url,executable);
             }
-
-            throw new RuntimeException("Unsupported protocol: " + url.getProtocol());
-
+            Loggers.getLogger().error("Unsupported protocol: " + url.getProtocol());
+            return  null;
         } catch (Exception e) {
-            throw new RuntimeException("Failed to load resource: " + resourcePath, e);
+            Loggers.getLogger().error("Failed to load resource: " + resourcePath, e);
+            return  null;
         }
     }
 
@@ -52,15 +55,17 @@ public class ClassPathLoading {
         try {
             temp = Files.createTempFile(resourcePath.replace('/', '_'), suffix);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Loggers.getLogger().error("Can't read jar file",e);
+            return null;
         }
 
             try (InputStream in = url.openStream()) {
                 Files.copy(in, temp, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                Loggers.getLogger().error("Can't read jar file",e);
         }
-        if(executable)  temp.toFile().setExecutable(true);
+        if(Boolean.TRUE.equals(executable))       {
+            Loggers.getLogger().info("set file executable to true {}",temp.toFile().setExecutable(true));}
         temp.toFile().deleteOnExit();
         return temp;
     }
@@ -69,9 +74,11 @@ public class ClassPathLoading {
         try {
             driverPath = Paths.get(url.toURI());
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            Loggers.getLogger().error("Can't read file",e);
+            return null;
         }
-        if(executable) driverPath.toFile().setExecutable(true);
+        if(Boolean.TRUE.equals(executable)) {
+        Loggers.getLogger().info("set file executable to true {}",driverPath.toFile().setExecutable(true));}
         return driverPath;
     }
 
@@ -105,7 +112,7 @@ public class ClassPathLoading {
                 }
 
             } catch (IOException e) {
-                throw new RuntimeException("Failed scanning classpath: " + basePath, e);
+                Loggers.getLogger().error("Failed scanning classpath: " + basePath, e);
             }
         }
     }
@@ -120,13 +127,13 @@ public class ClassPathLoading {
                             try (InputStream is = Files.newInputStream(p)) {
                                 consumer.accept(is);
                             } catch (IOException e) {
-                                throw new RuntimeException(e);
+                                Loggers.getLogger().error("Can't load directory",e);
                             }
                         });
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            Loggers.getLogger().error("Can't find directory",e);
         }
     }
 
@@ -148,7 +155,7 @@ public class ClassPathLoading {
                         try (InputStream is = jar.getInputStream(e)) {
                             consumer.accept(is);
                         } catch (IOException ex) {
-                            throw new RuntimeException(ex);
+                            Loggers.getLogger().error("Can't load directory",ex);
                         }
                     });
         }

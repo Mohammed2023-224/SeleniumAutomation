@@ -12,7 +12,7 @@ import java.io.*;
 
 
 public class AllureAttachments {
-
+    private AllureAttachments(){}
     public static void saveTextLog(String name, String filePath) {
         Allure.step( "Save text log",()-> {
         try (FileInputStream fis = new FileInputStream(filePath)) {

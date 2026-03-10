@@ -8,7 +8,6 @@ import org.openqa.selenium.devtools.v141.network.Network;
 import org.openqa.selenium.devtools.v141.network.model.Headers;
 import org.openqa.selenium.devtools.v141.page.Page;
 import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.util.Base64;
 import java.util.HashMap;
@@ -16,11 +15,9 @@ import java.util.Map;
 import java.util.Optional;
 
 public class DevToolsActions {
-    private WebDriver driver;
     private DevTools devTools;
 
     public DevToolsActions(WebDriver driver){
-        this.driver=driver;
         if(driver instanceof ChromeDriver ) {
             devTools = ((ChromeDriver) driver).getDevTools();
         } else if (driver instanceof EdgeDriver) {
@@ -41,7 +38,7 @@ public class DevToolsActions {
         devTools.send(Page.setDownloadBehavior(
                 Page.SetDownloadBehaviorBehavior.ALLOW,  //
                 Optional.of(filePath)));
-        Loggers.getLogger().info("set file Download Path at: "+ filePath);
+        Loggers.getLogger().info("set file Download Path at: {}", filePath);
 
     }
 
@@ -52,7 +49,7 @@ public class DevToolsActions {
         headers.put("Authorization", "Basic " + basicAuth);
         devTools.send(Network.enable(Optional.empty(),Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
         devTools.send(Network.setExtraHTTPHeaders(new Headers(headers)));
-        Loggers.getLogger().info("add basic auth headers through dev tools as user name: "+ username+" password: "+ password);
+        Loggers.getLogger().info("add basic auth headers through dev tools as user name: {} password: {}",username, password);
 
     }
 }

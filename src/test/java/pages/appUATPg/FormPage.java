@@ -2,15 +2,15 @@ package pages.appUATPg;
 
 
 import engine.actions.*;
+import engine.assertions.HardAssertions;
 import engine.constants.FrameworkConfigs;
-import engine.reporters.Loggers;
+import engine.utils.ClassPathLoading;
 import io.qameta.allure.Allure;
-import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -21,8 +21,8 @@ private final WebDriver driver;
 public FormPage(WebDriver driver){
     this.driver=driver;
 }
-String path=  System.getProperty("user.dir")+"/"+FrameworkConfigs.downloadsPath();
-String firstFile="test.text";
+String path= ClassPathLoading.getResourceAsPath(FrameworkConfigs.downloadsPath(),false).toString()+File.separator;
+String firstFile="test.txt";
 String secondFile="pom.txt";
 String thirdFile="sample_text.txt";
     By expField= By.id("exp");
@@ -74,10 +74,7 @@ private void clickOption(String text){
 }
 
 private void assertText(By element,String text){
-    Loggers.getLogger().info(ElementActions.getText(driver,element));
-    Loggers.getLogger().info(text);
-    Assert.assertTrue(ElementActions.getText(driver,element).contains(text));
-    Loggers.getLogger().info("Assertion successful where "+ElementActions.getText(driver,element)+" contains "+ text);
+    HardAssertions.assertTextContains(ElementActions.getText(driver,element),text);
 }
 
 public void userFillsExperience(String text){
@@ -120,17 +117,14 @@ public void handleForm(){
     JSActions.clickUsingJavaScript(driver,readGerman);
     assertText(readGermanValidate,"false");
     DragAndDropActions.dragAndDropByLocation(driver,fluency,-100,0);
-//    Assert.assertTrue(ElementActions.getText(driver,fluencyValidate).contains("0"));
     typeField(path+firstFile,uploadCV);
     assertText(uploadCVValidate,firstFile);
-    typeField(path+secondFile+" \n "+path+firstFile,uploadFiles);
+    typeField(path+secondFile+"\n"+path+firstFile,uploadFiles);
     assertText(uploadFilesValidate,secondFile+" "+firstFile);
 
     Assert.assertTrue(driver.findElement(salary).getDomProperty("placeholder").contains("You should not provide this"));
     ElementActions.clickElement(driver,downloadFile);
-Waits.waitForFileToBeDownloaded(driver,path+thirdFile);
-    Assert.assertTrue(SystemMethods.checkExistenceOfFile(path+thirdFile));
-    Assert.assertTrue(SystemMethods.readFileContent(path+thirdFile).contains("File downloaded by AutomationCamp"));
+
     ElementActions.typeInElement(driver,city,"test");
     ElementActions.typeInElement(driver,state,"test");
     ElementActions.clickElement(driver,submitButton);

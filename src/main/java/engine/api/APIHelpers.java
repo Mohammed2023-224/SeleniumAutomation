@@ -64,12 +64,15 @@ public class APIHelpers {
 
 
     public static Response waitForResponse(CompletableFuture<Response> res){
-        Response response;
+        Response response = null;
         try {
             response = res.get();
             Loggers.getLogger().info("Cast future response into response type");
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
+        }
+
+        catch (InterruptedException | ExecutionException e) {
+                Loggers.getLogger().warn(" Interrupted thread");
+                Thread.currentThread().interrupt();
         }
         return response;
     }

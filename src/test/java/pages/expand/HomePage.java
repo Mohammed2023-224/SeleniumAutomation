@@ -3,7 +3,6 @@ package pages.expand;
 import engine.actions.BrowserActions;
 import engine.actions.ElementActions;
 import engine.actions.JSActions;
-import engine.constants.FrameworkConfigs;
 import engine.utils.PropertyReader;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;

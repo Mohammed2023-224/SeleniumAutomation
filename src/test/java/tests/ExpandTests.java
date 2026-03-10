@@ -2,17 +2,16 @@ package tests;
 
 import engine.driver.DriverFactory;
 import pages.expand.*;
-import tests.baseTest.BaseTest;
+import tests.baseTest.BaseTestClass;
 import engine.actions.BrowserActions;
 import engine.actions.DevToolsActions;
 import engine.utils.Faker;
 import org.testng.annotations.*;
-import engine.constants.FrameworkConfigs;
 import engine.utils.ExcelReader;
 
 import java.util.LinkedHashMap;
 
-public class ExpandTests extends BaseTest {
+public class ExpandTests extends BaseTestClass {
 
     HomePage homePage;
     WebInputs webInputs;
@@ -21,7 +20,7 @@ public class ExpandTests extends BaseTest {
     DynamicTable dynamicTable;
     DragAndDrop dragAndDrop;
     FileDownloader fileDownloader;
-    MultipleTests multipleTests;
+    MultiplePages multiplePages;
 // web inputs test
     @Test(dataProvider = "webInputsData")
     public void webInputsTest(LinkedHashMap<String,String> data){
@@ -48,8 +47,8 @@ public class ExpandTests extends BaseTest {
 
         @Test
     public void registerTest(){
-        String newUserName= Faker.userName;
-        String pass= Faker.pass;
+        String newUserName= Faker.USERNAME;
+        String pass= Faker.PASS;
         homePage.navigateHomePage();
         homePage.clickOnSubLink("Test Register Page");
         loginPage.typeUserName(newUserName);
@@ -129,13 +128,13 @@ public class ExpandTests extends BaseTest {
     public void autoCompleteTest() {
         homePage.navigateHomePage();
         homePage.clickOnSubLink("Autocomplete");
-        multipleTests.autoComplete("Taiwan");
+        multiplePages.autoComplete("Taiwan");
     }
 
     @Test
     public void alert() {
         homePage.navigateHomePage();
-        multipleTests.alert();
+        multiplePages.alert();
         homePage.clickOnSubLink("Secure File Download");
     }
 
@@ -143,46 +142,46 @@ public class ExpandTests extends BaseTest {
     public void shadowElement() {
         homePage.navigateHomePage();
         homePage.clickOnSubLink("Shadow DOM");
-        multipleTests.shadowDom();
+        multiplePages.shadowDom();
     }
     @Test
     public void scroll() {
         homePage.navigateHomePage();
         homePage.clickOnSubLink("Infinite Scroll");
-        multipleTests.scroll();
+        multiplePages.scroll();
     }
     @Test
     public void brokenImg() {
         homePage.navigateHomePage();
         homePage.clickOnSubLink("Broken Images");
-        multipleTests.brokenImg();
+        multiplePages.brokenImg();
     }
 
     @Test
     public void alerts() {
          homePage.navigateHomePage();
         homePage.clickOnSubLink("JavaScript Dialogs");
-        multipleTests.alerts();
+        multiplePages.alerts();
     }
 
     @Test
     public void scrollBar() {
         homePage.navigateHomePage();
         homePage.clickOnSubLink("Scrollbars");
-        multipleTests.scrollInner();
+        multiplePages.scrollInner();
     }
 
 
     @DataProvider(name = "webInputsData")
     private Object[][]  webInputsData(){
 return new ExcelReader().
-        readRowAsLinkedHashMapThroughCondition(FrameworkConfigs.testDataPath()+"data.xlsx","Web Inputs","run","true");
+        readRowAsLinkedHashMapThroughCondition(testDataPath,"Web Inputs","run","true");
     }
 
     @DataProvider(name = "loginData")
     private Object[][]  loginData(){
 return new ExcelReader().
-        readRowAsLinkedHashMapThroughCondition(FrameworkConfigs.testDataPath()+"data.xlsx","Login Page","run","true");
+        readRowAsLinkedHashMapThroughCondition(testDataPath,"Login Page","run","true");
     }
 
 
@@ -195,7 +194,7 @@ return new ExcelReader().
     dynamicTable=new DynamicTable(DriverFactory.getDriver());
     dragAndDrop=new DragAndDrop(DriverFactory.getDriver());
     fileDownloader=new FileDownloader(DriverFactory.getDriver());
-    multipleTests=new MultipleTests(DriverFactory.getDriver());
+    multiplePages =new MultiplePages(DriverFactory.getDriver());
 }
 
 }

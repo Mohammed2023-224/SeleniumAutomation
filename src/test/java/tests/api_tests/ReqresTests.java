@@ -1,7 +1,6 @@
 package tests.api_tests;
 
 import engine.assertions.HardAssertions;
-import tests.baseTest.APIBaseTest;
 import engine.api.ApiRequestFactory;
 import engine.api.NoAuthTokenProvider;
 import engine.api.ResponseActions;
@@ -14,7 +13,7 @@ import pages.reqresAPI.ReqresApiCalls;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReqresTests extends APIBaseTest {
+public class ReqresTests {
     private ReqresApiCalls apiCalls;
     @Test
     public void getAllObjects(){
@@ -37,19 +36,19 @@ public class ReqresTests extends APIBaseTest {
     }
     @Test
     public void postObject(){
-        Response res=apiCalls.postObject("src/test/resources/postObject.json");
+        Response res=apiCalls.postObject("postObject.json");
         ResponseActions.checkResponseStatus(res,200);
          HardAssertions.assertTextContains((ResponseActions.getValueByPath(res,"name",String.class)),"Apple");
     }
     @Test
     public void updateObject(){
-        Response res=apiCalls.updateObject("src/test/resources/updateObject.json","ff8081819782e69e019b98e775176b6e");
+        Response res=apiCalls.updateObject("updateObject.json","ff8081819782e69e019b98e775176b6e");
         ResponseActions.checkResponseStatus(res,200);
          HardAssertions.assertTextContains((ResponseActions.getValueByPath(res,"name",String.class)),"nar");
     }
     @Test
     public void updateObjectPartially(){
-        Response res=apiCalls.updatePartialObject("src/test/resources/partialUpdate.json","ff8081819782e69e019b98e775176b6e");
+        Response res=apiCalls.updatePartialObject("partialUpdate.json","ff8081819782e69e019b98e775176b6e");
         ResponseActions.checkResponseStatus(res,200);
          HardAssertions.assertTextContains((ResponseActions.getValueByPath(res,"name",String.class)),"nar");
     }
@@ -80,8 +79,6 @@ public class ReqresTests extends APIBaseTest {
 
     @BeforeClass
     private void handleAuthorization(){
-        NoAuthTokenProvider noAuthTokenProvider = new NoAuthTokenProvider();
-        ApiRequestFactory apiRequestFactory=new ApiRequestFactory(PropertyReader.get("main_reqres_url", String.class),noAuthTokenProvider);
-        apiCalls=new ReqresApiCalls(apiRequestFactory);
+        apiCalls=new ReqresApiCalls(new ApiRequestFactory(PropertyReader.get("main_reqres_url", String.class),new NoAuthTokenProvider()));
     }
 }

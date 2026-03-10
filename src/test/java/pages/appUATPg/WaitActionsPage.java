@@ -73,7 +73,7 @@ private final By minWaitTime= By.id("min_wait");
 
 
     @Step("Handling wait for visibility")
-    public void handleWaitForVisibility(int maxTime){
+    public void handleWaitForVisibility(){
         ElementActions.clickElement(driver,visibleTrigger);
         Waits.waitToBeVisible(driver, visibilityTarget);
         ElementActions.clickElement(driver, visibilityTarget);
@@ -83,7 +83,7 @@ private final By minWaitTime= By.id("min_wait");
     }
 
     @Step("Handling wait for invisibility")
-    public void handleWaitForInvisibility(int maxTime){
+    public void handleWaitForInvisibility(){
         ElementActions.clickElement(driver, invisibleTrigger);
         Waits.waitToBeInvisible(driver, invisibilityTarget);
         Assert.assertTrue(ElementActions.getText(driver,invisibilityAssertionTarget)
@@ -92,7 +92,7 @@ private final By minWaitTime= By.id("min_wait");
 
 
     @Step("Handling wait for enabled")
-    public void handleWaitForEnabled(int maxTime){
+    public void handleWaitForEnabled(){
         ElementActions.clickElement(driver, enabledTrigger);
         Waits.waitToBeClickable(driver,enabledTarget);
         Assert.assertTrue(ElementActions.getText(driver,enabledTarget)
@@ -100,21 +100,21 @@ private final By minWaitTime= By.id("min_wait");
     }
 
     @Step("Handling wait for title")
-    public void handleWaitForTitle(int maxTime){
+    public void handleWaitForTitle(){
         ElementActions.clickElement(driver,titleTrigger);
         Waits.explicitWaitShortTime(driver).until(ExpectedConditions.titleContains("My New Title"));
         Assert.assertEquals(driver.getTitle(), ("My New Title!"));
     }
 
     @Step("Handling wait for text")
-    public void handleWaitForText(int maxTime){
+    public void handleWaitForText(){
         ElementActions.clickElement(driver, textTrigger);
         Waits.explicitWaitShortTime(driver).until
                 (ExpectedConditions.textToBePresentInElementValue(textTarget,"Dennis"));
     }
 
     @Step("Handling wait for frame")
-    public void handleWaitForFrame(int maxTime){
+    public void handleWaitForFrame(){
         ElementActions.clickElement(driver, frameTrigger);
         Waits.explicitWaitLongTime(driver).until
                 (ExpectedConditions.frameToBeAvailableAndSwitchToIt(frame));

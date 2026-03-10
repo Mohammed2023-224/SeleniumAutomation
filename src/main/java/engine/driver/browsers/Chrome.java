@@ -7,12 +7,16 @@ import engine.utils.ClassPathLoading;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class Chrome implements  BrowserDriver{
 // Can always download using webdriver manager as it gives more control then manual downloads
@@ -20,7 +24,7 @@ public class Chrome implements  BrowserDriver{
     private ChromeOptions getDriverOptions() {
         DriverOptions driverOptions = new DriverOptions();
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments( driverOptions.defineDriverOptions());
+        chromeOptions.addArguments(new ArrayList<>(driverOptions.defineDriverOptions()));
         chromeOptions.setExperimentalOption("prefs",driverOptions.definePreferences());
 
         return chromeOptions;
@@ -34,26 +38,36 @@ public class Chrome implements  BrowserDriver{
     }
 
 
-    public WebDriver initiateRemoteDriver(String proxyURl) {
-     Loggers.getLogger().info("Start chrome on remote driver port: "+proxyURl);
+    public WebDriver initiateRemoteDriver(String proxyURl, Map<String,Object> caps) {
+     Loggers.getLogger().info("Start chrome on remote driver port: {}",proxyURl);
         try {
-            return new RemoteWebDriver(new URL(proxyURl), getDriverOptions());
+            ChromeOptions options=getDriverOptions();
+            if(!caps.isEmpty()) {caps.forEach(options::setCapability);}
+            RemoteWebDriver remoteWebDriver= new RemoteWebDriver(new URI(proxyURl).toURL(), options);
+            remoteWebDriver.setFileDetector(new LocalFileDetector());
+            return remoteWebDriver;
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            Loggers.getLogger().error("Malformed URl ",e);
+            return null;
+        } catch (URISyntaxException e) {
+            Loggers.getLogger().error("syntax error URl ",e);
+            return null;
         }
 
     }
 
     private void setLocalDriver() {
+        String webDriverPropertyPath="webdriver.chrome.driver";
         if (FrameworkConfigs.localPathDriver()) {
             if(FrameworkConfigs.chromeLocalDriverPath().isEmpty()) {
                 Path path = ClassPathLoading.getResourceAsPath("driver/chromedriver.exe", true);
-                System.setProperty("webdriver.chrome.driver", path.toString());
+                System.setProperty(webDriverPropertyPath, path.toString());
             }
             else {
-                System.setProperty("webdriver.chrome.driver", FrameworkConfigs.chromeLocalDriverPath());
+                System.setProperty(webDriverPropertyPath, FrameworkConfigs.chromeLocalDriverPath());
             }
-            Loggers.getLogger().info("chrome driver is found at path: " + System.getProperty("webdriver.chrome.driver"));
+            Loggers.getLogger().info("chrome driver is found at path: {}" ,
+                    System.getProperty(webDriverPropertyPath).isEmpty()?"test log":System.getProperty(webDriverPropertyPath));
 
         }
     }

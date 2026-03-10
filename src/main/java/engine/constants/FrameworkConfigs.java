@@ -1,20 +1,12 @@
 package engine.constants;
 
 import engine.utils.PropertyReader;
-import engine.utils.PropertyReader.*;
 
 
 public class FrameworkConfigs {
 
 
-    /* ======================
-       Core resolver
-       ====================== */
-
-  
-    /* ======================
-       Configs
-       ====================== */
+private FrameworkConfigs(){}
 
         public static int shortWait() {
             return PropertyReader.get("shortWaitTime", Integer.class);
@@ -58,9 +50,6 @@ public class FrameworkConfigs {
         public static boolean localExecution() {
             return PropertyReader.get("local_execution", Boolean.class);
         }
-        public static String testDataPath() {
-            return PropertyReader.get("test_data_path", String.class);
-        }
 
         public static boolean gridEnabled() {
             return PropertyReader.get("localSeleniumGrid", Boolean.class);
@@ -86,7 +75,7 @@ public class FrameworkConfigs {
         public static String xmlFilesPath() {
             return PropertyReader.get("xml_files_path", String.class);
         }
-        public static boolean per_test_log() {
+        public static boolean perTestLog() {
             return PropertyReader.get("per_test_log", Boolean.class);
         }
 
