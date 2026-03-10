@@ -1,19 +1,16 @@
 package engine.utils;
 
 
+import engine.reporters.Loggers;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.jar.JarFile;
-import java.util.stream.Stream;
+
 
 public class PropertyReader {
+    private PropertyReader(){}
     private static final Map<String, String> CACHE = new ConcurrentHashMap<>();
     public static <T> T get(String key, Class<T> type) {
         String value = resolve(key);
@@ -90,7 +87,7 @@ public class PropertyReader {
                         try {
                             properties.load(is);
                         } catch (IOException e) {
-                            throw new RuntimeException(e);
+                            Loggers.getLogger().error("Can't load file ");
                         }
                     },".properties"
             );
@@ -104,38 +101,6 @@ public class PropertyReader {
             return PropertyHolder.PROPERTIES;  // This triggers lazy initialization
         }
 
-        private static void loadPropertyFiles(Stream<Path> paths, Properties targetProps) {
-            paths.filter(p -> p.toString().endsWith(".properties"))
-                    .forEach(p -> {
-                        try (InputStream is = Files.newInputStream(p)) {
-                            targetProps.load(is);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-        }
-
-        // Modified to accept Properties parameter
-        private static void loadFromJar(URL dirUrl, Properties targetProps) throws IOException {
-            String jarPath = dirUrl.getPath().substring(5, dirUrl.getPath().indexOf("!"));
-            try (JarFile jar = new JarFile(URLDecoder.decode(jarPath, StandardCharsets.UTF_8))) {
-                String baseEntry = dirUrl.getPath().substring(dirUrl.getPath().indexOf("!") + 2);
-
-                jar.stream()
-                        .filter(e -> !e.isDirectory())
-                        .filter(e -> e.getName().startsWith(baseEntry))
-                        .filter(e -> e.getName().endsWith(".properties"))
-                        .forEach(e -> {
-                            try (InputStream is = jar.getInputStream(e)) {
-                                targetProps.load(is);
-                            } catch (IOException ex) {
-                                throw new RuntimeException(ex);
-                            }
-                        });
-            }
-        }
-
-        // Convenience method if you need the Properties object
         public static Properties reedAll() {
             return readAllProperties();
         }
