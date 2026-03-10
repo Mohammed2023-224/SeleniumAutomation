@@ -37,7 +37,7 @@ public class APIRequestBuilder {
     }
     public APIRequestBuilder(String url, Map<String, String> data,Boolean isCookies) {
         setURL(url);
-        if(isCookies) {
+        if(Boolean.TRUE.equals(isCookies)) {
             setCookies(data);}
         else {
             setHeaders(data);
@@ -145,7 +145,7 @@ public class APIRequestBuilder {
         if (cookies != null && !cookies.isEmpty()) {
             this.cookies.putAll(cookies); // copy instead of assigning
             requestSpecBuilder.addCookies(this.cookies);
-            System.out.println("Cookies set: " + this.cookies.keySet());
+            Loggers.getLogger().info("Cookies set: {}" , this.cookies.keySet());
         }
     }
 
@@ -170,8 +170,7 @@ public class APIRequestBuilder {
             requestSpecBuilder.setBody(Files.readAllBytes(Paths.get(filePath)));
             Loggers.getLogger().info("Set body as file located at [{}]", filePath);
         } catch (IOException e) {
-            Loggers.getLogger().info("couldn't set body as file located at [{}]", filePath);
-            throw new RuntimeException(e);
+            Loggers.getLogger().error("couldn't set body as file located at [{}]", filePath);
         }
     }
 
@@ -185,7 +184,7 @@ public class APIRequestBuilder {
         Loggers.getLogger().info("Set body as current object [{}]", body);
     }
 
-    public void addFormParams(HashMap<String, String> header) {
+    public void addFormParams(Map<String, String> header) {
         requestSpecBuilder.addFormParams(header);
     }
 }

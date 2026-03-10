@@ -7,12 +7,10 @@ import io.restassured.http.Headers;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import org.apache.poi.ss.formula.functions.T;
-
-import java.util.ArrayList;
 import java.util.Map;
 
 public class ResponseActions {
+    private ResponseActions(){}
     private static final ObjectMapper objectMapper;
 
     static {
@@ -66,7 +64,7 @@ public class ResponseActions {
         return response.getHeaders();
     }
     public static String getCertainHeader(Response response,String header){
-        Loggers.getLogger().info("get header with the name : "+header);
+        Loggers.getLogger().info("get header with the name : {}",header);
         return response.getHeader(header);
     }
 
@@ -105,7 +103,7 @@ public class ResponseActions {
         }
         catch (Exception e){
             Loggers.getLogger().info("Couldn't deserialize current response");
-            throw new RuntimeException(e);
+            return null;
         }
     }
 }
