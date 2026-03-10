@@ -62,10 +62,11 @@ private SystemMethods(){}
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             Loggers.getLogger().error("Interrupted while starting process", e);
+            return null;
         } catch (ExecutionException e) {
             Loggers.getLogger().error("Failed to start process: " + batPath, e);
+            return null;
         }
-        return null;
     }
     public static void killProcessesByPort(int... ports) {
         try {
