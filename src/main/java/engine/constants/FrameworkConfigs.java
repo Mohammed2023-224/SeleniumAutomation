@@ -50,9 +50,6 @@ private FrameworkConfigs(){}
         public static boolean localExecution() {
             return PropertyReader.get("local_execution", Boolean.class);
         }
-        public static String testDataPath() {
-            return PropertyReader.get("test_data_path", String.class);
-        }
 
         public static boolean gridEnabled() {
             return PropertyReader.get("localSeleniumGrid", Boolean.class);

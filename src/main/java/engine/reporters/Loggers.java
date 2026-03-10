@@ -12,7 +12,7 @@ import java.nio.file.Path;
 
 
 public class Loggers {
-
+private Loggers(){}
 private static Logger logger;
     static {
         Path path = ClassPathLoading.getResourceAsPath(PropertyReader.get("logFile", String.class), false);
@@ -24,8 +24,9 @@ private static Logger logger;
         if (logger == null) {
             boolean perTestLog = FrameworkConfigs.perTestLog();
             logger = (Logger) (perTestLog ? LogManager.getRootLogger() : LogManager.getLogger("All_tests"));
-            logger.info("Initialized logger where per test logger is "+ perTestLog);
-            logger.info("Read all property files found at path "+System.getProperty("readPropertyPath")+ " where properties inside folders override outside properties");
+            logger.info("Initialized logger where per test logger is {}", perTestLog);
+            logger.info("Read all property files found at path {} where properties inside folders override outside properties",
+                    System.getProperty("readPropertyPath").isEmpty()?"Unknown env":System.getProperty("readPropertyPath"));
         }
         return logger;
     }

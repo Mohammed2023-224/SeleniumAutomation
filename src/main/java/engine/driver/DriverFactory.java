@@ -3,6 +3,7 @@ package engine.driver;
 import org.openqa.selenium.WebDriver;
 
 public class DriverFactory {
+    private DriverFactory(){}
     private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
     public static WebDriver getDriver() {
