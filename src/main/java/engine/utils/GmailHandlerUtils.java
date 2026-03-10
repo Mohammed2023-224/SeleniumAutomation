@@ -1,12 +1,12 @@
 package engine.utils;
 
-import org.jsoup.Jsoup;
 import javax.activation.CommandMap;
 import javax.activation.MailcapCommandMap;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class GmailHandlerUtils {
+    private GmailHandlerUtils(){}
     protected static MailcapCommandMap getMailcapCommandMap() {
         MailcapCommandMap mc = (MailcapCommandMap) CommandMap.getDefaultCommandMap();
         mc.addMailcap("text/plain;; x-java-content-handler=com.sun.mail.handlers.text_plain");
@@ -20,11 +20,11 @@ public class GmailHandlerUtils {
     protected static String formatHtmlData(String data){
         return   data .replaceAll("(?s)<style[^>]*>.*?</style>", "")
                 .replaceAll("<[^>]*>", "").
-                replaceAll("&nbsp;", " ")
-                .replaceAll("&amp;", "&")
-                .replaceAll("&lt;", "<")
-                .replaceAll("&gt;", ">")
-                .replaceAll("&quot;", "\"")
+                replace("&nbsp;", " ")
+                .replace("&amp;", "&")
+                .replace("&lt;", "<")
+                .replace("&gt;", ">")
+                .replace("&quot;", "\"")
                 .replaceAll("(?m)^[ \t]*\r?\n", "").trim();
     }
     protected static String decodeBase64(String data) {
