@@ -12,9 +12,9 @@ public class HardAssertions {
         boolean visible = ElementActions.checkIfElementVisible(driver, locator);
         Assert.assertTrue(
                 visible,
-                "Expected element to be VISIBLE, but it was NOT. Locator: " + locator
+                "Expected element to be VISIBLE, but it was not. Locator: " + locator
         );
-        Loggers.getLogger().info("✅ Element is visible: {}", locator);
+        Loggers.getLogger().info(" Element is visible: {}", locator);
     }
 
     public static void assertNotVisible(WebDriver driver,By locator){
@@ -22,7 +22,7 @@ public class HardAssertions {
         boolean visible = ElementActions.checkIfElementVisible(driver, locator);
         Assert.assertFalse(
                 visible,
-                "Expected element to be NOT VISIBLE, but it WAS. Locator: " + locator
+                "Expected element to be NOT VISIBLE, but it was. Locator: " + locator
         );
         Loggers.getLogger().info("Element is not visible: {}", locator);
 
@@ -34,7 +34,7 @@ public class HardAssertions {
                         expectedSubstring == null ? "" : expectedSubstring.toLowerCase());
         Assert.assertTrue(
                 ok,
-                "Expected element text to CONTAIN [" + expectedSubstring + "] but wasn't contained in [" + actual + "]. Locator: " + locator);
+                "Expected element text to CONTAIN [" + expectedSubstring + "] but didn't contain  [" + actual + "]. Locator: " + locator);
         Loggers.getLogger().info("Text contains. Expected part: [{}], Actual: [{}], Locator: {}", expectedSubstring, actual, locator);
     }
 
@@ -48,10 +48,13 @@ public class HardAssertions {
 
     }
 
+    private static String expectedLog(String actual,String expected,String message){
+        return "Expected [" + expected + "] "+message+" [" + actual + "]";
+    }
     public static void assertNumberIsLowerThanGeneratedNumber(int actual,int threshold){
         Assert.assertTrue(
                 actual < threshold,
-                "Expected [" + actual + "] to be < [" + threshold + "]"
+                expectedLog(String.valueOf(actual),String.valueOf(threshold),"to be < ")
         );
         Loggers.getLogger().info("[{}] < [{}]", actual, threshold);
 
@@ -59,7 +62,7 @@ public class HardAssertions {
     public static void assertTextEquals(String actual,String expected){
         Assert.assertTrue(
                 actual.equalsIgnoreCase(expected),
-                "Expected [" + actual + "] to EQUAL (ignore case) [" + expected + "]"
+                expectedLog(actual,expected,"to EQUAL (ignore case)" )
         );
         Loggers.getLogger().info("Equals ignore case. Expected: [{}], Actual: [{}]", expected, actual);
 
@@ -67,7 +70,7 @@ public class HardAssertions {
     public static void assertTextContains(String actual,String expectedSubstring){
         Assert.assertTrue(
                 actual.toLowerCase().contains(expectedSubstring.toLowerCase()),
-                "Expected [" + actual + "] to CONTAIN (ignore case) [" + expectedSubstring + "]"
+                expectedLog(actual,expectedSubstring,"to CONTAIN (ignore case)")
         );
         Loggers.getLogger().info("Contains ignore case. Expected part: [{}], Actual: [{}]", expectedSubstring, actual);
     }
@@ -76,7 +79,7 @@ public class HardAssertions {
     public static void assertNumberIsHigherThanGeneratedNumber(int actual,int threshold){
         Assert.assertTrue(
                 actual > threshold,
-                "Expected [" + actual + "] to be > [" + threshold + "]"
+                expectedLog(String.valueOf(actual),String.valueOf(threshold),"to be > ")
         );
         Loggers.getLogger().info(" [{}] > [{}]", actual, threshold);
 
