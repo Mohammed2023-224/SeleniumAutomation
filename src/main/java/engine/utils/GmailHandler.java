@@ -8,7 +8,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
@@ -16,6 +16,7 @@ import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePart;
 import engine.constants.FrameworkConfigs;
+import engine.exceptions.CustomExceptions;
 import engine.reporters.Loggers;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -48,12 +49,12 @@ public class GmailHandler {
 
     public GmailHandler(String appName){
         this.scopes = Arrays.asList(GmailScopes.GMAIL_SEND,GmailScopes.GMAIL_READONLY,GmailScopes.GMAIL_COMPOSE,GmailScopes.GMAIL_MODIFY);
-        this.jsonFactory=JacksonFactory.getDefaultInstance();
+        this.jsonFactory = new GsonFactory();
         this.applicationName=appName;
         try {
             this.service = getGmailService();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            Loggers.getLogger().error(e);
         }
 
     }
@@ -62,7 +63,7 @@ public class GmailHandler {
         // Load credentials.json
         InputStream in = GmailHandler.class.getClassLoader().getResourceAsStream(credentialsFilePath);
         if (in == null) {
-            throw new RuntimeException(credentialsFilePath+" not found in resources folder.");
+            Loggers.getLogger().error("{} not found in resources folder.",credentialsFilePath);
         }
         GoogleClientSecrets clientSecrets = null;
         FileDataStoreFactory tokenStore = null;
@@ -88,7 +89,8 @@ public class GmailHandler {
         try {
             return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
         } catch (IOException e) {
-            throw new RuntimeException("Failed to authorize {}", e);
+            Loggers.getLogger().error("Failed to authorize ", e);
+            return null;
 
         }
     }
@@ -102,10 +104,9 @@ public class GmailHandler {
                     credential)
                     .setApplicationName(applicationName)
                     .build();
-        } catch (GeneralSecurityException e) {
-            throw new RuntimeException("Failed to fetch API "+e);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to fetch API "+e);
+        } catch (GeneralSecurityException | IOException e) {
+            Loggers.getLogger().error("Failed to fetch API ",e);
+            return null;
         }
     }
     /**
@@ -154,7 +155,9 @@ public class GmailHandler {
         int count =1;
         List<Message> messages = returnMessages(numberOfMessages, query);
         Message fullMessage = null;
-        if (messages == null || messages.isEmpty()) return null;
+        if (messages == null || messages.isEmpty())
+            throw new CustomExceptions("Failed to retrieve message");
+
         for (Message message : messages) {
             if(count==id) {
                 fullMessage =getMessage(message.getId());
@@ -183,6 +186,7 @@ public class GmailHandler {
     public String readFullBody(Message message){
         Message fullMessage = null;
         fullMessage =getMessage(message.getId());
+        assert fullMessage != null;
         MessagePart payload = fullMessage.getPayload();
         String body = extractMessageBody(payload);
         return GmailHandlerUtils.formatHtmlData(body);
@@ -199,6 +203,7 @@ public class GmailHandler {
     public List<String> readLinksFromEmail(Message message){
         List<String> links = new ArrayList<>();
         Message fullMessage = getMessage(message.getId());
+        assert fullMessage!=null;
         MessagePart payload = fullMessage.getPayload();
         // Get body data
         String data = payload.getBody().getData();
@@ -294,9 +299,9 @@ public class GmailHandler {
             multipart.addBodyPart(attachmentPart);
             email.setContent(multipart);
         } catch (MessagingException e) {
-            throw new RuntimeException("Failed to create mail" + e);
+            Loggers.getLogger().error("Failed to create mail" + e);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Loggers.getLogger().error(e);
         }
         return email;
     }
@@ -304,7 +309,8 @@ public class GmailHandler {
         try {
             return service.users().messages().get(currentUser, messageID).execute();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to get message "+ e);
+             Loggers.getLogger().error("Failed to get message "+ e);
+            throw new CustomExceptions("Failed to retrieve message: " + messageID, e);
         }
     }
 
