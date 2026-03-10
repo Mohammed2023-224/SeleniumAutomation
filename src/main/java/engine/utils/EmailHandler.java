@@ -3,6 +3,7 @@ package engine.utils;
 import com.mailosaur.MailosaurClient;
 import com.mailosaur.MailosaurException;
 import com.mailosaur.models.*;
+import engine.reporters.Loggers;
 
 import java.io.IOException;
 
@@ -29,10 +30,8 @@ public class EmailHandler {
                     break;
                 }
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (MailosaurException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | MailosaurException e) {
+            Loggers.getLogger().error("Couldn't get server ID",e);
         }
         return serverID;
     }
@@ -69,31 +68,27 @@ public class EmailHandler {
     public MessageListResult getAllEmailsInInbox(){
         try {
             return  mailosaur.messages().list(addMessageListSearchParams());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (MailosaurException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | MailosaurException e) {
+            Loggers.getLogger().error("Couldn't get all mails",e);
+            return null;
         }
     }
 
     public MessageListResult getAllEmailsInInboxWithCertainCriteria(String sentTo,String sentFrom,String subject,String body){
         try {
             return  mailosaur.messages().search(addMessageSearchParams(),addSearchCriteria(sentTo,sentFrom,subject,body));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (MailosaurException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | MailosaurException e) {
+            Loggers.getLogger().error("Couldn't get all mails",e);
+            return null;
         }
     }
 
     public Message getLatestEmailWithCriteria(String sentTo,String sentFrom,String subject,String body){
         try {
             return mailosaur.messages().get(addMessageSearchParams(),addSearchCriteria(sentTo,sentFrom,subject,body));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (MailosaurException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | MailosaurException e) {
+            Loggers.getLogger().error("Couldn't get latest mails",e);
+            return null;
         }
     }
-
 }
