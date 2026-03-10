@@ -45,7 +45,7 @@ private SystemMethods(){}
         new Thread(() -> {
             try {
                 File batFile = new File(batPath);
-                ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", batFile.getAbsolutePath());
+                ProcessBuilder builder = new ProcessBuilder("Cmd.exe", "/c", batFile.getAbsolutePath());
                 builder.directory(batFile.getParentFile());
                 builder.inheritIO();
 
@@ -61,10 +61,11 @@ private SystemMethods(){}
             return future.get();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException("Interrupted while starting process", e);
+            Loggers.getLogger().error("Interrupted while starting process", e);
         } catch (ExecutionException e) {
-            throw new RuntimeException("Failed to start process: " + batPath, e);
+            Loggers.getLogger().error("Failed to start process: " + batPath, e);
         }
+        return null;
     }
     public static void killProcessesByPort(int... ports) {
         try {
@@ -91,7 +92,11 @@ private SystemMethods(){}
                 }
                 process.waitFor();
             }
-        } catch (Exception e) {
+        }
+        catch (InterruptedException ee){
+            Loggers.getLogger().warn(" Interrupted thread");
+            Thread.currentThread().interrupt();
+        }catch (Exception e) {
             Loggers.getLogger().error("Error killing processes by port: " + e.getMessage());
         }
     }
@@ -111,11 +116,14 @@ private SystemMethods(){}
                         Loggers.getLogger().info(line);
                     }
                 }
-
                  process.waitFor();
              Loggers.getLogger().info("File executed: {}", path);
-            } catch (IOException | InterruptedException e) {
-             Loggers.getLogger().info("File isn't executed: {}", path);
+            } catch (IOException e) {
+             Loggers.getLogger().warn("File isn't executed: {}", path);
+            }
+            catch (InterruptedException ee){
+                Loggers.getLogger().warn(" Interrupted thread");
+                Thread.currentThread().interrupt();
             }
         } else {
          Loggers.getLogger().info("File {} isn't executable type", path);
