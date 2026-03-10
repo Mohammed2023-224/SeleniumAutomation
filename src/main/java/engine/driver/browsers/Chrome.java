@@ -12,7 +12,8 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Map;
@@ -42,11 +43,15 @@ public class Chrome implements  BrowserDriver{
         try {
             ChromeOptions options=getDriverOptions();
             if(!caps.isEmpty()) {caps.forEach(options::setCapability);}
-            RemoteWebDriver remoteWebDriver= new RemoteWebDriver(new URL(proxyURl), options);
+            RemoteWebDriver remoteWebDriver= new RemoteWebDriver(new URI(proxyURl).toURL(), options);
             remoteWebDriver.setFileDetector(new LocalFileDetector());
             return remoteWebDriver;
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            Loggers.getLogger().error("Malformed URl ",e);
+            return null;
+        } catch (URISyntaxException e) {
+            Loggers.getLogger().error("syntax error URl ",e);
+            return null;
         }
 
     }
@@ -61,7 +66,8 @@ public class Chrome implements  BrowserDriver{
             else {
                 System.setProperty(webDriverPropertyPath, FrameworkConfigs.chromeLocalDriverPath());
             }
-            Loggers.getLogger().info("chrome driver is found at path: {}" , System.getProperty(webDriverPropertyPath));
+            Loggers.getLogger().info("chrome driver is found at path: {}" ,
+                    System.getProperty(webDriverPropertyPath).isEmpty()?"test log":System.getProperty(webDriverPropertyPath));
 
         }
     }

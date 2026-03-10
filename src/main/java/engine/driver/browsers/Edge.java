@@ -11,7 +11,8 @@ import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Map;
@@ -39,11 +40,15 @@ public class Edge  implements  BrowserDriver{
         try {
             EdgeOptions options=getDriverOptions();
             if(!caps.isEmpty()) {caps.forEach(options::setCapability);}
-            RemoteWebDriver remoteWebDriver= new RemoteWebDriver(new URL(proxyURl), options);
+            RemoteWebDriver remoteWebDriver= new RemoteWebDriver(new URI(proxyURl).toURL(), options);
             remoteWebDriver.setFileDetector(new LocalFileDetector());
             return remoteWebDriver;
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            Loggers.getLogger().error("Malformed URl ",e);
+            return null;
+        } catch (URISyntaxException e) {
+            Loggers.getLogger().error("syntax error URl ",e);
+            return null;
         }
     }
     private void setLocalDriver(){
@@ -56,7 +61,8 @@ public class Edge  implements  BrowserDriver{
             else {
                 System.setProperty(localEdgePath, FrameworkConfigs.edgeLocalDriverPath());
             }
-            Loggers.getLogger().info("Edge driver is found at path: {}",System.getProperty(localEdgePath));
+            Loggers.getLogger().info("Edge driver is found at path: {}",
+                    System.getProperty(localEdgePath).isEmpty()?"test log":System.getProperty(localEdgePath));
 
         }
     }

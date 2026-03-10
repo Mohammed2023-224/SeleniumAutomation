@@ -4,7 +4,6 @@ import engine.constants.FrameworkConfigs;
 import engine.driver.browsers.Chrome;
 import engine.driver.browsers.Edge;
 import engine.enums.Browsers;
-import engine.reporters.Loggers;
 import engine.utils.PropertyReader;
 import org.openqa.selenium.WebDriver;
 
@@ -18,9 +17,12 @@ public class SetupDriver {
     public  WebDriver startDriver(String browser ,boolean local) {
         Browsers enumBrowser =Browsers.valueOf((browser == null || browser.isEmpty() ? FrameworkConfigs.browser() : browser).toUpperCase());
         String port=System.getProperty("port");
-        Map<String,Object> caps= PropertyReader.get("use_capability_class", Boolean.class) ||!local?
+        boolean useCapabilityClass =
+                Boolean.TRUE.equals(PropertyReader.get("use_capability_class", Boolean.class));
+        Map<String,Object> caps= useCapabilityClass||!local?
                 new Capabilities().build(browser): new HashMap<>();
-        port = local?"":port == null || port.isEmpty()? FrameworkConfigs.proxy():port;
+        String resolvedPort = (port == null || port.isEmpty()) ? FrameworkConfigs.proxy() : port;
+        port = local ? "" : resolvedPort;
         if(!local) waitForRemoteUrl(port,10);
         if(!local && (port==null||port.isEmpty()))  throw new IllegalStateException("Port or grid URL must be specified for remote execution");
         return switch (enumBrowser) {
