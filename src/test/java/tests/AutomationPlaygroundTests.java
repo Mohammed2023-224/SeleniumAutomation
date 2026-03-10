@@ -1,12 +1,12 @@
 package tests;
 
 import pages.appUATPg.*;
-import tests.baseTest.BaseTest;
+import tests.baseTest.BaseTestClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class AutomationPlaygroundTests extends BaseTest {
+public class AutomationPlaygroundTests extends BaseTestClass {
 HomePage homePage;
 WaitActionsPage waitActionsPage;
 PopUpWindows popUpWindows;
@@ -24,12 +24,12 @@ AdvancedUI advancedUI;
     waitActionsPage.typeMinWait(String.valueOf(minWait));
     waitActionsPage.typeMaxWait(String.valueOf(maxWait));
     waitActionsPage.handleWaitForAlert(maxWait);
-    waitActionsPage.handleWaitForVisibility(maxWait);
-waitActionsPage.handleWaitForInvisibility(maxWait);
-waitActionsPage.handleWaitForEnabled(maxWait);
-waitActionsPage.handleWaitForTitle(maxWait);
-waitActionsPage.handleWaitForText(maxWait);
-waitActionsPage.handleWaitForFrame(maxWait);
+    waitActionsPage.handleWaitForVisibility();
+waitActionsPage.handleWaitForInvisibility();
+waitActionsPage.handleWaitForEnabled();
+waitActionsPage.handleWaitForTitle();
+waitActionsPage.handleWaitForText();
+waitActionsPage.handleWaitForFrame();
     }
 
     @Test

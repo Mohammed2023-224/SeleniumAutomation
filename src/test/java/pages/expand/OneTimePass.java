@@ -9,13 +9,13 @@ import org.testng.Assert;
 
 public class OneTimePass extends HomePage{
 
-    private By otpCode= By.xpath("//li[contains(text(),'OTP Code')]//b");
-    private By emailField=By.id("email");
-    private By otpField=By.id("otp");
-    private By welcomeMessage=By.id("username");
-    private By sendOTPButton=By.id("btn-send-otp");
-    private By verifyOTPBN=By.id("btn-send-verify");
-    private By otpAssertionMessage=By.id("otp-message");
+    private final By otpCode= By.xpath("//li[contains(text(),'OTP Code')]//b");
+    private final By emailField=By.id("email");
+    private final By otpField=By.id("otp");
+    private final By welcomeMessage=By.id("username");
+    private final By sendOTPButton=By.id("btn-send-otp");
+    private final By verifyOTPBN=By.id("btn-send-verify");
+    private final By otpAssertionMessage=By.id("otp-message");
 
     public OneTimePass(WebDriver driver) {
         super(driver);
@@ -49,6 +49,5 @@ public class OneTimePass extends HomePage{
     }
     public void clickVerifyOTP(){
         JSActions.clickUsingJavaScript(driver,verifyOTPBN);
-//        Waits.waitToBeInvisible(driver,verifyOTPBN);
     }
 }

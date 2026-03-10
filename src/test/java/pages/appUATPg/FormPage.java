@@ -4,17 +4,13 @@ package pages.appUATPg;
 import engine.actions.*;
 import engine.assertions.HardAssertions;
 import engine.constants.FrameworkConfigs;
-import engine.reporters.Loggers;
 import engine.utils.ClassPathLoading;
 import io.qameta.allure.Allure;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
-
 import java.io.File;
-import java.net.HttpURLConnection;
-import java.net.ProtocolException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -121,7 +117,6 @@ public void handleForm(){
     JSActions.clickUsingJavaScript(driver,readGerman);
     assertText(readGermanValidate,"false");
     DragAndDropActions.dragAndDropByLocation(driver,fluency,-100,0);
-//    Assert.assertTrue(ElementActions.getText(driver,fluencyValidate).contains("0"));
     typeField(path+firstFile,uploadCV);
     assertText(uploadCVValidate,firstFile);
     typeField(path+secondFile+"\n"+path+firstFile,uploadFiles);
@@ -129,10 +124,7 @@ public void handleForm(){
 
     Assert.assertTrue(driver.findElement(salary).getDomProperty("placeholder").contains("You should not provide this"));
     ElementActions.clickElement(driver,downloadFile);
-    // Removed file validation for now for the demo sake
-//Waits.waitForFileToBeDownloaded(driver,path+thirdFile);
-//    Assert.assertTrue(SystemMethods.checkExistenceOfFile(path+thirdFile));
-//    Assert.assertTrue(SystemMethods.readFileContent(path+thirdFile).contains("File downloaded by AutomationCamp"));
+
     ElementActions.typeInElement(driver,city,"test");
     ElementActions.typeInElement(driver,state,"test");
     ElementActions.clickElement(driver,submitButton);

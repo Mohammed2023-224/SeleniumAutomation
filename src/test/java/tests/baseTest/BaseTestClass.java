@@ -20,7 +20,7 @@ import java.util.List;
 
 
 @Listeners({TestNgListener.class, TransformListener.class})
-public class BaseTest {
+public class BaseTestClass {
     public WebDriver driver;
     public String testDataPath= ClassPathLoading.getResourceAsPath("testData/data.xlsx",false).toString();
 

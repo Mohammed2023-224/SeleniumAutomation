@@ -10,9 +10,9 @@ import org.testng.Assert;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class MultipleTests extends HomePage {
+public class MultiplePages extends HomePage {
 
-    public MultipleTests(WebDriver driver) {
+    public MultiplePages(WebDriver driver) {
         super(driver);
     }
 
@@ -68,6 +68,7 @@ public class MultipleTests extends HomePage {
                     System.out.println("Broken image: " + imageUrl + " - Status: " + responseCode);
                 }
             } catch (Exception e) {
+                //Catch Code
             }
         }
     }
