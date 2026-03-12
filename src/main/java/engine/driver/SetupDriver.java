@@ -20,7 +20,7 @@ public class SetupDriver {
         boolean useCapabilityClass =
                 Boolean.TRUE.equals(PropertyReader.get("use_capability_class", Boolean.class));
         Map<String,Object> caps= useCapabilityClass||!local?
-                new Capabilities().build(browser): new HashMap<>();
+                new Capabilities().build(enumBrowser.toString()): new HashMap<>();
         String resolvedPort = (port == null || port.isEmpty()) ? FrameworkConfigs.proxy() : port;
         port = local ? "" : resolvedPort;
         if(!local) waitForRemoteUrl(port,10);
