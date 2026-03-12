@@ -17,6 +17,7 @@ public class FileDownloader extends HomePage{
     }
 
     public void downloadFile(){
+        ElementActions.scrollToElement(driver, By.xpath("//a[@data-testid='cdct.jpg']"));
         ElementActions.clickElement(driver, By.xpath("//a[@data-testid='cdct.jpg']"));
         Waits.waitForFileToBeDownloaded(driver,"C:\\Users\\USER\\Downloads\\cdct.jpg");
         Assert.assertTrue(SystemMethods.checkExistenceOfFile("C:\\Users\\USER\\Downloads\\cdct.jpg"));
