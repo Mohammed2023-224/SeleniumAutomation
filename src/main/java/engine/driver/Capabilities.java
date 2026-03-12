@@ -6,7 +6,8 @@ import java.util.Map;
 
 public class Capabilities {
 
-    public Map<String,Object> build(String browser){
+    //Can enhance more to be more dynamic for only one session
+    public Map<String,Object> browserStackCapabilities(String browser){
     Map<String,Object> m=new HashMap<>();
         // REQUIRED
         m.put("browserName", browser);
