@@ -17,6 +17,13 @@ public class ResponseActions {
         objectMapper=new ObjectMapper();
     }
     public static void checkResponseStatus(Response res,int status){
+        if(res.statusCode()!=status && Loggers.getLogger().isErrorEnabled()){
+                String error = ResponseActions.getValueByPath(res, "error", String.class);
+                Loggers.getLogger().error(
+                        "Incorrect status code. Getting error: {}",
+                        error
+                );
+        }
         res.then().statusCode(status);
         Loggers.getLogger().info("Validate that status code = {}",status);
     }
