@@ -1,6 +1,6 @@
 package tests.api_tests;
 
-import engine.api.AddedHeaderTokenProvider;
+import pages.reqresAPI.tokenProviders.AddedHeaderTokenProvider;
 import engine.assertions.HardAssertions;
 import engine.api.ApiRequestFactory;
 import engine.api.ResponseActions;

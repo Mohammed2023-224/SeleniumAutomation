@@ -1,8 +1,11 @@
-package engine.api;
+package pages.reqresAPI.tokenProviders;
+
+import engine.api.AuthSession;
+import engine.api.TokenProvider;
 
 import java.util.Map;
 
-public class AddedHeaderTokenProvider implements TokenProvider{
+public class AddedHeaderTokenProvider implements TokenProvider {
     private static final AuthSession addedHeaderSession = new AuthSession(
             Map.of(
                     "x-api-key", "01252cee-4854-49b0-8e32-4215ba456977"

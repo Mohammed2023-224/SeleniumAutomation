@@ -1,8 +1,11 @@
-package engine.api;
+package pages.reqresAPI.tokenProviders;
+
+import engine.api.AuthSession;
+import engine.api.TokenProvider;
 
 import java.util.Map;
 
-public class NoAuthTokenProvider implements TokenProvider{
+public class NoAuthTokenProvider implements TokenProvider {
     private static final AuthSession EMPTY_SESSION = new AuthSession(
             Map.of(),      // no headers
             Map.of(),      // no cookies
