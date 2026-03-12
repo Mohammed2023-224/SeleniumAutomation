@@ -2,7 +2,6 @@ package engine.driver;
 
 import engine.constants.FrameworkConfigs;
 import engine.reporters.Loggers;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.nio.file.Paths;
 import java.util.*;
@@ -10,7 +9,6 @@ import java.util.*;
 public class DriverOptions {
 private LinkedHashSet<String> userDriverOptions=new LinkedHashSet<>();
 private Map<String,Object> userDriverPreferences=new LinkedHashMap<>();
-private Map<String,Object> userDrivercapabilities=new LinkedHashMap<>();
 
     public Set<String> defineDriverOptions(){
         Set<String> opts = new LinkedHashSet<>();
@@ -42,9 +40,6 @@ private Map<String,Object> userDrivercapabilities=new LinkedHashMap<>();
         userDriverPreferences= new LinkedHashMap<>(pref);
     }
 
-    public void setUserDesiredCapabilities(Map<String,Object> pref){
-        userDrivercapabilities= new LinkedHashMap<>(pref);
-    }
 
     public  Map<String,Object> definePreferences(){
         Map<String, Object> prefs = new LinkedHashMap<>();
@@ -58,17 +53,5 @@ private Map<String,Object> userDrivercapabilities=new LinkedHashMap<>();
         prefs.put("download.directory_upgrade", true);
         if(!userDriverPreferences.isEmpty()) prefs.putAll(userDriverPreferences);
         return  prefs;
-    }
-
-    public DesiredCapabilities defineDesiredCapabilities(){
-        DesiredCapabilities desiredCapabilities=new DesiredCapabilities();
-        Map<String, Object> bstackOptions = new LinkedHashMap<>();
-        bstackOptions.put("local", false);
-        bstackOptions.put("projectName", "test");
-        bstackOptions.put("buildName", "my build");
-        bstackOptions.put("sessionName", "Test Session");
-        if(!userDrivercapabilities.isEmpty()) bstackOptions.putAll(userDrivercapabilities);
-        desiredCapabilities.setCapability("bstack:options", bstackOptions);
-        return desiredCapabilities;
     }
 }
