@@ -1,6 +1,7 @@
 package engine.driver;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class Capabilities {
         bstackOptions.put("os", "Windows");
         bstackOptions.put("osVersion", "11");
         bstackOptions.put("projectName", "SeleniumAutomation");
-        bstackOptions.put("buildName", "Local Debug Build "+ LocalDateTime.now());
+        bstackOptions.put("buildName", "Local Debug Build "+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         bstackOptions.put("sessionName", browser+" Test");
 
         m.put("bstack:options", bstackOptions);
