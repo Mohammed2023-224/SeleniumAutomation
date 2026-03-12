@@ -10,9 +10,11 @@ import java.util.List;
 
 public class ReqresApiCalls {
     private final ApiRequestFactory factory;
+
     String getFileClassPath(String file){
         return ClassPathLoading.getResourceAsPath(file,false).toString();
     }
+
     public ReqresApiCalls(ApiRequestFactory factory){
         this.factory=factory;
     }
@@ -20,7 +22,7 @@ public class ReqresApiCalls {
     public Response getObjectsEndPoint(String idPath, List<String> queryIds){
         return factory.executeWithoutRetry(req ->{
             req.setBasePathParameter(idPath==null?PropertyReader.get("objectsEndPoint", String.class)
-                    :PropertyReader.get("objectsEndPoint", String.class)+idPath);
+                    :PropertyReader.get("objectsEndPoint", String.class)+"/"+idPath);
             req.addQueryParam("id",queryIds);
             return req.performRequest(HttpMethods.GET);
         });
@@ -29,14 +31,14 @@ public class ReqresApiCalls {
     public Response postObject(String filePath){
         return factory.executeWithoutRetry(req ->{
             req.setBasePathParameter(PropertyReader.get("objectsEndPoint", String.class));
-            req.setBodyAsFile(getFileClassPath(filePath),"Application/json");
+            req.setBodyAsFile(getFileClassPath(filePath),"application/json");
             return req.performRequest(HttpMethods.POST);
         });
     }
     public Response updateObject(String filePath,String id){
         return factory.executeWithoutRetry(req ->{
             req.setBasePathParameter(PropertyReader.get("objectsEndPoint", String.class)+"/"+id);
-            req.setBodyAsFile(getFileClassPath(filePath),"Application/json");
+            req.setBodyAsFile(getFileClassPath(filePath),"application/json");
             return req.performRequest(HttpMethods.PUT);
         });
     }
@@ -44,7 +46,7 @@ public class ReqresApiCalls {
     public Response updatePartialObject(String filePath,String id){
         return factory.executeWithoutRetry(req ->{
             req.setBasePathParameter(PropertyReader.get("objectsEndPoint", String.class)+"/"+id);
-            req.setBodyAsFile(getFileClassPath(filePath),"Application/json");
+            req.setBodyAsFile(getFileClassPath(filePath),"application/json");
             return req.performRequest(HttpMethods.PATCH);
         });
     }
