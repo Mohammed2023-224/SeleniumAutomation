@@ -31,7 +31,7 @@ public class FireFox implements  BrowserDriver{
     // initiate chrome driver
     public WebDriver initiateDriver() {
         setLocalDriver();
-        Loggers.getLogger().info("Start chrome driver " );
+        Loggers.getLogger().info("Start fire fox driver " );
         return new FirefoxDriver(getDriverOptions());
     }
 
@@ -55,17 +55,17 @@ public class FireFox implements  BrowserDriver{
     }
 
     private void setLocalDriver() {
-        String webDriverPropertyPath="webdriver.chrome.driver";
+        String webDriverPropertyPath="webdriver.firefox.driver";
         if (FrameworkConfigs.localPathDriver()) {
             if(FrameworkConfigs.chromeLocalDriverPath().isEmpty()) {
-                Path path = ClassPathLoading.getResourceAsPath("driver/chromedriver.exe", true);
+                Path path = ClassPathLoading.getResourceAsPath("driver/geckodriver.exe", true);
                 assert path != null;
                 System.setProperty(webDriverPropertyPath, path.toString());
             }
             else {
                 System.setProperty(webDriverPropertyPath, FrameworkConfigs.chromeLocalDriverPath());
             }
-            Loggers.getLogger().info("chrome driver is found at path: {}" ,
+            Loggers.getLogger().info("gecko driver is found at path: {}" ,
                     System.getProperty(webDriverPropertyPath).isEmpty()?"test log":System.getProperty(webDriverPropertyPath));
 
         }
