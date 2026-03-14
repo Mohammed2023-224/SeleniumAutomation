@@ -22,8 +22,13 @@ public class JSActions {
         return jsExec(driver).executeScript(script);
     }
     public static Object executeScript(WebDriver driver, String script,WebElement element) {
-        Loggers.getLogger().info("execute java script: {}",script);
+        Loggers.getLogger().info("execute java script: {} on element {}",script,element);
         return jsExec(driver).executeScript(script,element);
+    }
+
+    public static void scrollToElement(WebDriver driver,By element) {
+        Loggers.getLogger().info("scroll using JS to the end of the element {}",element);
+         jsExec(driver).executeScript("arguments[0].scrollTop = arguments[0].scrollHeight",driver.findElement(element));
     }
 
     public static WebElement getShadowElement(WebDriver driver, By shadowHost, String cssSelectorInsideShadowRoot) {
