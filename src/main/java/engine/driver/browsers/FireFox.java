@@ -59,6 +59,7 @@ public class FireFox implements  BrowserDriver{
         if (FrameworkConfigs.localPathDriver()) {
             if(FrameworkConfigs.chromeLocalDriverPath().isEmpty()) {
                 Path path = ClassPathLoading.getResourceAsPath("driver/chromedriver.exe", true);
+                assert path != null;
                 System.setProperty(webDriverPropertyPath, path.toString());
             }
             else {

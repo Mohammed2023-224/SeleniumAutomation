@@ -5,5 +5,5 @@ public enum Browsers {
     CHROME ,
     FIREFOX,
     OPERA,
-    SAFARI;
+    SAFARI
 }

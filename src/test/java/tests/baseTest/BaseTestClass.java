@@ -12,18 +12,20 @@ import engine.reporters.Loggers;
 import engine.utils.ClassPathLoading;
 import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Listeners({TestNgListener.class, TransformListener.class})
 public class BaseTestClass {
     public WebDriver driver;
-    public String testDataPath= ClassPathLoading.getResourceAsPath("testData/data.xlsx",false).toString();
+    public String testDataPath= Objects.requireNonNull(ClassPathLoading.getResourceAsPath("testData/data.xlsx", false)).toString();
 
     @Parameters({"browser","osVersion","browserVersion","os"})
     @BeforeClass
@@ -58,6 +60,7 @@ public class BaseTestClass {
             try {
                 driver.switchTo().window(handle);
                 String url = driver.getCurrentUrl();
+                Assert.assertNotNull(url);
                 boolean isEdgeDownloader = url.toLowerCase().contains("edge://");
                 boolean isBlank = url.equals("about:blank");
                 if ( isBlank) {
@@ -72,6 +75,7 @@ public class BaseTestClass {
              Loggers.getLogger().info("Error handling tab: " + e.getMessage());
             }
         }
+        Assert.assertNotNull(validTab);
         driver.switchTo().window(validTab);
 
     }
