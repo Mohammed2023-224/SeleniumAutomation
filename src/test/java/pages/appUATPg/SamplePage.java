@@ -54,8 +54,9 @@ public void loginForm(){
         Waits.waitToBeVisible(driver,warning);
         Assert.assertTrue(driver.findElement(warning).getText().contains("1 or more!"));
         ElementActions.clickElement(driver,closeWarning);
+        Waits.waitToBeInvisible(driver,closeWarning);
         ElementActions.typeInElement(driver,quantity,"5");
-    ElementActions.selectDDLOptionText(driver,flavor,"Pepperoni");
+        ElementActions.selectDDLOptionText(driver,flavor,"Pepperoni");
         ElementActions.clickElement(driver,submitButton);
         Waits.waitToBeVisible(driver,added);
         Assert.assertTrue(ElementActions.getText(driver,added).contains("Pizza added to the cart!"));
