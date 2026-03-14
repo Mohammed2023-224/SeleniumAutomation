@@ -118,7 +118,6 @@ private final By minWaitTime= By.id("min_wait");
         ElementActions.clickElement(driver, frameTrigger);
         Waits.explicitWaitLongTime(driver).until
                 (ExpectedConditions.frameToBeAvailableAndSwitchToIt(frame));
-        System.out.println("test");
         JSActions.clickUsingJavaScript(driver, frameButtonTarget);
         Assert.assertTrue(ElementActions.getText(driver, frameButtonTarget)
                 .contains("Clicked"));
