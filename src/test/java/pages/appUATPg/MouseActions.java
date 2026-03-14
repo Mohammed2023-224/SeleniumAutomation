@@ -40,7 +40,7 @@ public class MouseActions {
 
 
     public void dragAndDrop(){
-        DragAndDropActions.dragAndDrop(driver,dragSource,dropSource);
+        DragAndDropActions.jsDragAndDrop(driver,dragSource,dropSource);
         Assert.assertTrue(ElementActions.getText(driver,assertion).contains("Drop is suc"));
     }
 }
