@@ -3,6 +3,7 @@ package tests.baseTest;
 import engine.actions.JSActions;
 import engine.constants.FrameworkConfigs;
 import engine.driver.DriverFactory;
+import engine.driver.DriverOptions;
 import engine.driver.SetupDriver;
 import engine.listeners.AllureAttachments;
 import engine.listeners.TestNgListener;
@@ -24,10 +25,13 @@ public class BaseTestClass {
     public WebDriver driver;
     public String testDataPath= ClassPathLoading.getResourceAsPath("testData/data.xlsx",false).toString();
 
-    @Parameters("browser")
+    @Parameters({"browser","osVersion","browserVersion","os"})
     @BeforeClass
-    protected void InitDriver(ITestContext con, @Optional String browser) {
-            driver = new SetupDriver().startDriver(browser,FrameworkConfigs.localExecution());
+    protected void InitDriver(ITestContext con, @Optional() String browser,
+                              @Optional("Windows") String osVersion,@Optional("latest") String browserVersion
+            ,@Optional("11") String os) {
+            driver = new SetupDriver().startDriver(browser, FrameworkConfigs.localExecution(), osVersion, browserVersion, os);
+        DriverOptions.maximizeWindow(driver,FrameworkConfigs.maximized());
         DriverFactory.setDriver(driver);
         con.setAttribute("driver", driver);
     }
