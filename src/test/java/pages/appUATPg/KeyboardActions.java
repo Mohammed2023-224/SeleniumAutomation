@@ -2,6 +2,7 @@ package pages.appUATPg;
 
 import engine.actions.ElementActions;
 import engine.actions.Waits;
+import engine.assertions.HardAssertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -27,7 +28,8 @@ public void handleKeyboard(){
     ElementActions.typeInElement(driver,typingArea,"G");
     Assert.assertTrue(ElementActions.getText(driver,currentKey).contains("G"));
     Assert.assertTrue(ElementActions.getText(driver,keyCode).contains("KeyG"));
-    Assert.assertTrue(ElementActions.getText(driver,shiftModifier).contains("Shift"));
+    ElementActions.pressKeyboardKeys(driver,typingArea,Keys.SHIFT);
+    HardAssertions.assertTextContains(driver,shiftModifier,"shift");
     ElementActions.typeInElement(driver,typingArea,"5");
     Assert.assertTrue(ElementActions.getText(driver,currentKey).contains("5"));
     Assert.assertTrue(ElementActions.getText(driver,keyCode).contains("Digit5"));

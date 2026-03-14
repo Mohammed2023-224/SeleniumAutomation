@@ -80,6 +80,16 @@ public class ElementActions {
         driver.findElement(locator).sendKeys(key);
        Loggers.getLogger().info("press keyboard key: {} in element located at {}",key, locator);
     }
+
+    public static void holdKeyboardKey(WebDriver driver, Keys key) {
+        actions(driver).keyDown(key);
+       Loggers.getLogger().info("hold keyboard key: {}",key );
+    }
+    public static void unholdKeyboardKey(WebDriver driver, Keys key) {
+        actions(driver).keyUp(key);
+       Loggers.getLogger().info("hold keyboard key: {}",key );
+    }
+
     public static void pressKeyboardKeys(WebDriver driver, Keys key) {
         actions(driver).sendKeys(key).perform();
        Loggers.getLogger().info("press keyboard key: {}", key);
