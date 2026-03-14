@@ -3,5 +3,7 @@ package engine.enums;
 public enum Browsers {
     EDGE ,
     CHROME ,
-    FIREFOX;
+    FIREFOX,
+    OPERA,
+    SAFARI;
 }
