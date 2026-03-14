@@ -7,26 +7,29 @@
     </listeners>
     <test name="edge tests">
         <parameter name="browser" value="edge"/>
+        <parameter name="osVersion" value="11"/>
+        <parameter name="browserVersion" value="latest"/>
+        <parameter name="os" value="Windows"/>
         <classes>
             <class name="tests.AutomationPlaygroundTests"/>
         </classes>
     </test> <!-- Test -->
-    <test name="edge tests2">
-        <parameter name="browser" value="edge"/>
+    <test name="firefox tests">
+        <parameter name="browser" value="firefox"/>
+        <parameter name="osVersion" value="10"/>
+        <parameter name="browserVersion" value="latest"/>
+        <parameter name="os" value="Windows"/>
         <classes>
-            <class name="tests.ExpandTests"/>
+            <class name="tests.AutomationPlaygroundTests"/>
         </classes>
     </test> <!-- Test -->
     <test name="chrome tests ">
         <parameter name="browser" value="chrome"/>
+        <parameter name="osVersion" value="8.1"/>
+        <parameter name="browserVersion" value="latest"/>
+        <parameter name="os" value="Windows"/>
         <classes>
             <class name="tests.AutomationPlaygroundTests"/>
-        </classes>
-    </test> <!-- Test -->
-    <test name="chrome tests2">
-        <parameter name="browser" value="chrome"/>
-        <classes>
-            <class name="tests.ExpandTests"/>
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->
