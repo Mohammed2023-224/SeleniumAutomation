@@ -76,6 +76,11 @@ private Waits(){}
      Loggers.getLogger().info("wait for element located at {} to contain text {} for {}", locator,text, FrameworkConfigs.longWait());
     }
 
+    public static void waitForTextToChange(WebDriver driver, By locator,String text){
+        fluentWaitShortTime(driver).until(x-> !x.findElement(locator).getText().contains(text));
+     Loggers.getLogger().info("wait for element located at {} to not have text {} for {}", locator,text, FrameworkConfigs.longWait());
+    }
+
 
     public static void waitForFileToBeDownloaded(WebDriver driver,String path){
         File file = new File(path);
