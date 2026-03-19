@@ -162,7 +162,6 @@
           <artifactId>rest-assured</artifactId>
           <version>${RestAssured.version}</version>
       </dependency>
-
     <!-- https://mvnrepository.com/artifact/com.mailosaur/mailosaur-java -->
     <dependency>
       <groupId>com.mailosaur</groupId>
