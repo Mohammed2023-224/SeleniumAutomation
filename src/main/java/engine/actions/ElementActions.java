@@ -56,19 +56,19 @@ public class ElementActions {
     public static void scrollToElement(WebDriver driver, By locator) {
         Waits.waitToBeClickable(driver,locator);
         actions(driver).scrollToElement(driver.findElement(locator)).perform();
-       Loggers.logInfo("scroll to element located at: {}" , locator);
+       Loggers.logInfo("scroll to element located at: " + locator);
     }
 
     public static void doubleClickElement(WebDriver driver, By locator) {
         Waits.waitToBeClickable(driver,locator);
         actions(driver).doubleClick(driver.findElement(locator)).perform();
-       Loggers.logInfo("double click element located at: {}", locator);
+       Loggers.logInfo("double click element located at: "+ locator);
     }
 
     public static void hoverOverElement(WebDriver driver, By locator) {
         Waits.waitToBeVisible(driver,locator);
         actions(driver).moveToElement(driver.findElement(locator)).perform();
-       Loggers.logInfo("hover over element located at: {}", locator);
+       Loggers.logInfo("hover over element located at: "+ locator);
     }
 
     public static void pressKeyboardKeys(WebDriver driver, By locator, Keys key) {
@@ -106,13 +106,13 @@ public class ElementActions {
 
     public static void switchToFrameByLocator(WebDriver driver, By locator){
         driver.switchTo().frame(driver.findElement(locator));
-     Loggers.logInfo("switch to frame by locator: {}",locator);
+     Loggers.logInfo("switch to frame by locator: "+locator);
     }
 
     public static void contextClickElement(WebDriver driver, By locator){
         Waits.waitToBeVisible(driver,locator);
         new Actions(driver).contextClick(driver.findElement(locator)).perform();
-     Loggers.logInfo("right Clicking element: {}",locator);
+     Loggers.logInfo("right Clicking element: "+locator);
     }
 
     public static void switchToParentFrame(WebDriver driver){
@@ -125,10 +125,10 @@ public class ElementActions {
         try {
             if (!driver.findElements(locator).isEmpty()) {
                 flag = true;
-             Loggers.logInfo("Element located at {} exists",locator);
+             Loggers.logInfo("Element located at "+locator+" exists");
             }
         } catch (Exception e) {
-         Loggers.getLogger().warn("Element located at {} doesn't exist",locator);
+         Loggers.logWarn("Element located at "+locator+" doesn't exist");
         }
         return flag;
     }
@@ -141,7 +141,7 @@ public class ElementActions {
              Loggers.logInfo("Element located at: "+locator+" is visible");
             }
         } catch (Exception e) {
-         Loggers.getLogger().warn("Element located at {} isn't visible",locator);
+         Loggers.logWarn("Element located at "+locator+" isn't visible");
         }
         return flag;
     }
@@ -155,7 +155,7 @@ public class ElementActions {
              Loggers.logInfo("Element located at: "+locator+" is clickable");
             }
         } catch (Exception e) {
-         Loggers.getLogger().warn("Element located at {} isn't clickable",locator);
+         Loggers.logWarn("Element located at "+locator+" isn't clickable");
         }
         return flag;
     }
@@ -165,10 +165,10 @@ public class ElementActions {
         try {
             if (driver.findElement(locator).isSelected()) {
                 flag = true;
-             Loggers.logInfo("Element located at {} is selected",locator );
+             Loggers.logInfo("Element located at "+locator+" is selected");
             }
         } catch (Exception e) {
-         Loggers.getLogger().warn("Element located at {} isn't selected",locator);
+         Loggers.logWarn("Element located at "+locator+" isn't selected");
         }
         return flag;
     }
