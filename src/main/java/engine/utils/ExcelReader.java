@@ -10,11 +10,9 @@ import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-
 public class ExcelReader {
     private static XSSFWorkbook workbook;
     private static XSSFSheet sheet;
-
 
     public  String readSingleCell(String filePath,String sheetName, int rowNum,int colNum) {
         readExcel(filePath);
@@ -33,16 +31,16 @@ public class ExcelReader {
         changeSheet(sheetName);
         int numberOfRowsMeetingCondition=0;
         int conditionColumnNumber=getColumnNumFromHeaderName(colName);
-        Loggers.getLogger().info("condition was found at column number {}", conditionColumnNumber);
+       Loggers.logInfo("condition was found at column number "+ conditionColumnNumber);
         for(int i=1 ;i<getNumberOfRows();i++){
             if(getCellByColumnNumAndRowNum(i,conditionColumnNumber).equalsIgnoreCase(condition)){
-             Loggers.getLogger().debug("Increase rows meeting condition by 1");
+             Loggers.logDebug("Increase rows meeting condition by 1");
                 numberOfRowsMeetingCondition++;
             }
         }
         Object[][] dataObj=new Object[numberOfRowsMeetingCondition][1];
         int num=0;
-     Loggers.getLogger().info("total number of rows meeting condition is {}", numberOfRowsMeetingCondition);
+    Loggers.logInfo("total number of rows meeting condition is "+ numberOfRowsMeetingCondition);
         for (int i=1;i<getNumberOfRows();i++){
             if(getCellByColumnNumAndRowNum(i,conditionColumnNumber).equalsIgnoreCase(condition)){
                 LinkedHashMap<String,String> linkedHashMap=new LinkedHashMap<>();
@@ -50,7 +48,7 @@ public class ExcelReader {
                     String currentKey=getCellByColumnNumAndRowNum(0,j);
                     String currentValue=getCellByColumnNumAndRowNum(i,j);
                     linkedHashMap.put(currentKey,currentValue);
-                   Loggers.getLogger().debug("Read data Key:{} --> Value: {} from row {} and column  {}",currentKey,currentValue,i,j);
+                   Loggers.logDebug("Read data Key:"+currentKey+" --> Value: "+currentValue+" from row "+i+" and column "+j);
                 }
                 dataObj[num++][0]=linkedHashMap;
             }
@@ -69,11 +67,10 @@ public class ExcelReader {
                     String currentKey=getCellByColumnNumAndRowNum(0,j);
                     String currentValue=getCellByColumnNumAndRowNum(i,j);
                     linkedHashMap.put(currentKey,currentValue);
-                   Loggers.getLogger().debug("Read data Key: {} --> Value: {} from row {} and column  {}",currentKey,currentValue,i,j);
+                   Loggers.logDebug("Read data Key: "+currentKey+" --> Value: "+currentValue+" from row "+i+" and column "+j);
                 }
                 dataObj[num++][0]=linkedHashMap;
             }
-
         return dataObj;
     }
 
@@ -91,7 +88,7 @@ public class ExcelReader {
                     String currentKey=getCellByColumnNumAndRowNum(0,j);
                     String currentValue=getCellByColumnNumAndRowNum(i,j);
                  linkedHashMap.put(currentKey,currentValue );
-                   Loggers.getLogger().debug("Read data Key: {} --> Value: {} from row {} and column  {}",currentKey,currentValue,i,j);
+                   Loggers.logDebug("Read data Key: "+currentKey+" --> Value: "+currentValue+" from row "+i+" and column "+j);
                 }
             dataObj[num][0] =referenceCall;
             dataObj[num++][1] =linkedHashMap;
@@ -104,18 +101,18 @@ public class ExcelReader {
         try (
                 FileInputStream file = new FileInputStream(path)) {
             workbook = new XSSFWorkbook(file);
-         Loggers.getLogger().info("Workbook loaded from path: {}", path);
+        Loggers.logInfo("Workbook loaded from path: "+ path);
         } catch (Exception e) {
-         Loggers.getLogger().error("Failed to open workbook at path: {}", path, e);
+        Loggers.logError("Failed to open workbook at path: "+ path+"  " +e);
         }
     }
 
     private static void changeSheet(String sheetName) {
         if (workbook != null) {
             sheet = workbook.getSheet(sheetName);
-         Loggers.getLogger().info("found  sheet {} and changed to it", sheetName);
+        Loggers.logInfo("found  sheet "+sheetName+" and changed to it");
         } else {
-         Loggers.getLogger().error("Can't find sheet {}", sheetName);
+        Loggers.logError("Can't find sheet "+ sheetName);
         }
     }
 
@@ -123,13 +120,13 @@ public class ExcelReader {
         int colNum = getColumnNumFromHeaderName(colName);
         XSSFRow targetRow = sheet.getRow(rowNum);
         if (targetRow == null) {
-         Loggers.getLogger().error("Row {} not found in sheet {}", rowNum, sheet.getSheetName());
+        Loggers.logError("Row "+rowNum+" not found in sheet "+  sheet.getSheetName());
             return "";
         }
         // ✅ EDIT: Null-check for cell
         XSSFCell targetCell = targetRow.getCell(colNum);
         if (targetCell == null) {
-         Loggers.getLogger().error("Cell not found at row {}, column {}", rowNum, colNum);
+        Loggers.logError("Cell not found at row "+rowNum+", column "+ colNum);
             return "";
         }
         return  getCellData(targetCell);
@@ -138,13 +135,13 @@ public class ExcelReader {
     private static String getCellByColumnNumAndRowNum(int rowNum, int colNum) {
         XSSFRow targetRow = sheet.getRow(rowNum);
         if (targetRow == null) {
-         Loggers.getLogger().error("Row {} not found in sheet {}", rowNum, sheet.getSheetName());
+        Loggers.logError("Row "+rowNum+" not found in sheet "+ sheet.getSheetName());
             return "";
         }
 
         XSSFCell targetCell = targetRow.getCell(colNum);
         if (targetCell == null) {
-         Loggers.getLogger().error("Cell not found at row {}, column {}", rowNum, colNum);
+        Loggers.logError("Cell not found at row "+rowNum+", column "+  colNum);
             return "";
         }
         return getCellData(targetCell);
@@ -156,10 +153,9 @@ public class ExcelReader {
                 return i;
             }
         }
-     Loggers.getLogger().error("Couldn't find column header {}", columnName);
+    Loggers.logError("Couldn't find column header "+ columnName);
         return -1;
     }
-
 
     private static int getNumberOfColumnsByHeaders() {
         return sheet.getRow(0).getLastCellNum();
