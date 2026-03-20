@@ -2,6 +2,7 @@ package engine.listeners;
 
 import engine.actions.SystemMethods;
 import engine.constants.FrameworkConfigs;
+import engine.reporters.DynamicLoggers;
 import engine.reporters.Loggers;
 import engine.utils.ClassPathLoading;
 import engine.utils.GmailHandler;
@@ -38,7 +39,7 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
         String fileName = name +"-"+browserName+"-"+timestamp;
         fileName = fileName.replaceAll("[^a-zA-Z0-9\\-_]", "_");
         ThreadContext.put("testLogFileName", fileName); // ✅ thread-local
-        ListenerHelper.addAppenderForTest(fileName);
+        DynamicLoggers.addAppenderForTest(fileName);
      Loggers.logInfo("Start test: "+ result.getName());
     }
 
