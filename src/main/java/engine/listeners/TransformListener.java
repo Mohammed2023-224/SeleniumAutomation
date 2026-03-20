@@ -5,7 +5,6 @@ import engine.utils.PropertyReader;
 import engine.utils.ReadExecutionFlow;
 import org.testng.IAnnotationTransformer;
 import org.testng.annotations.ITestAnnotation;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Set;
@@ -22,10 +21,10 @@ public class TransformListener implements IAnnotationTransformer {
             String testSignature = (className + "." + testMethod.getName()).trim().toLowerCase();
             if (!runningTests.contains(testSignature.toLowerCase())) {
                 annotation.setEnabled(false);
-                Loggers.getLogger().info("⛔ Skipping: {}",  testSignature);
+                Loggers.logInfo("⛔ Skipping: "+  testSignature);
             } else {
                 annotation.setRetryAnalyzer(RetryListener.class);
-                Loggers.getLogger().info("✅ Executing: {}", testSignature);
+                Loggers.logInfo("✅ Executing: "+ testSignature);
             }
         }
     }
