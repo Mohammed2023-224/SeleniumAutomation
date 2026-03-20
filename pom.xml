@@ -164,11 +164,11 @@
           <artifactId>rest-assured</artifactId>
           <version>${RestAssured.version}</version>
       </dependency>
-<!--      <dependency>-->
-<!--          <groupId>com.browserstack</groupId>-->
-<!--          <artifactId>browserstack-java-sdk</artifactId>-->
-<!--          <version>LATEST</version>-->
-<!--      </dependency>-->
+      <dependency>
+          <groupId>com.browserstack</groupId>
+          <artifactId>browserstack-java-sdk</artifactId>
+          <version>LATEST</version>
+      </dependency>
     <!-- https://mvnrepository.com/artifact/com.mailosaur/mailosaur-java -->
     <dependency>
       <groupId>com.mailosaur</groupId>
