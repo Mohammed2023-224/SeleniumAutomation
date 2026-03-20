@@ -15,9 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
 public class TestNgListener implements ITestListener , IExecutionListener ,IInvokedMethodListener {
-
 
     private static final List<String> successfulTests = Collections.synchronizedList(new ArrayList<>());
     private static final List<String> failedTests = Collections.synchronizedList(new ArrayList<>());
@@ -25,7 +23,8 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
     private static final AtomicInteger numberOfSuccessTest = new AtomicInteger(0);
     private static final AtomicInteger numberOfFailedTests = new AtomicInteger(0);
     private static final AtomicInteger numberOfSkippedTests = new AtomicInteger(0);
-static {
+
+    static {
     SystemMethods.deleteDirectory("reports");
     SystemMethods.deleteDirectory("allure-results");
 }
@@ -39,46 +38,54 @@ static {
         String fileName = name +"-"+browserName+"-"+timestamp;
         fileName = fileName.replaceAll("[^a-zA-Z0-9\\-_]", "_");
         ThreadContext.put("testLogFileName", fileName); // ✅ thread-local
-     Loggers.getLogger().info("Start test: {}", result.getName());
-
+        ListenerHelper.addAppenderForTest(fileName);
+     Loggers.logInfo("Start test: "+ result.getName());
     }
+
     @Override
     public void onTestSuccess(ITestResult result) {
      Loggers.getLogger().info("Test succeeded: {}", result.getName());
         numberOfSuccessTest.incrementAndGet();
         successfulTests.add(result.getName());
+        String fileName = ThreadContext.get("testLogFileName");
+        Loggers.cleanupPerTestAppender(fileName);
     }
+
     @Override
     public void onTestFailure(ITestResult result) {
-     Loggers.getLogger().info("Test failed: {}", result.getName());
+     Loggers.logInfo("Test failed: "+ result.getName());
         numberOfFailedTests.incrementAndGet();
         failedTests.add(result.getName());
-
+        String fileName = ThreadContext.get("testLogFileName");
+        Loggers.cleanupPerTestAppender(fileName);
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-     Loggers.getLogger().info("Test skipped: {}", result.getName());
+     Loggers.logInfo("Test skipped: "+ result.getName());
         numberOfSkippedTests.incrementAndGet();
         skippedTests.add(result.getName());
     }
+
     @Override
     public void onStart(ITestContext context) {
     //This method runs when starting tests
     }
+
     @Override
     public void onFinish(ITestContext context) {
      Loggers.getLogger().info("finished Execution");
     }
+
     @Override
     public void onExecutionFinish() {
-     Loggers.getLogger().info("Number of all tests: {}", (numberOfSuccessTest.get()+numberOfFailedTests.get()+numberOfSkippedTests.get()));
-     Loggers.getLogger().info("Number of successful tests: {}", numberOfSuccessTest.get());
-     Loggers.getLogger().info("Name of successful tests: {}", successfulTests);
-     Loggers.getLogger().info("Number of failed tests: {}", numberOfFailedTests.get());
-     Loggers.getLogger().info("Name of failed tests: {}", failedTests);
-     Loggers.getLogger().info("Number of skipped tests: {}", numberOfSkippedTests.get());
-     Loggers.getLogger().info("Name of skipped tests: {}",skippedTests);
+     Loggers.logInfo("Number of all tests: "+ (numberOfSuccessTest.get()+numberOfFailedTests.get()+numberOfSkippedTests.get()));
+     Loggers.logInfo("Number of successful tests: "+ numberOfSuccessTest.get());
+     Loggers.logInfo("Name of successful tests: "+ successfulTests);
+     Loggers.logInfo("Number of failed tests: "+ numberOfFailedTests.get());
+     Loggers.logInfo("Name of failed tests: "+ failedTests);
+     Loggers.logInfo("Number of skipped tests: "+ numberOfSkippedTests.get());
+     Loggers.logInfo("Name of skipped tests: "+skippedTests);
         if(FrameworkConfigs.generateReport()) {
             SystemMethods.runFile(ClassPathLoading.getResourceAsPath("batFiles/generateReport.bat", true).toString());
         }
@@ -88,20 +95,21 @@ static {
                     , FrameworkConfigs.emailBody(), FrameworkConfigs.emailAttachmentPath());
         }
         if (Boolean.TRUE.equals(PropertyReader.get("kill_processes", Boolean.class))) {
-            Loggers.getLogger().info("Test execution finished. cleaning up proccesses...");
+            Loggers.logInfo("Test execution finished. cleaning up proccesses...");
             String portsValue = PropertyReader.get("portsToCloseBeforeFinishingExecution", String.class);
             int[] ports = Arrays.stream(portsValue.split(","))
                     .map(String::trim)
                     .mapToInt(Integer::parseInt)
                     .toArray();
             SystemMethods.killProcessesByPort(ports);
-            Loggers.getLogger().info("Cleanup completed.");
+            Loggers.logInfo("Cleanup completed.");
         }
         if (FrameworkConfigs.openAllure()) {
-            Loggers.getLogger().info("start allure report pls don't stop the execution");
+            Loggers.logInfo("start allure report pls don't stop the execution");
             SystemMethods.runFile(ClassPathLoading.getResourceAsPath("batFiles/serve_allure_report.bat",true).toString());
         }
     }
+
     @Override
     public void onExecutionStart() {
         if(!FrameworkConfigs.localExecution()&&FrameworkConfigs.gridEnabled()){
@@ -110,14 +118,10 @@ static {
         }
     }
 
-
     public static String getBrowserName(WebDriver driver) {
         if (driver instanceof RemoteWebDriver remoteWebDriver) {
             return remoteWebDriver.getCapabilities().getBrowserName().toLowerCase();
         }
         return "unknown";
     }
-
-
 }
-
