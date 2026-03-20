@@ -2,14 +2,10 @@ package engine.listeners;
 
 import engine.reporters.Loggers;
 import io.qameta.allure.Allure;
-
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-
-
 import java.io.*;
-
 
 public class AllureAttachments {
     private AllureAttachments(){}
@@ -17,11 +13,11 @@ public class AllureAttachments {
         Allure.step( "Save text log",()-> {
         try (FileInputStream fis = new FileInputStream(filePath)) {
             Allure.addAttachment(name,fis);
-         Loggers.getLogger().info("attached to report {}", filePath);
+         Loggers.logInfo("attached to report "+ filePath);
         } catch (FileNotFoundException e) {
-         Loggers.getLogger().warn("File can't be found at: {}", filePath);
+         Loggers.logWarn("File can't be found at: "+ filePath);
         } catch (IOException e) {
-            Loggers.getLogger().warn("Failed attaching log file: {}", filePath, e);
+            Loggers.logWarn("Failed attaching log file: "+ filePath+ "  "+ e);
         }
     });
     }
@@ -31,14 +27,12 @@ public class AllureAttachments {
             try {
                 if (driver == null) return;
                 byte[] ss = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-                Loggers.getLogger().info("Screen shot taken");
+                Loggers.logInfo("Screen shot taken");
                 Allure.addAttachment(name, "img/png", new ByteArrayInputStream(ss), ".png");
-                Loggers.getLogger().info("Screen shot attached to report");
-
+                Loggers.logInfo("Screen shot attached to report");
             } catch (Exception e) {
-                Loggers.getLogger().warn("⚠ Unable to capture screenshot for Allure: {}", e.getMessage());
+                Loggers.logWarn("⚠ Unable to capture screenshot for Allure: "+ e.getMessage());
             }
         } );
     }
-
     }
