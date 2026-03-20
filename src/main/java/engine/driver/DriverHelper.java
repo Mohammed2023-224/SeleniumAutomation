@@ -1,7 +1,6 @@
 package engine.driver;
 
 import engine.reporters.Loggers;
-
 import java.net.HttpURLConnection;
 import java.net.URI;
 
@@ -24,7 +23,7 @@ public class DriverHelper {
                 Thread.currentThread().interrupt();
             }
             catch (Exception e)
-            {Loggers.getLogger().error("Not handled error",e);}
+            {Loggers.logError("Not handled error: "+e);}
         }
     }
 }
