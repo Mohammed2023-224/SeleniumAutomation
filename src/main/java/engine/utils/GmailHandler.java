@@ -22,7 +22,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
 import javax.activation.CommandMap;
 import javax.activation.MailcapCommandMap;
 import javax.mail.MessagingException;
@@ -54,21 +53,19 @@ public class GmailHandler {
         try {
             this.service = getGmailService();
         } catch (Exception e) {
-            Loggers.getLogger().error(e);
+            Loggers.logError(e.toString());
         }
-
     }
 
     private  Credential authorize()  {
         // Load credentials.json
         InputStream in = GmailHandler.class.getClassLoader().getResourceAsStream(credentialsFilePath);
         if (in == null) {
-            Loggers.getLogger().error("{} not found in resources folder.",credentialsFilePath);
+            Loggers.logError(credentialsFilePath+" not found in resources folder.");
         }
         GoogleClientSecrets clientSecrets = null;
         FileDataStoreFactory tokenStore = null;
         GoogleAuthorizationCodeFlow flow = null;
-
         try {
             clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(in));
             tokenStore = new FileDataStoreFactory(new File(tokensPath));
@@ -81,17 +78,15 @@ public class GmailHandler {
                     .setAccessType("offline")
                     .build();
         } catch (IOException e) {
-         Loggers.getLogger().error("Error with token file ", e );
+         Loggers.logError("Error with token file "+ e );
         } catch (GeneralSecurityException e) {
-         Loggers.getLogger().warn("gmail security issue ", e );
+         Loggers.logError("gmail security issue "+ e );
         }
-
         try {
             return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
         } catch (IOException e) {
-            Loggers.getLogger().error("Failed to authorize ", e);
+            Loggers.logError("Failed to authorize "+ e);
             return null;
-
         }
     }
 
@@ -105,10 +100,11 @@ public class GmailHandler {
                     .setApplicationName(applicationName)
                     .build();
         } catch (GeneralSecurityException | IOException e) {
-            Loggers.getLogger().error("Failed to fetch API ",e);
+            Loggers.logError("Failed to fetch API "+e);
             return null;
         }
     }
+
     /**
      * * How to write queries
     * From a specific sender	"from:example@gmail.com"
@@ -128,17 +124,15 @@ public class GmailHandler {
                     .setQ(query)
                     .execute();
         } catch (IOException e) {
-         Loggers.getLogger().warn("Failed to fetch messages through API call");
+         Loggers.logWarn("Failed to fetch messages through API call");
         }
         assert response != null;
         List<Message> messages = response.getMessages();
         if (messages == null || messages.isEmpty()) {
-         Loggers.getLogger().warn("No messages found.");
+         Loggers.logWarn("No messages found.");
         }
         return messages;
     }
-
-
 
     public List<Message> readMultipleEmails(int numberOfMessages,  String query){
         List<Message> messages = returnMessages(numberOfMessages, query);
@@ -157,7 +151,6 @@ public class GmailHandler {
         Message fullMessage = null;
         if (messages == null || messages.isEmpty())
             throw new CustomExceptions("Failed to retrieve message");
-
         for (Message message : messages) {
             if(count==id) {
                 fullMessage =getMessage(message.getId());
@@ -182,7 +175,6 @@ public class GmailHandler {
                 }, Objects::nonNull);
     }
 
-
     public String readFullBody(Message message){
         Message fullMessage = null;
         fullMessage =getMessage(message.getId());
@@ -191,8 +183,6 @@ public class GmailHandler {
         String body = extractMessageBody(payload);
         return GmailHandlerUtils.formatHtmlData(body);
     }
-
-
 
     public String readFullSnippet(Message message){
         String snippet ="";
@@ -238,25 +228,25 @@ public class GmailHandler {
             message.setRaw(encodedEmail);
 
             message = service.users().messages().send(currentUser, message).execute();
-         Loggers.getLogger().info("Email sent successfully: {}", message.getId());
+         Loggers.logInfo("Email sent successfully: {}"+ message.getId());
         }catch (GoogleJsonResponseException e) {
             int statusCode = e.getStatusCode();
             String details = e.getDetails() != null ? e.getDetails().getMessage() : "No error details";
             switch (statusCode) {
                 case 403:
-                 Loggers.getLogger().error("Permission denied. Check Gmail scopes and API access: {}", details);
+                 Loggers.logError("Permission denied. Check Gmail scopes and API access: "+ details);
                     break;
                 case 400:
-                 Loggers.getLogger().error("Bad Request - possibly invalid email or message format: {}", details);
+                 Loggers.logError("Bad Request - possibly invalid email or message format: "+ details);
                     break;
                 case 401:
-                 Loggers.getLogger().error("Unauthorized - token may have expired or is invalid: {}", details);
+                 Loggers.logError("Unauthorized - token may have expired or is invalid: "+ details);
                     break;
                 default:
-                 Loggers.getLogger().error("Google API error {}: {}", statusCode, details);
+                 Loggers.logError("Google API error "+statusCode+": "+ details);
             }
         }catch (Exception e) {
-         Loggers.getLogger().error("Failed to send email", e);
+         Loggers.logError("Failed to send email"+ e);
         }
     }
 
@@ -275,7 +265,6 @@ public class GmailHandler {
         }
         return "";
     }
-
 
     private MimeMessage createEmail(String to,String cc, String from, String subject, String bodyText,String attachment) {
         final MailcapCommandMap mc = GmailHandlerUtils.getMailcapCommandMap();
@@ -299,9 +288,9 @@ public class GmailHandler {
             multipart.addBodyPart(attachmentPart);
             email.setContent(multipart);
         } catch (MessagingException e) {
-            Loggers.getLogger().error("Failed to create mail" + e);
+            Loggers.logError("Failed to create mail" + e);
         } catch (IOException e) {
-            Loggers.getLogger().error(e);
+            Loggers.logError(String.valueOf(e));
         }
         return email;
     }
@@ -309,9 +298,8 @@ public class GmailHandler {
         try {
             return service.users().messages().get(currentUser, messageID).execute();
         } catch (IOException e) {
-             Loggers.getLogger().error("Failed to get message "+ e);
+             Loggers.logError("Failed to get message "+ e);
             throw new CustomExceptions("Failed to retrieve message: " + messageID, e);
         }
     }
-
 }
