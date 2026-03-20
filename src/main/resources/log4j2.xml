@@ -25,29 +25,12 @@
             </DefaultRolloverStrategy>
         </RollingFile>
 
-        <Routing name="PerTestRouting">
-            <Routes pattern="${ctx:testLogFileName}">
-                <Route>
-                    <File name="PerTestLog"
-                          fileName="reports/log4j/perTest/${ctx:testLogFileName:-configs}.log"
-                          append="false"
-                          ignoreExceptions="true">
-                        <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-                    </File>
-                </Route>
-            </Routes>
-        </Routing>
     </Appenders>
     <Loggers>
         <Logger level="info" additivity="false" name="All_tests">
             <AppenderRef ref="allTestsLogs"/>
             <AppenderRef ref="console"/>
         </Logger>
-        <Root level="info" additivity="false">
-            <AppenderRef ref="PerTestRouting"/>
-            <AppenderRef ref="allTestsLogs"/>
-            <AppenderRef ref="console"/>
-        </Root>
 
     </Loggers>
 </Configuration>
