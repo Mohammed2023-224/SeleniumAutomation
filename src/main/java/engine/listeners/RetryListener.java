@@ -12,11 +12,10 @@ public class RetryListener implements IRetryAnalyzer {
         int current = retryCount.get();
         if (current < maxRetry) {
             retryCount.set(current + 1);
-            Loggers.getLogger().info("Retry {} for {}", current + 1, result.getName());
+            Loggers.logInfo("Retry "+current + 1+" for "+ result.getName());
             return true;
         }
         retryCount.remove();
         return false;
     }
 }
-
