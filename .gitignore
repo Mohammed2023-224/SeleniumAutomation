@@ -4,6 +4,8 @@ target/
 !**/src/test/**/target/
 
 ### IntelliJ IDEA ###
+.local.log
+*.ajcore*
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
@@ -36,8 +38,13 @@ build/
 allure-results/
 reports/
 allure-report/
+SDKYML/
+logs/
+log/
+downloadables/
 ### VS Code ###
 .vscode/
+
 
 ### Mac OS ###
 .DS_Store
