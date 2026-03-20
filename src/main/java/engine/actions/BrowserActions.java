@@ -3,39 +3,33 @@ package engine.actions;
 import engine.reporters.Loggers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class BrowserActions {
     private BrowserActions(){}
     public static void navigateTo(WebDriver driver, String url) {
-        String logs="Navigated to url: "+ url;
         driver.navigate().to(url);
-       Loggers.getLogger().info(logs);
+       Loggers.logInfo("Navigated to url: "+ url);
     }
     public static void navigateBack(WebDriver driver) {
-        String logs="Navigated to last page";
         driver.navigate().back();
-       Loggers.getLogger().info(logs);
+       Loggers.logInfo("Navigated back to last page");
     }
 
     public static void navigateForward(WebDriver driver) {
-        String logs="Navigated forward";
         driver.navigate().forward();
-       Loggers.getLogger().info(logs);
+       Loggers.logInfo("Navigated forward");
     }
 
     public static void switchIframe(WebDriver driver, By frameLocator) {
-        String log="Switch to iframe located at: "+ frameLocator;
         driver.switchTo().frame(driver.findElement(frameLocator));
-       Loggers.getLogger().info(log);
+       Loggers.logInfo("Switch to iframe located at: "+ frameLocator);
     }
 
     public static void switchParentFrame(WebDriver driver) {
-        String log="Switch to main frame";
         driver.switchTo().parentFrame();
-       Loggers.getLogger().info(log);
+       Loggers.logInfo("Switch to main frame");
     }
 
     public static void switchToWindowByIndex(WebDriver driver, int windowNumber) {
@@ -43,30 +37,23 @@ public class BrowserActions {
         if (windowNumber >= 0 && windowNumber < windows.size()) {
             driver.switchTo().window(windows.get(windowNumber));
         }
-        String log="Switch to windows number: "+ windowNumber;
-       Loggers.getLogger().info(log);
+       Loggers.logInfo("Switch to windows number: "+ windowNumber);
     }
 
     public static void switchToWindowByTitle(WebDriver driver, String title) {
-        String log="";
         ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
         for(String t: windows){
             driver.switchTo().window(t);
             try {
                 if(Objects.requireNonNull(driver.getTitle()).equalsIgnoreCase(title)){
-                    log="Switch to windows titled: "+ title;
+                    Loggers.logInfo("Switch to windows titled: "+ title);
                     break;
                 }
             } catch (NullPointerException e) {
-                throw new NullPointerException();
+                Loggers.logInfo("No windows was found with title "+ title+" so switched to first window");
+                switchToFirstWindow(driver);
             }
-
         }
-        if(log.isEmpty()){
-            log="No windows was found with title "+ title+" so switched to first window ";
-            switchToFirstWindow(driver);
-        }
-       Loggers.getLogger().info(log);
     }
 
     public static void switchToWindowByURL(WebDriver driver, String url) {
@@ -81,20 +68,17 @@ public class BrowserActions {
                 throw new NullPointerException();
             }
         }
-        String log="Switch to windows url: "+ url;
-       Loggers.getLogger().info(log);
+       Loggers.logInfo("Switch to windows url: "+ url);
     }
 
     public static void switchToFirstWindow(WebDriver driver) {
-        String log="Switch to main window";
         ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
-            driver.switchTo().window(windows.get(0));
-       Loggers.getLogger().info(log);
+            driver.switchTo().window(windows.getFirst());
+       Loggers.logInfo("Switch to main window");
     }
 
     public static void acceptAlert(WebDriver driver){
-        String log="Accept existing alert";
         driver.switchTo().alert().accept();
-        Loggers.getLogger().info(log);
+        Loggers.logInfo("Accept existing alert");
     }
 }
