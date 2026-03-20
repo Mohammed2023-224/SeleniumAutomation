@@ -4,8 +4,6 @@ target/
 !**/src/test/**/target/
 
 ### IntelliJ IDEA ###
-.local.log
-*.ajcore*
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
@@ -48,3 +46,7 @@ downloadables/
 
 ### Mac OS ###
 .DS_Store
+/ajcore.*.txt
+/local.log
+/src/main/resources/json/credentials.json
+/src/main/resources/tokens/StoredCredential
