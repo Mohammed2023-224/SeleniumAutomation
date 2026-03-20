@@ -1,13 +1,9 @@
 package engine.utils;
 
-
 import engine.reporters.Loggers;
-
 import java.io.IOException;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
 
 public class PropertyReader {
     private PropertyReader(){}
@@ -40,8 +36,7 @@ public class PropertyReader {
             throw new IllegalArgumentException(
                     "Failed to parse config key '" + key +
                             "' as " + type.getSimpleName() +
-                            " (value=" + value + ")",
-                    e
+                            " (value=" + value + ")", e
             );
         }
         throw new IllegalArgumentException(
@@ -54,15 +49,12 @@ public class PropertyReader {
             if (sysValue != null && !sysValue.isBlank()) {
                 return sysValue;
             }
-
             String fileValue = PropertyHolder.readAllProperties().getProperty(k);
-
             if (fileValue == null) {
                 throw new IllegalStateException(
                         "Missing configuration key: " + k
                 );
             }
-
             return fileValue.trim();
         });
     }
@@ -73,7 +65,6 @@ public class PropertyReader {
 
     private static class PropertyHolder {
         static final Properties PROPERTIES = loadProperties();
-
         private static Properties loadProperties() {
             Properties properties = new Properties();
             String env = System.getProperty("env", "default");
@@ -87,15 +78,13 @@ public class PropertyReader {
                         try {
                             properties.load(is);
                         } catch (IOException e) {
-                            Loggers.getLogger().error("Can't load file ");
+                            Loggers.logInfo("Can't load file");
                         }
                     },".properties"
             );
-
             System.setProperty("readPropertyPath", resourcePaths.toString());
             return properties;
         }
-
 
         public static Properties readAllProperties() {
             return PropertyHolder.PROPERTIES;  // This triggers lazy initialization
@@ -104,7 +93,5 @@ public class PropertyReader {
         public static Properties reedAll() {
             return readAllProperties();
         }
-
-
     }
 }
