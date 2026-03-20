@@ -32,11 +32,11 @@ public class Edge  implements  BrowserDriver{
     // initiate edge driver
     public WebDriver initiateDriver() {
         setLocalDriver();
-     Loggers.getLogger().info("Start edge driver ");
+     Loggers.logInfo("Start edge driver");
         return new EdgeDriver(getDriverOptions());
     }
     public WebDriver initiateRemoteDriver(String proxyURl, Map<String,Object> caps) {
-     Loggers.getLogger().info("Start edge on remote driver port: {}",proxyURl);
+     Loggers.logInfo("Start edge on remote driver port: "+proxyURl);
         try {
             EdgeOptions options=getDriverOptions();
             if(!caps.isEmpty()) {caps.forEach(options::setCapability);}
@@ -44,13 +44,14 @@ public class Edge  implements  BrowserDriver{
             remoteWebDriver.setFileDetector(new LocalFileDetector());
             return remoteWebDriver;
         } catch (MalformedURLException e) {
-            Loggers.getLogger().error("Malformed URl ",e);
+            Loggers.logError("Malformed URl "+e);
             return null;
         } catch (URISyntaxException e) {
-            Loggers.getLogger().error("syntax error URl ",e);
+            Loggers.logError("syntax error URl "+e);
             return null;
         }
     }
+
     private void setLocalDriver(){
         if(FrameworkConfigs.localPathDriver()){
             String localEdgePath="webdriver.edge.driver";
@@ -61,9 +62,8 @@ public class Edge  implements  BrowserDriver{
             else {
                 System.setProperty(localEdgePath, FrameworkConfigs.edgeLocalDriverPath());
             }
-            Loggers.getLogger().info("Edge driver is found at path: {}",
-                    System.getProperty(localEdgePath).isEmpty()?"test log":System.getProperty(localEdgePath));
-
+            Loggers.logInfo("Edge driver is found at path: "+
+                    (System.getProperty(localEdgePath).isEmpty()?"test log":System.getProperty(localEdgePath)));
         }
     }
 }
