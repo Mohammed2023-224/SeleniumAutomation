@@ -30,7 +30,7 @@ public class ClassPathLoading {
             ClassLoader cl = Thread.currentThread().getContextClassLoader();
             URL url = cl.getResource(resourcePath);
             if (url == null) {
-                Loggers.getLogger().error("resource doesn't exist");
+               Loggers.logError("resource doesn't exist");
             }
 
             assert url != null;
@@ -41,10 +41,10 @@ public class ClassPathLoading {
             if ("file".equals(url.getProtocol())) {
                 return extractFromFilePath(url,executable);
             }
-            Loggers.getLogger().error("Unsupported protocol: " + url.getProtocol());
+           Loggers.logError("Unsupported protocol: " + url.getProtocol());
             return  null;
         } catch (Exception e) {
-            Loggers.getLogger().error("Failed to load resource: " + resourcePath, e);
+           Loggers.logError("Failed to load resource: " + resourcePath+"  "+ e);
             return  null;
         }
     }
@@ -55,30 +55,30 @@ public class ClassPathLoading {
         try {
             temp = Files.createTempFile(resourcePath.replace('/', '_'), suffix);
         } catch (IOException e) {
-            Loggers.getLogger().error("Can't read jar file",e);
+           Loggers.logError("Can't read jar file "+e);
             return null;
         }
-
             try (InputStream in = url.openStream()) {
                 Files.copy(in, temp, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
-                Loggers.getLogger().error("Can't read jar file",e);
+               Loggers.logError("Can't read jar file "+e);
         }
         if(Boolean.TRUE.equals(executable))       {
-            Loggers.getLogger().info("set file executable to true {}",temp.toFile().setExecutable(true));}
+           Loggers.logInfo("set file executable to "+temp.toFile().setExecutable(true));}
         temp.toFile().deleteOnExit();
         return temp;
     }
+
     private static Path extractFromFilePath(URL url,Boolean executable)  {
         Path driverPath = null;
         try {
             driverPath = Paths.get(url.toURI());
         } catch (URISyntaxException e) {
-            Loggers.getLogger().error("Can't read file",e);
+           Loggers.logError("Can't read file "+e);
             return null;
         }
         if(Boolean.TRUE.equals(executable)) {
-        Loggers.getLogger().info("set file executable to true {}",driverPath.toFile().setExecutable(true));}
+       Loggers.logInfo("set file executable to "+driverPath.toFile().setExecutable(true));}
         return driverPath;
     }
 
@@ -112,7 +112,7 @@ public class ClassPathLoading {
                 }
 
             } catch (IOException e) {
-                Loggers.getLogger().error("Failed scanning classpath: " + basePath, e);
+               Loggers.logError("Failed scanning classpath: " + basePath+"  " +e);
             }
         }
     }
@@ -127,13 +127,13 @@ public class ClassPathLoading {
                             try (InputStream is = Files.newInputStream(p)) {
                                 consumer.accept(is);
                             } catch (IOException e) {
-                                Loggers.getLogger().error("Can't load directory",e);
+                               Loggers.logError("Can't load directory "+e);
                             }
                         });
             }
 
         } catch (Exception e) {
-            Loggers.getLogger().error("Can't find directory",e);
+           Loggers.logError("Can't find directory "+e);
         }
     }
 
@@ -143,10 +143,8 @@ public class ClassPathLoading {
         String jarPath = dirUrl.getPath().substring(5, dirUrl.getPath().indexOf("!"));
         String baseEntry = dirUrl.getPath()
                 .substring(dirUrl.getPath().indexOf("!") + 2);
-
         try (JarFile jar = new JarFile(
                 URLDecoder.decode(jarPath, StandardCharsets.UTF_8))) {
-
             jar.stream()
                     .filter(e -> !e.isDirectory())
                     .filter(e -> e.getName().startsWith(baseEntry))
@@ -155,7 +153,7 @@ public class ClassPathLoading {
                         try (InputStream is = jar.getInputStream(e)) {
                             consumer.accept(is);
                         } catch (IOException ex) {
-                            Loggers.getLogger().error("Can't load directory",ex);
+                           Loggers.logError("Can't load directory "+ex);
                         }
                     });
         }
