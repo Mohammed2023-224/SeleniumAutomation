@@ -2,7 +2,6 @@ package engine.actions;
 
 import engine.reporters.Loggers;
 import org.apache.commons.io.FileUtils;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,40 +14,40 @@ import java.util.concurrent.ExecutionException;
 
 public class SystemMethods {
     private static final List<Process> runningProcesses = Collections.synchronizedList(new ArrayList<>());
-private SystemMethods(){}
+
+    private SystemMethods(){}
+
     public static void deleteDirectory(String path) {
         File directory = new File(path);
         try {
             FileUtils.deleteDirectory(directory);
-         Loggers.getLogger().info("Deleted the directory {}", path);
+         Loggers.logInfo("Deleted the directory "+ path);
         } catch (Exception e) {
-         Loggers.getLogger().info("Couldn't delete directory {}", path);
+         Loggers.logInfo("Couldn't delete directory "+ path);
         }
     }
 
     public static void deleteFile(String path) {
         File file = new File(path);
         if (!file.exists()) {
-         Loggers.getLogger().warn("File does not exist: {}", path);
+         Loggers.logWarn("File does not exist: "+ path);
             return;
         }
         try {
             FileUtils.delete(file);
-         Loggers.getLogger().info("Deleted the file: {}", path);
+         Loggers.logInfo("Deleted the file: "+ path);
         } catch (Exception e) {
-         Loggers.getLogger().error("Couldn't delete file: {}.", path);
+         Loggers.logError("Couldn't delete file: "+ path);
         }
     }
     public static Process startBatAsync(String batPath) {
         CompletableFuture<Process> future = new CompletableFuture<>();
-
         new Thread(() -> {
             try {
                 File batFile = new File(batPath);
                 ProcessBuilder builder = new ProcessBuilder("Cmd.exe", "/c", batFile.getAbsolutePath());
                 builder.directory(batFile.getParentFile());
                 builder.inheritIO();
-
                 Process process = builder.start();
                 runningProcesses.add(process);
                 future.complete(process);
@@ -56,27 +55,24 @@ private SystemMethods(){}
                 future.completeExceptionally(e);
             }
         }).start();
-
         try {
             return future.get();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            Loggers.getLogger().error("Interrupted while starting process", e);
+            Loggers.logError("Interrupted while starting process "+ e);
             return null;
         } catch (ExecutionException e) {
-            Loggers.getLogger().error("Failed to start process: " + batPath, e);
+            Loggers.logError("Failed to start process: " + batPath+"  "+ e);
             return null;
         }
     }
     public static void killProcessesByPort(int... ports) {
         try {
             for (int port : ports) {
-                // Find PID using port
                 ProcessBuilder findPid = new ProcessBuilder(
                         "cmd.exe", "/c",
                         "netstat -ano | findstr :" + port + " | findstr LISTENING"
                 );
-
                 Process process = findPid.start();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String line;
@@ -84,24 +80,21 @@ private SystemMethods(){}
                     if (line.contains("LISTENING")) {
                         String[] parts = line.trim().split("\\s+");
                         String pid = parts[parts.length - 1];
-
-                        // Kill the process
                         ProcessBuilder killPb = new ProcessBuilder("taskkill", "/F", "/PID", pid);
                         killPb.start();
-                        Loggers.getLogger().info("Killed process {} using port {}",pid,  port);
+                        Loggers.logInfo("Killed process "+pid+" using port "+ port);
                     }
                 }
                 process.waitFor();
             }
         }
         catch (InterruptedException ee){
-            Loggers.getLogger().warn(" Interrupted thread");
+            Loggers.logWarn("Interrupted thread");
             Thread.currentThread().interrupt();
         }catch (Exception e) {
-            Loggers.getLogger().error("Error killing processes by port: " + e.getMessage());
+            Loggers.logError("Error killing processes by port: " + e.getMessage());
         }
     }
-
 
     public static void runFile(String path) {
         File file = new File(path);
@@ -114,26 +107,26 @@ private SystemMethods(){}
                         new InputStreamReader(process.getInputStream()))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
-                        Loggers.getLogger().info(line);
+                        Loggers.logInfo(line);
                     }
                 }
                  process.waitFor();
-             Loggers.getLogger().info("File executed: {}", path);
+             Loggers.logInfo("File executed: "+ path);
             } catch (IOException e) {
-             Loggers.getLogger().warn("File isn't executed: {}", path);
+             Loggers.logWarn("File isn't executed: "+ path);
             }
             catch (InterruptedException ee){
-                Loggers.getLogger().warn(" Interrupted thread");
+                Loggers.logWarn("Interrupted thread");
                 Thread.currentThread().interrupt();
             }
         } else {
-         Loggers.getLogger().info("File {} isn't executable type", path);
+         Loggers.logInfo("File "+path+" isn't executable type");
         }
     }
 
     public static boolean checkExistenceOfFile(String path) {
         File file = new File(path);
-     Loggers.getLogger().info("Check if file exists {}", file.exists());
+     Loggers.logInfo("Check if file exists "+ file.exists());
         return file.exists();
     }
 
@@ -143,10 +136,9 @@ private SystemMethods(){}
         try {
             lines = String.valueOf(Files.readAllLines(pth));
         } catch (IOException ex) {
-         Loggers.getLogger().error("Error reading file: {}", ex.getMessage());
+         Loggers.logError("Error reading file: "+ ex.getMessage());
         }
-     Loggers.getLogger().info("Get file contents: {}", lines);
+     Loggers.logInfo("Get file contents: "+ lines);
         return lines;
     }
-
 }
