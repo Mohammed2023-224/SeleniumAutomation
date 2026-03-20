@@ -26,20 +26,18 @@ public class Chrome implements  BrowserDriver{
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments(new ArrayList<>(driverOptions.defineDriverOptions()));
         chromeOptions.setExperimentalOption("prefs",driverOptions.definePreferences());
-
         return chromeOptions;
     }
 
     // initiate chrome driver
     public WebDriver initiateDriver() {
         setLocalDriver();
-        Loggers.getLogger().info("Start chrome driver " );
+        Loggers.logInfo("Start chrome driver " );
         return new ChromeDriver(getDriverOptions());
     }
 
-
     public WebDriver initiateRemoteDriver(String proxyURl, Map<String,Object> caps) {
-     Loggers.getLogger().info("Start chrome on remote driver port: {}",proxyURl);
+     Loggers.logInfo("Start chrome on remote driver port: "+proxyURl);
         try {
             ChromeOptions options=getDriverOptions();
             if(!caps.isEmpty()) {caps.forEach(options::setCapability);}
@@ -47,13 +45,12 @@ public class Chrome implements  BrowserDriver{
             remoteWebDriver.setFileDetector(new LocalFileDetector());
             return remoteWebDriver;
         } catch (MalformedURLException e) {
-            Loggers.getLogger().error("Malformed URl ",e);
+            Loggers.logError("Malformed URl "+e);
             return null;
         } catch (URISyntaxException e) {
-            Loggers.getLogger().error("syntax error URl ",e);
+            Loggers.logError("syntax error URl "+e);
             return null;
         }
-
     }
 
     private void setLocalDriver() {
@@ -66,9 +63,8 @@ public class Chrome implements  BrowserDriver{
             else {
                 System.setProperty(webDriverPropertyPath, FrameworkConfigs.chromeLocalDriverPath());
             }
-            Loggers.getLogger().info("chrome driver is found at path: {}" ,
-                    System.getProperty(webDriverPropertyPath).isEmpty()?"test log":System.getProperty(webDriverPropertyPath));
-
+            Loggers.logInfo("chrome driver is found at path: " +
+                    (System.getProperty(webDriverPropertyPath).isEmpty()?"test log":System.getProperty(webDriverPropertyPath)));
         }
     }
 }
