@@ -24,20 +24,18 @@ public class FireFox implements  BrowserDriver{
         DriverOptions driverOptions = new DriverOptions();
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.addArguments(new ArrayList<>(driverOptions.defineDriverOptions()));
-
         return firefoxOptions;
     }
 
     // initiate chrome driver
     public WebDriver initiateDriver() {
         setLocalDriver();
-        Loggers.getLogger().info("Start fire fox driver " );
+        Loggers.logInfo("Start fire fox driver");
         return new FirefoxDriver(getDriverOptions());
     }
 
-
     public WebDriver initiateRemoteDriver(String proxyURl, Map<String,Object> caps) {
-     Loggers.getLogger().info("Start firefox on remote driver port: {}",proxyURl);
+     Loggers.logInfo("Start firefox on remote driver port: "+proxyURl);
         try {
             FirefoxOptions options=getDriverOptions();
             if(!caps.isEmpty()) {caps.forEach(options::setCapability);}
@@ -45,13 +43,12 @@ public class FireFox implements  BrowserDriver{
             remoteWebDriver.setFileDetector(new LocalFileDetector());
             return remoteWebDriver;
         } catch (MalformedURLException e) {
-            Loggers.getLogger().error("Malformed URl ",e);
+            Loggers.logError("Malformed URl "+e);
             return null;
         } catch (URISyntaxException e) {
-            Loggers.getLogger().error("syntax error URl ",e);
+            Loggers.logError("syntax error URl "+e);
             return null;
         }
-
     }
 
     private void setLocalDriver() {
@@ -65,9 +62,8 @@ public class FireFox implements  BrowserDriver{
             else {
                 System.setProperty(webDriverPropertyPath, FrameworkConfigs.chromeLocalDriverPath());
             }
-            Loggers.getLogger().info("gecko driver is found at path: {}" ,
-                    System.getProperty(webDriverPropertyPath).isEmpty()?"test log":System.getProperty(webDriverPropertyPath));
-
+            Loggers.logInfo("gecko driver is found at path: {}" +
+                    (System.getProperty(webDriverPropertyPath).isEmpty()?"test log":System.getProperty(webDriverPropertyPath)));
         }
     }
 }
