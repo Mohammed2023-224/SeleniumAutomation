@@ -16,9 +16,9 @@ public class APIHelpers {
         try {
             if (data instanceof Number n) return n.intValue();
             if (data instanceof String s) return Integer.parseInt(s.trim());
-            Loggers.getLogger().warn("Cannot convert type [{}] to int; returning default {}", data.getClass(), defaultValue);
+            Loggers.logWarn("Cannot convert type ["+data.getClass()+"] to int; returning default "+ defaultValue);
         } catch (NumberFormatException ex) {
-            Loggers.getLogger().warn("Failed to parse integer from [{}]; returning default {}", data, defaultValue);
+            Loggers.logWarn("Failed to parse integer from ["+data+"]; returning default "+ defaultValue);
         }
         return defaultValue;
 
@@ -71,7 +71,7 @@ public class APIHelpers {
         }
 
         catch (InterruptedException | ExecutionException e) {
-                Loggers.getLogger().warn(" Interrupted thread");
+                Loggers.logWarn(" Interrupted thread");
                 Thread.currentThread().interrupt();
         }
         return response;
