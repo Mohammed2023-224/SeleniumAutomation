@@ -27,5 +27,8 @@ public class TransformListener implements IAnnotationTransformer {
                 Loggers.logInfo("✅ Executing: "+ testSignature);
             }
         }
+        else{
+            annotation.setRetryAnalyzer(RetryListener.class);
+        }
     }
 }
