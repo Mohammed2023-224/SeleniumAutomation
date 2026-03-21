@@ -27,17 +27,6 @@ private Loggers(){}
         Configurator.initialize(null,newPath);
     }
 
-    public static Logger getLogger() {
-        if (logger == null) {
-            boolean perTestLog = FrameworkConfigs.perTestLog();
-            logger = (Logger) (perTestLog ? LogManager.getRootLogger() : LogManager.getLogger("All_tests"));
-            logInfo("Initialized logger where per test logger is "+ perTestLog);
-            logInfo("Read all property files found at path {} where properties inside folders override outside properties"+
-                    (System.getProperty("readPropertyPath").isEmpty()?"Unknown env":System.getProperty("readPropertyPath")));
-        }
-        return logger;
-    }
-
     public static void logInfo(String info){
         allTestlogger.info(info);
         String testFileName = ThreadContext.get("testLogFileName");
