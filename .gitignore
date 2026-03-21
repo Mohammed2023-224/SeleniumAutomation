@@ -39,7 +39,6 @@ allure-report/
 SDKYML/
 logs/
 log/
-downloadables/
 ### VS Code ###
 .vscode/
 
