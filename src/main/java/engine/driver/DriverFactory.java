@@ -6,7 +6,7 @@ public class DriverFactory {
     private DriverFactory(){}
     private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
-    public static WebDriver getDriver()  {
+    public static WebDriver getDriver() {
         return driver.get();
     }
 
