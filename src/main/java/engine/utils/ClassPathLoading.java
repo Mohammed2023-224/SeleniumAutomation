@@ -30,7 +30,7 @@ public class ClassPathLoading {
             ClassLoader cl = Thread.currentThread().getContextClassLoader();
             URL url = cl.getResource(resourcePath);
             if (url == null) {
-               Loggers.logError("resource doesn't exist");
+               Loggers.logError("resource doesn't exist at path "+resourcePath);
             }
 
             assert url != null;
