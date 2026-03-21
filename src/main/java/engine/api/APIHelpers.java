@@ -32,22 +32,22 @@ public class APIHelpers {
             return switch (type) {
                 case BASIC -> {
                     guardAuthorization(parts, 2);
-                    Loggers.getLogger().info("Setting BASIC authorization for user [{}]", parts[0]);
+                    Loggers.logInfo("Setting BASIC authorization for user "+ parts[0]);
                     yield RestAssured.preemptive().basic(parts[0], parts[1]);
                 }
                 case BEARER -> {
                     guardAuthorization(parts, 1);
-                    Loggers.getLogger().info("Setting BEARER authorization");
+                    Loggers.logInfo("Setting BEARER authorization");
                     yield RestAssured.oauth2(parts[0]);
                 }
                 case DIGEST -> {
                     guardAuthorization(parts, 2);
-                    Loggers.getLogger().info("Setting DIGEST authorization for user [{}]", parts[0]);
+                    Loggers.logInfo("Setting DIGEST authorization for user "+ parts[0]);
                     yield RestAssured.digest(parts[0], parts[1]);
                 }
                 case OAUTH1 -> {
                     guardAuthorization(parts, 4);
-                    Loggers.getLogger().info("Setting OAUTH1 authorization ");
+                    Loggers.logInfo("Setting OAUTH1 authorization ");
                     yield RestAssured.oauth(parts[0], parts[1], parts[2], parts[3]);
                 }
             }; }
@@ -67,7 +67,7 @@ public class APIHelpers {
         Response response = null;
         try {
             response = res.get();
-            Loggers.getLogger().info("Cast future response into response type");
+            Loggers.logInfo("Cast future response into response type");
         }
 
         catch (InterruptedException | ExecutionException e) {

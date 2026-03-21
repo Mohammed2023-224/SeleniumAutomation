@@ -17,21 +17,21 @@ public class Waits {
 private Waits(){}
     public static void implicitWait(WebDriver driver, int time){
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(time));
-     Loggers.getLogger().info("Add implicit wait by {} seconds", time);
+     Loggers.logInfo("Add implicit wait by "+ time+" seconds");
     }
     public static void waitForAlert(WebDriver driver,int time){
         explicitWaitShortTime(driver).until(ExpectedConditions.alertIsPresent());
-     Loggers.getLogger().info("Waited for alert to be present for [{}]",time);
+     Loggers.logInfo("Waited for alert to be present for ["+ time+"]");
     }
     public static WebDriverWait explicitWaitLongTime(WebDriver driver){
         WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(FrameworkConfigs.shortWait()));
-     Loggers.getLogger().info(" explicit wait for {} sec" , FrameworkConfigs.shortWait());
+     Loggers.logInfo(" explicit wait for "+FrameworkConfigs.shortWait()+" sec" );
         return wait;
     }
 
     public static WebDriverWait explicitWaitShortTime(WebDriver driver){
         WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(FrameworkConfigs.shortWait()));
-     Loggers.getLogger().info(" explicit wait for {} seconds" , FrameworkConfigs.shortWait());
+     Loggers.logInfo(" explicit wait for "+FrameworkConfigs.shortWait()+" seconds" );
         return wait;
     }
 
@@ -48,44 +48,44 @@ private Waits(){}
 
     public static void waitToBeVisible(WebDriver driver, By locator ){
             explicitWaitLongTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locator));
-         Loggers.getLogger().info("wait for element located at {}} to be visible for {}", locator,FrameworkConfigs.longWait());
+         Loggers.logInfo("wait for element located at "+locator+" to be visible for "+FrameworkConfigs.longWait());
 
     }
 
     public static void waitToBeInvisible(WebDriver driver, By locator ){
             explicitWaitLongTime(driver).until(ExpectedConditions.invisibilityOfElementLocated(locator));
-         Loggers.getLogger().info("wait for element located at {} to be invisible for {}", locator, FrameworkConfigs.longWait());
+         Loggers.logInfo("wait for element located at "+locator+" to be invisible for "+ FrameworkConfigs.longWait());
 
     }
 
 
     public static void waitToBeClickable(WebDriver driver, By locator  ) {
             explicitWaitLongTime(driver).until(ExpectedConditions.elementToBeClickable(locator));
-            Loggers.getLogger().info("wait for element located at {} to be clickable for {}" ,locator, FrameworkConfigs.longWait());
+            Loggers.logInfo("wait for element located at "+locator+" to be clickable for " + FrameworkConfigs.longWait());
     }
 
 
     public static void waitToExist(WebDriver driver, By locator){
             explicitWaitLongTime(driver).until(ExpectedConditions.presenceOfElementLocated(locator));
-         Loggers.getLogger().info("wait for element located at {} to exist for {}", locator, FrameworkConfigs.longWait());
+         Loggers.logInfo("wait for element located at "+locator+" to exist for "+ FrameworkConfigs.longWait());
 
     }
 
     public static void waitElementToContainText(WebDriver driver, By locator,String text){
         explicitWaitLongTime(driver).until(x-> x.findElement(locator).getText().contains(text));
-     Loggers.getLogger().info("wait for element located at {} to contain text {} for {}", locator,text, FrameworkConfigs.longWait());
+     Loggers.logInfo("wait for element located at "+locator+" to contain text "+text+" for "+ FrameworkConfigs.longWait());
     }
 
     public static void waitForTextToChange(WebDriver driver, By locator,String text){
         fluentWaitShortTime(driver).until(x-> !x.findElement(locator).getText().contains(text));
-     Loggers.getLogger().info("wait for element located at {} to not have text {} for {}", locator,text, FrameworkConfigs.longWait());
+     Loggers.logInfo("wait for element located at "+locator+" to not have text "+text+" for "+ FrameworkConfigs.longWait());
     }
 
 
     public static void waitForFileToBeDownloaded(WebDriver driver,String path){
         File file = new File(path);
             explicitWaitLongTime(driver).until(x ->file.exists() && file.canRead());
-         Loggers.getLogger().info("Waited for file [{}] to appear for [{}]",path, FrameworkConfigs.longWait());
+         Loggers.logInfo("Waited for file ["+path+"] to appear for "+ FrameworkConfigs.longWait());
     }
 
 }

@@ -19,7 +19,7 @@ public class HTTPActions {
             this.url = URI.create(url).toURL();
             this.connection = (HttpURLConnection) this.url.openConnection();
         } catch (Exception e) {
-            Loggers.getLogger().error("Failed to create HTTP connection");
+            Loggers.logError("Failed to create HTTP connection");
         }
     }
 
@@ -27,7 +27,7 @@ public class HTTPActions {
         try {
             connection.setRequestMethod(method);
         } catch (ProtocolException e) {
-            Loggers.getLogger().error("Failed to set HTTP method");
+            Loggers.logError("Failed to set HTTP method");
         }
         return this;
     }
@@ -42,7 +42,7 @@ public class HTTPActions {
         try {
              connection.connect();
         } catch (IOException e) {
-            Loggers.getLogger().error("Failed to connect");
+            Loggers.logError("Failed to connect");
         }
         return this;
     }
@@ -60,7 +60,7 @@ public class HTTPActions {
         try {
             resCode=connection.getResponseCode();
         } catch (IOException e) {
-            Loggers.getLogger().error("Failed to get response code");
+            Loggers.logError("Failed to get response code");
         }
         return resCode;
     }
@@ -71,7 +71,7 @@ public class HTTPActions {
             try {
                 return connection.getErrorStream();
             } catch (Exception ex) {
-                Loggers.getLogger().error("Not handled error ",ex);
+                Loggers.logError("Not handled error "+ex);
                 return null;
             }
         }

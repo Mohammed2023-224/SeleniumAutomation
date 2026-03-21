@@ -24,13 +24,13 @@ public class DevToolsActions {
             devTools = ((EdgeDriver) driver).getDevTools();
         }
         else {
-            Loggers.getLogger().error("Couldn't initiate devtools actions");
+            Loggers.logError("Couldn't initiate devtools actions");
         }
     }
 
     public DevToolsActions  createSession(){
         devTools.createSession();
-        Loggers.getLogger().info("Create devtools session");
+        Loggers.logInfo("Create devtools session");
         return this;
     }
 
@@ -38,7 +38,7 @@ public class DevToolsActions {
         devTools.send(Page.setDownloadBehavior(
                 Page.SetDownloadBehaviorBehavior.ALLOW,  //
                 Optional.of(filePath)));
-        Loggers.getLogger().info("set file Download Path at: {}", filePath);
+        Loggers.logInfo("set file Download Path at: "+ filePath);
 
     }
 
@@ -49,7 +49,7 @@ public class DevToolsActions {
         headers.put("Authorization", "Basic " + basicAuth);
         devTools.send(Network.enable(Optional.empty(),Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
         devTools.send(Network.setExtraHTTPHeaders(new Headers(headers)));
-        Loggers.getLogger().info("add basic auth headers through dev tools as user name: {} password: {}",username, password);
+        Loggers.logInfo("add basic auth headers through dev tools as user name: "+username+" password: "+ password);
 
     }
 }

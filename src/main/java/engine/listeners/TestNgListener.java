@@ -45,7 +45,7 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
 
     @Override
     public void onTestSuccess(ITestResult result) {
-     Loggers.getLogger().info("Test succeeded: {}", result.getName());
+     Loggers.logInfo("Test succeeded: "+ result.getName());
         numberOfSuccessTest.incrementAndGet();
         successfulTests.add(result.getName());
         String fileName = ThreadContext.get("testLogFileName");
@@ -75,7 +75,7 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
 
     @Override
     public void onFinish(ITestContext context) {
-     Loggers.getLogger().info("finished Execution");
+     Loggers.logInfo("finished Execution");
     }
 
     @Override

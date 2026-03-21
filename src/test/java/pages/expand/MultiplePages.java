@@ -89,7 +89,7 @@ public class MultiplePages extends HomePage {
                         return lastHeight != newHeight.get();
                     });
                 } catch (Exception e) {
-                 Loggers.getLogger().info("Reached the end of the page");
+                 Loggers.logInfo("Reached the end of the page");
                 }
                 // Break if no new content is loaded
                 if (newHeight.get() == lastHeight) {

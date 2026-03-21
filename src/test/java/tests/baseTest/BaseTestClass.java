@@ -67,13 +67,13 @@ public class BaseTestClass {
                 if ( isBlank) {
                     validTab = handle;
                 } else if (isEdgeDownloader) {
-                 Loggers.getLogger().info("edge download tab can't be closed");
+                 Loggers.logInfo("edge download tab can't be closed");
                 } else {
                     driver.close();
                 }
 
             } catch (Exception e) {
-             Loggers.getLogger().info("Error handling tab: " + e.getMessage());
+             Loggers.logInfo("Error handling tab: " + e.getMessage());
             }
         }
         Assert.assertNotNull(validTab);

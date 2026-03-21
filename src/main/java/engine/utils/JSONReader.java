@@ -16,7 +16,7 @@ public class JSONReader {
 
     public static <T> T deserializeJson(String file, Class<T> classType) {
         try {
-            Loggers.getLogger().info("Deserializing JSON file: {}", file);
+            Loggers.logInfo("Deserializing JSON file: "+ file);
             return objectMapper.readValue(new File(file), classType);
         } catch (IOException e) {
             throw  new CustomExceptions("Failed to read JSON array from " + file, e);        }
@@ -24,7 +24,7 @@ public class JSONReader {
 
     public static <T> List<T> deserializeJsonArray(String file, Class<T> classType) {
         try {
-            Loggers.getLogger().info("Deserializing JSON array file: {}", file);
+            Loggers.logInfo("Deserializing JSON array file: "+ file);
             JavaType type = objectMapper.getTypeFactory()
                     .constructCollectionType(List.class, classType);
             return objectMapper.readValue(new File(file), type);

@@ -31,7 +31,7 @@ public class EmailHandler {
                 }
             }
         } catch (IOException | MailosaurException e) {
-            Loggers.getLogger().error("Couldn't get server ID",e);
+            Loggers.logError("Couldn't get server ID "+e);
         }
         return serverID;
     }
@@ -69,7 +69,7 @@ public class EmailHandler {
         try {
             return  mailosaur.messages().list(addMessageListSearchParams());
         } catch (IOException | MailosaurException e) {
-            Loggers.getLogger().error("Couldn't get all mails",e);
+            Loggers.logError("Couldn't get all mails "+e);
             return null;
         }
     }
@@ -78,7 +78,7 @@ public class EmailHandler {
         try {
             return  mailosaur.messages().search(addMessageSearchParams(),addSearchCriteria(sentTo,sentFrom,subject,body));
         } catch (IOException | MailosaurException e) {
-            Loggers.getLogger().error("Couldn't get all mails",e);
+            Loggers.logError("Couldn't get all mails "+e);
             return null;
         }
     }
@@ -87,7 +87,7 @@ public class EmailHandler {
         try {
             return mailosaur.messages().get(addMessageSearchParams(),addSearchCriteria(sentTo,sentFrom,subject,body));
         } catch (IOException | MailosaurException e) {
-            Loggers.getLogger().error("Couldn't get latest mails",e);
+            Loggers.logError("Couldn't get latest mails "+e);
             return null;
         }
     }
