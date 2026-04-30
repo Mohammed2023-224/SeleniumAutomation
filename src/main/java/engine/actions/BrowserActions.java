@@ -3,7 +3,10 @@ package engine.actions;
 import engine.reporters.Loggers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class BrowserActions {
@@ -80,5 +83,33 @@ public class BrowserActions {
     public static void acceptAlert(WebDriver driver){
         driver.switchTo().alert().accept();
         Loggers.logInfo("Accept existing alert");
+    }
+
+    public static void startNewTab(WebDriver driver){
+        if (driver==null) return;
+        JSActions.executeScript(driver,"window.open();");
+        List<String> handles = new ArrayList<>(driver.getWindowHandles());
+        String validTab = null;
+        for (String handle : handles) {
+            try {
+                driver.switchTo().window(handle);
+                String url = driver.getCurrentUrl();
+                Assert.assertNotNull(url);
+                boolean isEdgeDownloader = url.toLowerCase().contains("edge://");
+                boolean isBlank = url.equals("about:blank");
+                if ( isBlank) {
+                    validTab = handle;
+                } else if (isEdgeDownloader) {
+                    Loggers.logInfo("edge download tab can't be closed");
+                } else {
+                    driver.close();
+                }
+
+            } catch (Exception e) {
+                Loggers.logInfo("Error handling tab: " + e.getMessage());
+            }
+        }
+        Assert.assertNotNull(validTab);
+        driver.switchTo().window(validTab);
     }
 }
