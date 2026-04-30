@@ -44,6 +44,10 @@ private Waits(){}
                     .ignoring(TimeoutException.class).ignoring(StaleElementReferenceException.class);
     }
 
+    public static FluentWait<WebDriver> fluentWaitCustomTime(WebDriver driver,int time){
+        return new FluentWait<>(driver).withTimeout(Duration.ofSeconds(time)).pollingEvery(Duration.ofSeconds(1))
+                .ignoring(TimeoutException.class).ignoring(StaleElementReferenceException.class);
+    }
 
 
     public static void waitToBeVisible(WebDriver driver, By locator ){
