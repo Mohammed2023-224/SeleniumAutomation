@@ -5,6 +5,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
+import static engine.actions.Waits.fluentWaitShortTime;
+
 public class ElementActions {
     private ElementActions(){}
 
@@ -13,15 +15,27 @@ public class ElementActions {
     }
 
     public static void clickElement(WebDriver driver, By locator) {
-        Waits.waitToBeClickable(driver,locator);
-        driver.findElement(locator).click();
-       Loggers.logInfo("click element located at: " + locator);
+        fluentWaitShortTime(driver).until(d -> {
+            try {
+                d.findElement(locator).click();
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        });
+        Loggers.logInfo("click element located at: " + locator);
     }
+
 
     public static void selectOption(WebDriver driver, By locator,String text) {
         Select select=new Select(driver.findElement(locator));
         select.selectByVisibleText(text);
        Loggers.logInfo("Select "+text+" from selection located at: " + locator);
+    }
+    public static void selectOptionByValue(WebDriver driver, By locator,String text) {
+        Select select=new Select(driver.findElement(locator));
+        select.selectByValue(text);
+        Loggers.logInfo("Select "+text+" from selection located at: " + locator);
     }
 
     public static void selectDDLOptionText(WebDriver driver, By locator,String option){
@@ -44,6 +58,19 @@ public class ElementActions {
         Waits.waitToBeClickable(driver,locator);
         driver.findElement(locator).clear();
        Loggers.logInfo("clear field located at " + locator);
+    }
+
+    public static void clearFieldUsingKeyBoard(WebDriver driver, By locator) {
+        Waits.waitToBeClickable(driver,locator);
+        clickElement(driver, locator);
+        driver.findElement(locator).sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        driver.findElement(locator).sendKeys(Keys.DELETE);
+        Waits.fluentWaitShortTime(driver).until(d -> {
+            WebElement e = d.findElement(locator);
+            String v = e.getAttribute("value");
+            return v == null || v.isEmpty();
+        });
+        Loggers.logInfo("clear field located at " + locator);
     }
 
     public static String getText(WebDriver driver, By locator) {
