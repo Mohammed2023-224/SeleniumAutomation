@@ -118,13 +118,8 @@ public class APIRequestBuilder {
             });
         }
     }
-    public void addQueryParam(String name, List<String> queryParams) {
-        if (queryParams != null) {
-            requestSpecBuilder.addQueryParam(name,queryParams);
-        }
-    }
 
-    public void addQueryParam(String queryName, String value) {
+    public void addQueryParam(String queryName, Object value) {
         requestSpecBuilder.addQueryParam(queryName, value);
         Loggers.logInfo("add query parameters: "+queryName+" -> "+ value);
     }
