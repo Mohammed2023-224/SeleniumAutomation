@@ -1,115 +1,187 @@
 package engine.actions;
 
+import engine.exceptions.CustomExceptions;
 import engine.reporters.Loggers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class BrowserActions {
-    private BrowserActions(){}
-    public static void navigateTo(WebDriver driver, String url) {
-        driver.navigate().to(url);
-       Loggers.logInfo("Navigated to url: "+ url);
+    private BrowserActions() {
     }
+
+    public static void navigateTo(WebDriver driver, String url) {
+        try {
+            driver.navigate().to(url);
+            Loggers.logInfo("Navigated to url: " + url);
+        } catch (Exception e) {
+            Loggers.logError("Failed when navigating to page: " + url);
+            throw e;
+        }
+    }
+
     public static void navigateBack(WebDriver driver) {
-        driver.navigate().back();
-       Loggers.logInfo("Navigated back to last page");
+        try {
+            driver.navigate().back();
+            Loggers.logInfo("Navigated back to last page");
+        } catch (Exception e) {
+            Loggers.logError("Failed when navigating back");
+            throw e;
+        }
     }
 
     public static void navigateForward(WebDriver driver) {
-        driver.navigate().forward();
-       Loggers.logInfo("Navigated forward");
+        try {
+            driver.navigate().forward();
+            Loggers.logInfo("Navigated forward");
+        } catch (Exception e) {
+            Loggers.logError("Failed when navigating forward");
+            throw e;
+        }
     }
 
     public static void switchIframe(WebDriver driver, By frameLocator) {
-        driver.switchTo().frame(driver.findElement(frameLocator));
-       Loggers.logInfo("Switch to iframe located at: "+ frameLocator);
+        try {
+            driver.switchTo().frame(driver.findElement(frameLocator));
+            Loggers.logInfo("Switch to iframe located at: " + frameLocator);
+        } catch (Exception e) {
+            Loggers.logError("Failed when switching to iframe: " + frameLocator);
+            throw e;
+        }
     }
 
     public static void switchParentFrame(WebDriver driver) {
-        driver.switchTo().parentFrame();
-       Loggers.logInfo("Switch to main frame");
+        try {
+            driver.switchTo().parentFrame();
+            Loggers.logInfo("Switch to parent frame");
+        } catch (Exception e) {
+            Loggers.logError("Failed switching to parent frame");
+            throw e;
+        }
+    }
+
+    public static void switchDefaultFrame(WebDriver driver) {
+        try {
+            driver.switchTo().defaultContent();
+            Loggers.logInfo("Switch to default frame");
+        } catch (Exception e) {
+            Loggers.logError("Failed switching to default frame");
+            throw e;
+        }
     }
 
     public static void switchToWindowByIndex(WebDriver driver, int windowNumber) {
-        ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
-        if (windowNumber >= 0 && windowNumber < windows.size()) {
-            driver.switchTo().window(windows.get(windowNumber));
+        int windowNumbers;
+        try {
+            ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
+            windowNumbers = windows.size();
+            if (windowNumber >= 0 && windowNumber < windowNumbers) {
+                driver.switchTo().window(windows.get(windowNumber));
+                Loggers.logInfo("Switch to windows number: " + windowNumber);
+            } else {
+                Loggers.logWarn("Current number of windows: " + windowNumbers);
+            }
+        } catch (Exception e) {
+            Loggers.logError("Failed switching to windows number: " + windowNumber);
+            throw e;
         }
-       Loggers.logInfo("Switch to windows number: "+ windowNumber);
     }
 
     public static void switchToWindowByTitle(WebDriver driver, String title) {
         ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
-        for(String t: windows){
-            driver.switchTo().window(t);
+        if (windows.size() <= 1) {
+            Loggers.logError("Couldn't find more that the current window");
+            return;
+        }
+        for (String t : windows) {
             try {
-                if(Objects.requireNonNull(driver.getTitle()).equalsIgnoreCase(title)){
-                    Loggers.logInfo("Switch to windows titled: "+ title);
-                    break;
+                driver.switchTo().window(t);
+                String currentTitle = driver.getTitle();
+                if (currentTitle != null && currentTitle.equalsIgnoreCase(title)) {
+                    Loggers.logInfo("Switch to windows titled: " + title);
+                    return;
                 }
-            } catch (NullPointerException e) {
-                Loggers.logInfo("No windows was found with title "+ title+" so switched to first window");
-                switchToFirstWindow(driver);
+            } catch (Exception e) {
+                Loggers.logWarn("Couldn't inspect window: " + e.getMessage());
             }
         }
+        throw new CustomExceptions("No windows was found with title " + title);
     }
 
     public static void switchToWindowByURL(WebDriver driver, String url) {
         ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
-        for(String u: windows){
-            driver.switchTo().window(u);
+        if (windows.size() <= 1) {
+            Loggers.logError("Couldn't find more that the current window");
+            return;
+        }
+        for (String u : windows) {
             try {
-                if (Objects.requireNonNull(driver.getCurrentUrl()).equalsIgnoreCase(url)) {
-                    break;
+                driver.switchTo().window(u);
+                String currentUrl = driver.getCurrentUrl();
+                if (currentUrl != null && currentUrl.equals(url)) {
+                    Loggers.logInfo("Switch to windows with url: " + url);
+                    return;
                 }
-            } catch (NullPointerException e) {
-                throw new NullPointerException();
+            } catch (Exception e) {
+                Loggers.logError("Current window doesn't has the url: " + url);
             }
         }
-       Loggers.logInfo("Switch to windows url: "+ url);
+        throw new CustomExceptions("No windows was found with url " + url);
+
     }
 
     public static void switchToFirstWindow(WebDriver driver) {
-        ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
+        try {
+            ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
             driver.switchTo().window(windows.getFirst());
-       Loggers.logInfo("Switch to main window");
+            Loggers.logInfo("Switch to main window");
+        } catch (Exception e) {
+            Loggers.logError("Failed to switch to the first window");
+            throw e;
+        }
     }
 
-    public static void acceptAlert(WebDriver driver){
-        driver.switchTo().alert().accept();
-        Loggers.logInfo("Accept existing alert");
+    public static void acceptAlert(WebDriver driver) {
+        try {
+            driver.switchTo().alert().accept();
+            Loggers.logInfo("Accept existing alert");
+        } catch (Exception e) {
+            Loggers.logError("Couldn't accept the alert");
+            throw e;
+        }
     }
 
-    public static void startNewTab(WebDriver driver){
-        if (driver==null) return;
-        JSActions.executeScript(driver,"window.open();");
+    public static void startNewTab(WebDriver driver) {
+        if (driver == null) return;
+        JSActions.executeScript(driver, "window.open();");
         List<String> handles = new ArrayList<>(driver.getWindowHandles());
         String validTab = null;
         for (String handle : handles) {
             try {
                 driver.switchTo().window(handle);
                 String url = driver.getCurrentUrl();
-                Assert.assertNotNull(url);
-                boolean isEdgeDownloader = url.toLowerCase().contains("edge://");
+                if (url == null) throw new IllegalStateException("The current url is null");
                 boolean isBlank = url.equals("about:blank");
-                if ( isBlank) {
+                boolean isInternalPage = !isBlank && (url.startsWith("edge://") || url.startsWith("chrome://") || url.startsWith("about:"));
+                if (isBlank) {
                     validTab = handle;
-                } else if (isEdgeDownloader) {
+                } else if (isInternalPage) {
                     Loggers.logInfo("edge download tab can't be closed");
                 } else {
                     driver.close();
                 }
-
             } catch (Exception e) {
                 Loggers.logInfo("Error handling tab: " + e.getMessage());
             }
         }
-        Assert.assertNotNull(validTab);
-        driver.switchTo().window(validTab);
+        if (validTab == null) throw new IllegalStateException("The new valid tab is null");
+        try {
+            driver.switchTo().window(validTab);
+        } catch (Exception e) {
+            Loggers.logError("Failed to switch to the valid new tab");
+            throw e;
+        }
     }
 }
