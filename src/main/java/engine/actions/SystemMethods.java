@@ -2,7 +2,10 @@ package engine.actions;
 
 import engine.reporters.Loggers;
 import org.apache.commons.io.FileUtils;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,31 +18,33 @@ import java.util.concurrent.ExecutionException;
 public class SystemMethods {
     private static final List<Process> runningProcesses = Collections.synchronizedList(new ArrayList<>());
 
-    private SystemMethods(){}
+    private SystemMethods() {
+    }
 
     public static void deleteDirectory(String path) {
         File directory = new File(path);
         try {
             FileUtils.deleteDirectory(directory);
-         Loggers.logInfo("Deleted the directory "+ path);
+            Loggers.logInfo("Deleted the directory " + path);
         } catch (Exception e) {
-         Loggers.logInfo("Couldn't delete directory "+ path);
+            Loggers.logInfo("Couldn't delete directory " + path);
         }
     }
 
     public static void deleteFile(String path) {
         File file = new File(path);
         if (!file.exists()) {
-         Loggers.logWarn("File does not exist: "+ path);
+            Loggers.logWarn("File does not exist: " + path);
             return;
         }
         try {
             FileUtils.delete(file);
-         Loggers.logInfo("Deleted the file: "+ path);
+            Loggers.logInfo("Deleted the file: " + path);
         } catch (Exception e) {
-         Loggers.logError("Couldn't delete file: "+ path);
+            Loggers.logError("Couldn't delete file: " + path);
         }
     }
+
     public static Process startBatAsync(String batPath) {
         CompletableFuture<Process> future = new CompletableFuture<>();
         new Thread(() -> {
@@ -59,13 +64,14 @@ public class SystemMethods {
             return future.get();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            Loggers.logError("Interrupted while starting process "+ e);
+            Loggers.logError("Interrupted while starting process " + e);
             return null;
         } catch (ExecutionException e) {
-            Loggers.logError("Failed to start process: " + batPath+"  "+ e);
+            Loggers.logError("Failed to start process: " + batPath + "  " + e);
             return null;
         }
     }
+
     public static void killProcessesByPort(int... ports) {
         try {
             for (int port : ports) {
@@ -82,16 +88,15 @@ public class SystemMethods {
                         String pid = parts[parts.length - 1];
                         ProcessBuilder killPb = new ProcessBuilder("taskkill", "/F", "/PID", pid);
                         killPb.start();
-                        Loggers.logInfo("Killed process "+pid+" using port "+ port);
+                        Loggers.logInfo("Killed process " + pid + " using port " + port);
                     }
                 }
                 process.waitFor();
             }
-        }
-        catch (InterruptedException ee){
+        } catch (InterruptedException ee) {
             Loggers.logWarn("Interrupted thread");
             Thread.currentThread().interrupt();
-        }catch (Exception e) {
+        } catch (Exception e) {
             Loggers.logError("Error killing processes by port: " + e.getMessage());
         }
     }
@@ -110,23 +115,22 @@ public class SystemMethods {
                         Loggers.logInfo(line);
                     }
                 }
-                 process.waitFor();
-             Loggers.logInfo("File executed: "+ path);
+                process.waitFor();
+                Loggers.logInfo("File executed: " + path);
             } catch (IOException e) {
-             Loggers.logWarn("File isn't executed: "+ path);
-            }
-            catch (InterruptedException ee){
+                Loggers.logWarn("File isn't executed: " + path);
+            } catch (InterruptedException ee) {
                 Loggers.logWarn("Interrupted thread");
                 Thread.currentThread().interrupt();
             }
         } else {
-         Loggers.logInfo("File "+path+" isn't executable type");
+            Loggers.logInfo("File " + path + " isn't executable type");
         }
     }
 
     public static boolean checkExistenceOfFile(String path) {
         File file = new File(path);
-     Loggers.logInfo("Check if file exists "+ file.exists());
+        Loggers.logInfo("Check if file exists " + file.exists());
         return file.exists();
     }
 
@@ -136,9 +140,33 @@ public class SystemMethods {
         try {
             lines = String.valueOf(Files.readAllLines(pth));
         } catch (IOException ex) {
-         Loggers.logError("Error reading file: "+ ex.getMessage());
+            Loggers.logError("Error reading file: " + ex.getMessage());
         }
-     Loggers.logInfo("Get file contents: "+ lines);
+        Loggers.logInfo("Get file contents: " + lines);
         return lines;
+    }
+
+    public static void killProcessWithDescendants(Process process) {
+        if (process.isAlive()) {
+            ProcessHandle handle = process.toHandle();
+            handle.descendants()
+                    .forEach(ProcessHandle::destroyForcibly);
+            handle.destroyForcibly();
+        }
+    }
+
+    public static void killProcessWithDescendantsUsingShutDownHook(Process process) {
+        if (process.isAlive()) {
+            Runtime.getRuntime().addShutdownHook(
+                    new Thread(() -> {
+                        Loggers.logInfo("Shutdown hook triggered for process " + process);
+                        ProcessHandle handle = process.toHandle();
+                        handle.descendants()
+                                .forEach(ProcessHandle::destroyForcibly);
+                        handle.destroyForcibly();
+                        Loggers.logInfo("Process terminated: " + process);
+                    })
+            );
+        }
     }
 }
