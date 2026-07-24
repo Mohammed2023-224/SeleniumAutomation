@@ -42,7 +42,7 @@ public class BrowserActions {
         }
     }
 
-    public static void switchIframe(WebDriver driver, By frameLocator) {
+    public static void switchFrame(WebDriver driver, By frameLocator) {
         try {
             driver.switchTo().frame(driver.findElement(frameLocator));
             Loggers.logInfo("Switch to iframe located at: " + frameLocator);
