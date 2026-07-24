@@ -28,6 +28,7 @@ public class ResponseActions {
     public static void checkResponseStatus(Response res, int status) {
         try {
             if (res.statusCode() != status) {
+                Loggers.logError("Checking status failed");
                 Loggers.logError("current status code: " + res.getStatusCode());
                 Loggers.logError("current body: " + ResponseActions.getBodyAsString(res));
             }
