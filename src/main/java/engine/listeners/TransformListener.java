@@ -23,12 +23,9 @@ public class TransformListener implements IAnnotationTransformer {
                 annotation.setEnabled(false);
                 Loggers.logInfo("⛔ Skipping: "+  testSignature);
             } else {
-                annotation.setRetryAnalyzer(RetryListener.class);
-                Loggers.logInfo("✅ Executing: "+ testSignature);
+            Loggers.logInfo("✅ Executing: "+ testSignature);
             }
         }
-        else{
-            annotation.setRetryAnalyzer(RetryListener.class);
-        }
+        annotation.setRetryAnalyzer(RetryListener.class);
     }
 }
