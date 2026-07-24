@@ -4,45 +4,47 @@ import engine.actions.ElementActions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 public class HardAssertions {
     private HardAssertions() {}
 
     public static void assertVisible(WebDriver driver, By locator){
-        AssertionsHelpers.assertTrueWithRetry(()->ElementActions.checkIfElementVisible(driver, locator)
-                ,"Expected element to be VISIBLE, but it was not. Locator: " + locator);
+        AssertionHelper.assertTrueWithRetry(()->ElementActions.checkIfElementVisible(driver, locator)
+                ,"Expected element "+locator+" to be VISIBLE" );
     }
 
     public static void assertNotVisible(WebDriver driver,By locator){
-        AssertionsHelpers.assertTrueWithRetry(()->!ElementActions.checkIfElementVisible(driver, locator)
-                ,"Expected element to be inVISIBLE, but it was . Locator: " + locator
-                );
+        AssertionHelper.assertTrueWithRetry(()->ElementActions.checkIfElementInVisible(driver, locator)
+                ,"Expected element "+ locator+"to be inVISIBLE" );
     }
 
     public static void assertTextContains(WebDriver driver,By locator,String expectedSubstring){
-        AssertionsHelpers.assertTrueWithRetry
+        AssertionHelper.assertTrueWithRetry
                 (()->ElementActions.getText(driver, locator).toLowerCase().contains(
                                 expectedSubstring == null ? "" : expectedSubstring.toLowerCase())
-                        ,"Expected element text to CONTAIN [" + expectedSubstring + "] but didn't contain  [" + ElementActions.getText(driver, locator) + "]. Locator: " + locator
-                        );
+                        ,"Expected element text in element "+locator+" to CONTAIN [" + expectedSubstring + "], and the element text is  [" + ElementActions.getText(driver, locator) + "]"
+                );
 
     }
 
-    public static void assertTrue(Supplier<Boolean> func, String logMessage){
-        AssertionsHelpers.assertTrueWithRetry(func,"Assertion "+logMessage );
+    public static void assertTru(BooleanSupplier func, String logMessage){
+        AssertionHelper.assertTrueWithRetry(func,"Assertion "+logMessage );
     }
+
     public static void assertTextEquals(String actual,String expected){
-        AssertionsHelpers.assertTrueWithRetry
+        AssertionHelper.assertTrueWithRetry
                 (()->actual.equalsIgnoreCase(expected)
-                        ,actual+expected+" to EQUAL (ignore case)");
+                        ,"Ignoring case Expected "+actual+" to EQUAL "+expected);
+
     }
 
     public static void assertTextContains(String actual,String expectedSubstring){
-        AssertionsHelpers.assertTrueWithRetry
+        AssertionHelper.assertTrueWithRetry
                 (()->actual.toLowerCase().contains(expectedSubstring.toLowerCase())
-                        ,actual+expectedSubstring+ "to CONTAIN (ignore case)"
-                       );
+                        , "Ignoring case expected "+actual+" to CONTAIN "+expectedSubstring);
 
     }
+
 }
