@@ -14,6 +14,7 @@ public class DriverOptions {
         Set<String> opts = new LinkedHashSet<>();
         if (FrameworkConfigs.headless()) {
             opts.add("--headless=new");
+            opts.add("window-size=1920,1080");
             Loggers.logInfo("Activate Headless mode");
         }
 
