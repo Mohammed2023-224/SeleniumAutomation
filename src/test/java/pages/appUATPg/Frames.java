@@ -1,5 +1,6 @@
 package pages.appUATPg;
 
+import engine.actions.BrowserActions;
 import engine.actions.ElementActions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -20,13 +21,13 @@ public class Frames {
 
     public void handleFrames(){
 
-        ElementActions.switchToFrameByLocator(driver,firstFrame);
-        ElementActions.switchToFrameByLocator(driver,secondFrame);
+        BrowserActions.switchFrame(driver,firstFrame);
+        BrowserActions.switchFrame(driver,secondFrame);
         ElementActions.clickElement(driver,firstEle);
         Assert.assertTrue(ElementActions.getText(driver,firstEle).contains("Clicked"));
-        ElementActions.switchToParentFrame(driver);
-        ElementActions.switchToFrameByLocator(driver,thirdFrame);
-        ElementActions.switchToFrameByLocator(driver,fourthFrame);
+        BrowserActions.switchParentFrame(driver);
+        BrowserActions.switchFrame(driver,thirdFrame);
+        BrowserActions.switchFrame(driver,fourthFrame);
         ElementActions.clickElement(driver,secondEle);
         Assert.assertTrue(ElementActions.getText(driver,secondEle).contains("Clicked"));
 
