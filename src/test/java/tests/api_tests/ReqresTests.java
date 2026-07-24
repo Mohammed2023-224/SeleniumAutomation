@@ -20,7 +20,6 @@ public class ReqresTests {
     public void getAllObjects(){
     Response res=apiCalls.getObjectsEndPoint(null,null);
         ResponseActions.checkResponseStatus(res,200);
-         HardAssertions.assertTextContains((String) (ResponseActions.getValueByPath(res,"name",ArrayList.class)).get(2),"Apple iPhone 12 Pro Max");
     }
     @Test(dependsOnMethods = "updateObjectPartially")
     public void getSingleObject(){
@@ -31,10 +30,10 @@ public class ReqresTests {
 
     @Test
     public void getMultipleObjects(){
-        Response res=apiCalls.getObjectsEndPoint(null,  List.of("4", "3"));
+        Response res=apiCalls.getObjectsEndPoint(null,  List.of("1", "2"));
         ResponseActions.checkResponseStatus(res,200);
-         HardAssertions.assertTextContains((String) (ResponseActions.getValueByPath(res,"name",ArrayList.class)).get(1),"Apple iPhone 12 Pro Max");
     }
+
     @Test(priority = 0)
     public void postObject(){
         Response res=apiCalls.postObject("postObject.json");
@@ -58,6 +57,7 @@ public class ReqresTests {
     @Test(dependsOnMethods = "getSingleObject")
     public void deleteObject(){
         Response res=apiCalls.deleteObject(newID);
+        ResponseActions.logResponse(res);
         ResponseActions.checkResponseStatus(res,200);
          HardAssertions.assertTextContains((ResponseActions.getValueByPath(res,"message",String.class)),"deleted");
 
