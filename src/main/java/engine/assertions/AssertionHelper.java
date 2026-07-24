@@ -23,8 +23,8 @@ public class AssertionHelper {
             }
             boolean flag=  fn.getAsBoolean();
             if (flag) {
-                Assert.assertTrue(true, assertionMessage);
                 Loggers.logInfo(assertionMessage);
+                return;
             } else {
                 limit++;
             }
