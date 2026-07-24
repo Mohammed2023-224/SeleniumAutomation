@@ -5,19 +5,19 @@ import engine.constants.FrameworkConfigs;
 import engine.reporters.DynamicLoggers;
 import engine.reporters.Loggers;
 import engine.utils.ClassPathLoading;
-import engine.utils.GmailHandler;
 import engine.utils.PropertyReader;
 import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.*;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestNgListener implements ITestListener , IExecutionListener ,IInvokedMethodListener {
-
+    private static  Process  proxyProcess=null;
     private static final List<String> successfulTests = Collections.synchronizedList(new ArrayList<>());
     private static final List<String> failedTests = Collections.synchronizedList(new ArrayList<>());
     private static final List<String> skippedTests = Collections.synchronizedList(new ArrayList<>());
@@ -26,9 +26,9 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
     private static final AtomicInteger numberOfSkippedTests = new AtomicInteger(0);
 
     static {
-    SystemMethods.deleteDirectory("reports");
-    SystemMethods.deleteDirectory("allure-results");
-}
+        SystemMethods.deleteDirectory("reports");
+        SystemMethods.deleteDirectory("allure-results");
+    }
 
     @Override
     public void onTestStart(ITestResult result) {
@@ -40,12 +40,12 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
         fileName = fileName.replaceAll("[^a-zA-Z0-9\\-_]", "_");
         ThreadContext.put("testLogFileName", fileName); // ✅ thread-local
         DynamicLoggers.addAppenderForTest(fileName);
-     Loggers.logInfo("Start test: "+ result.getName());
+        Loggers.logInfo("Start test: "+ result.getName());
     }
 
     @Override
     public void onTestSuccess(ITestResult result) {
-     Loggers.logInfo("Test succeeded: "+ result.getName());
+        Loggers.logInfo("Test succeeded: "+ result.getName());
         numberOfSuccessTest.incrementAndGet();
         successfulTests.add(result.getName());
         String fileName = ThreadContext.get("testLogFileName");
@@ -54,7 +54,7 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
 
     @Override
     public void onTestFailure(ITestResult result) {
-     Loggers.logInfo("Test failed: "+ result.getName());
+        Loggers.logInfo("Test failed: "+ result.getName());
         numberOfFailedTests.incrementAndGet();
         failedTests.add(result.getName());
         String fileName = ThreadContext.get("testLogFileName");
@@ -63,37 +63,36 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
 
     @Override
     public void onTestSkipped(ITestResult result) {
-     Loggers.logInfo("Test skipped: "+ result.getName());
+        Loggers.logInfo("Test skipped: "+ result.getName());
         numberOfSkippedTests.incrementAndGet();
         skippedTests.add(result.getName());
     }
 
     @Override
     public void onStart(ITestContext context) {
-    //This method runs when starting tests
+        //This method runs when starting tests
     }
 
     @Override
     public void onFinish(ITestContext context) {
-     Loggers.logInfo("finished Execution");
+        Loggers.logInfo("finished Execution");
     }
 
     @Override
     public void onExecutionFinish() {
-     Loggers.logInfo("Number of all tests: "+ (numberOfSuccessTest.get()+numberOfFailedTests.get()+numberOfSkippedTests.get()));
-     Loggers.logInfo("Number of successful tests: "+ numberOfSuccessTest.get());
-     Loggers.logInfo("Name of successful tests: "+ successfulTests);
-     Loggers.logInfo("Number of failed tests: "+ numberOfFailedTests.get());
-     Loggers.logInfo("Name of failed tests: "+ failedTests);
-     Loggers.logInfo("Number of skipped tests: "+ numberOfSkippedTests.get());
-     Loggers.logInfo("Name of skipped tests: "+skippedTests);
-        if(FrameworkConfigs.generateReport()) {
+        Loggers.logInfo("Number of all tests: " + (numberOfSuccessTest.get() + numberOfFailedTests.get() + numberOfSkippedTests.get()));
+        Loggers.logInfo("Number of successful tests: " + numberOfSuccessTest.get());
+        Loggers.logInfo("Name of successful tests: " + successfulTests);
+        Loggers.logInfo("Number of failed tests: " + numberOfFailedTests.get());
+        Loggers.logInfo("Name of failed tests: " + failedTests);
+        Loggers.logInfo("Number of skipped tests: " + numberOfSkippedTests.get());
+        Loggers.logInfo("Name of skipped tests: " + skippedTests);
+        if (FrameworkConfigs.generateReport()) {
             SystemMethods.runFile(ClassPathLoading.getResourceAsPath("batFiles/generateReport.bat", true).toString());
         }
-            if(FrameworkConfigs.sendReportEmail()){
-            GmailHandler gmailHandler=new GmailHandler("test");
-            gmailHandler.sendEmail(FrameworkConfigs.emailTo(), FrameworkConfigs.emailCc(), FrameworkConfigs.emailSubject()
-                    , FrameworkConfigs.emailBody(), FrameworkConfigs.emailAttachmentPath());
+        if ("true".equalsIgnoreCase(PropertyReader.get("local_python_proxy", String.class))) {
+            SystemMethods.killProcessWithDescendants(proxyProcess);
+//            SystemMethods.killProcessesByName("python.exe");
         }
         if (Boolean.TRUE.equals(PropertyReader.get("kill_processes", Boolean.class))) {
             Loggers.logInfo("Test execution finished. cleaning up proccesses...");
@@ -107,15 +106,19 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
         }
         if (FrameworkConfigs.openAllure()) {
             Loggers.logInfo("start allure report pls don't stop the execution");
-            SystemMethods.runFile(ClassPathLoading.getResourceAsPath("batFiles/serve_allure_report.bat",true).toString());
+            SystemMethods.runFile(ClassPathLoading.getResourceAsPath("batFiles/serve_allure_report.bat", true).toString());
         }
     }
-
     @Override
     public void onExecutionStart() {
         if(!FrameworkConfigs.localExecution()&&FrameworkConfigs.gridEnabled()){
             SystemMethods.startBatAsync(ClassPathLoading.getResourceAsPath("grid/startHub.bat",true).toString());
             SystemMethods.startBatAsync(ClassPathLoading.getResourceAsPath("grid/startNode.bat",true).toString());
+        }
+        if ("true".equalsIgnoreCase(PropertyReader.get("local_python_proxy", String.class))){
+            proxyProcess=SystemMethods.startBatAsync(ClassPathLoading.getResourceAsPath("batFiles/run_local_proxy.bat",true).toString());
+            assert proxyProcess != null;
+            SystemMethods.killProcessWithDescendantsUsingShutDownHook(proxyProcess);
         }
     }
 
