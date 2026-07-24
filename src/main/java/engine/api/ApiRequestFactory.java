@@ -1,5 +1,6 @@
 package engine.api;
 
+import engine.reporters.Loggers;
 import io.restassured.response.Response;
 
 import java.util.function.Function;
@@ -16,22 +17,45 @@ public class ApiRequestFactory {
 
     public APIRequestBuilder newRequest() {
         AuthSession session = tokenProvider.getSession();
-        return new APIRequestBuilder(baseUrl, session.cookies(),session.headers());
+        return new APIRequestBuilder(baseUrl, session.cookies(), session.headers());
     }
 
     public Response executeWithoutRetry(Function<APIRequestBuilder, Response> fn) {
-        APIRequestBuilder req1 = newRequest();
-        return fn.apply(req1);
+        APIRequestBuilder req = newRequest();
+        try {
+             req = newRequest();
+            return fn.apply(req);
+        } catch (AssertionError e) {
+            Loggers.logError("\nCurrent Exception is: " + e.getMessage());
+            Loggers.logError("\nThe response received is: ");
+            Loggers.logError(req.getLastResponseLog());
+            Loggers.logError("\nThe request sent is: ");
+            Loggers.logError(req.getLastRequestLog());
+            throw e;
+        }
     }
 
 
     public Response executeWithRetry(Function<APIRequestBuilder, Response> fn, int expectedStatusCode) {
-        APIRequestBuilder req1 = newRequest();
-        Response res = fn.apply(req1);
-        if (res.getStatusCode() != expectedStatusCode) {
-            tokenProvider.refreshSession();
-            APIRequestBuilder req2 = newRequest();
-            res = fn.apply(req2);
+        APIRequestBuilder req = newRequest();
+        Response res = null;
+        try {
+            res = fn.apply(req);
+            if (res.getStatusCode() != expectedStatusCode) {
+                Loggers.logInfo("Failed first request. refreshing session and trying again");
+                tokenProvider.refreshSession();
+                req = newRequest();
+                res = fn.apply(req);
+            }
+            ResponseActions.checkResponseStatus(res, expectedStatusCode);
+        } catch (AssertionError e) {
+            Loggers.logError("\nCurrent Exception is: " + e.getMessage());
+            Loggers.logError("\nThe response received is: ");
+            assert res != null;
+            Loggers.logError(req.getLastResponseLog());
+            Loggers.logError("\nThe request sent is: ");
+            Loggers.logError(req.getLastRequestLog());
+            throw e;
         }
         return res;
     }

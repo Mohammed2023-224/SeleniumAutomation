@@ -1,29 +1,36 @@
 package engine.api;
 
+import engine.exceptions.CustomExceptions;
 import engine.reporters.Loggers;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.apache.logging.log4j.Marker;
 import org.awaitility.Awaitility;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 public class APIRequestBuilder {
 
     private String url;
-    private LinkedHashMap<String, String> cookies = new LinkedHashMap<>();
-    private LinkedHashMap<String, String> headers = new LinkedHashMap<>();
+    private final LinkedHashMap<String, String> cookies = new LinkedHashMap<>();
+    private final LinkedHashMap<String, String> headers = new LinkedHashMap<>();
     private RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
+    private String lastRequestLog;
+    private String lastResponseLog;
 
-    public APIRequestBuilder(APIRequestBuilder api,boolean url,boolean cookies,boolean headers) {
+    public APIRequestBuilder(APIRequestBuilder api, boolean url, boolean cookies, boolean headers) {
         this.requestSpecBuilder = new RequestSpecBuilder();
         if (url) setURL(api.url);
         if (cookies) setCookies(api.cookies);
@@ -32,18 +39,21 @@ public class APIRequestBuilder {
 
     public APIRequestBuilder() {
     }
+
     public APIRequestBuilder(String url) {
         setURL(url);
     }
-    public APIRequestBuilder(String url, Map<String, String> data,Boolean isCookies) {
+
+    public APIRequestBuilder(String url, Map<String, String> data, Boolean isCookies) {
         setURL(url);
-        if(Boolean.TRUE.equals(isCookies)) {
-            setCookies(data);}
-        else {
+        if (Boolean.TRUE.equals(isCookies)) {
+            setCookies(data);
+        } else {
             setHeaders(data);
         }
     }
-    public APIRequestBuilder(String url, Map<String, String> cookies,Map<String, String>  headers) {
+
+    public APIRequestBuilder(String url, Map<String, String> cookies, Map<String, String> headers) {
         setURL(url);
         setCookies(cookies);
         setHeaders(headers);
@@ -51,34 +61,54 @@ public class APIRequestBuilder {
 
 
     private Response sendRequest(HttpMethods method) {
-        RequestSpecification spec = RestAssured.given().spec(requestSpecBuilder.build());
-        return switch (method) {
-            case GET ->spec.when().get();
-            case POST -> spec.when().post();
-            case PUT -> spec.when().put();
-            case PATCH -> spec.when().patch();
-            case DELETE -> spec.when().delete();
-        };
+        try (ByteArrayOutputStream requestBAOS = new ByteArrayOutputStream();
+             ByteArrayOutputStream responseBAOS = new ByteArrayOutputStream();
+             PrintStream requestPS = new PrintStream(requestBAOS);
+             PrintStream responsePS = new PrintStream(responseBAOS)) {
+            RequestSpecification spec = RestAssured.given().spec(requestSpecBuilder.build());
+            spec = spec.filter(new RequestLoggingFilter(LogDetail.ALL, requestPS));
+            spec = spec.filter(new ResponseLoggingFilter(LogDetail.ALL, responsePS));
+            Response response = switch (method) {
+                case GET -> spec.when().get();
+                case POST -> spec.when().post();
+                case PUT -> spec.when().put();
+                case PATCH -> spec.when().patch();
+                case DELETE -> spec.when().delete();
+            };
+            requestPS.flush();
+            responsePS.flush();
+            lastRequestLog = requestBAOS.toString();
+            lastResponseLog = responseBAOS.toString();
+            return response;
+        } catch (Exception e) {
+            throw new CustomExceptions(
+                    "Couldn't Perform the request : " + method, e);
+        }
+    }
+
+    public String getLastRequestLog() {
+        return lastRequestLog;
+    }
+
+    public String getLastResponseLog() {
+        return lastResponseLog;
     }
 
     public Response performRequest(HttpMethods requestType) {
-        Loggers.logInfo("Start executing sync "+ requestType.getMethod()+" request");
+        Loggers.logInfo("Start executing sync " + requestType.getMethod() + " request");
         return sendRequest(requestType);
     }
 
 
     public CompletableFuture<Response> performAsyncRequest(HttpMethods requestType, int waitTime, int pollTime, int statusCode) {
         return CompletableFuture.supplyAsync(() -> {
-            Loggers.logInfo("Start executing async "+requestType+" request");
+            Loggers.logInfo("Start executing async " + requestType + " request");
             final Response[] finalResponse = {null};
-            Awaitility.await()
-                    .atMost(waitTime, TimeUnit.SECONDS)
-                    .pollInterval(pollTime, TimeUnit.SECONDS)
-                    .until(() -> {
-                        Response res = sendRequest(requestType);
-                        finalResponse[0] = res;
-                        return res.getStatusCode() == statusCode;
-                    });
+            Awaitility.await().atMost(waitTime, TimeUnit.SECONDS).pollInterval(pollTime, TimeUnit.SECONDS).until(() -> {
+                Response res = sendRequest(requestType);
+                finalResponse[0] = res;
+                return res.getStatusCode() == statusCode;
+            });
 
             return finalResponse[0];
         });
@@ -88,7 +118,7 @@ public class APIRequestBuilder {
     public void setURL(String url) {
         requestSpecBuilder.setBaseUri(url);
         this.url = url;
-        Loggers.logInfo("Set base URl to "+ url);
+        Loggers.logInfo("Set base URl to " + url);
     }
 
     public void setAuthorization(APIHelpers.AuthType authType, String... info) {
@@ -101,37 +131,37 @@ public class APIRequestBuilder {
         if (headers != null && !headers.isEmpty()) {
             this.headers.putAll(headers);
             requestSpecBuilder.addHeaders(this.headers);
-            Loggers.logInfo("set headers: "+ this.headers);
+            Loggers.logInfo("set headers: " + this.headers);
         }
     }
 
-    public void setHeaders(String headerName, String headerValue) {
+    public void addHeader(String headerName, String headerValue) {
+        this.headers.put(headerName, headerValue);
         requestSpecBuilder.addHeader(headerName, headerValue);
-        Loggers.logInfo("Add header ["+headerName+"] -> ["+headerValue+"]");
     }
 
     public void addQueryParam(Map<String, String> queryParams) {
         if (queryParams != null) {
             queryParams.forEach((k, v) -> {
                 requestSpecBuilder.addQueryParam(k, v);
-                Loggers.logInfo("Query param ["+k+"]=[masked]");
+                Loggers.logInfo("Query param [" + k + "]=[masked]");
             });
         }
     }
 
     public void addQueryParam(String queryName, Object value) {
         requestSpecBuilder.addQueryParam(queryName, value);
-        Loggers.logInfo("add query parameters: "+queryName+" -> "+ value);
+        Loggers.logInfo("add query parameters: " + queryName + " -> " + value);
     }
 
     public void setBasePathParameter(String path) {
         requestSpecBuilder.setBasePath(path);
-        Loggers.logInfo("Set base path parameter to "+ path);
+        Loggers.logInfo("Set base path parameter to " + path);
     }
 
     public void setProxy(String proxy) {
         requestSpecBuilder.setProxy(proxy);
-        Loggers.logInfo("Set proxy to "+ proxy);
+        Loggers.logInfo("Set proxy to " + proxy);
     }
 
 
@@ -144,39 +174,40 @@ public class APIRequestBuilder {
         }
     }
 
-    public void setCookies(String cookies,String value) {
-        requestSpecBuilder.addCookie(cookies,value);
-        Loggers.logInfo("Add cookie "+cookies+" with value "+value);
+    public void setCookies(String cookies, String value) {
+        this.headers.put(cookies, value);
+        requestSpecBuilder.addCookie(cookies, value);
     }
 
     public void setContentTypeAndAccept(String contentType) {
         requestSpecBuilder.setContentType(contentType).setAccept(contentType);
-        Loggers.logInfo("Set content type to "+ contentType);
+        Loggers.logInfo("Set content type to " + contentType);
     }
 
-    public Marker logRequest() {
+    public void logRequest() {
         requestSpecBuilder.log(LogDetail.ALL);
-        return null;
     }
 
     public void setBodyAsFile(String filePath, String contentType) {
         try {
             setContentTypeAndAccept(contentType);
             requestSpecBuilder.setBody(Files.readAllBytes(Paths.get(filePath)));
-            Loggers.logInfo("Set body as file located at "+ filePath);
+            Loggers.logInfo("Set body as file located at " + filePath);
         } catch (IOException e) {
-            Loggers.logError("couldn't set body as file located at "+filePath);
+            Loggers.logError("couldn't set body as file located at " + filePath);
+            throw new CustomExceptions(
+                    "Couldn't read body file: " + filePath, e);
         }
     }
 
     public void setBodyAsString(String body) {
         requestSpecBuilder.setBody(body);
-        Loggers.logInfo("Set body as string: "+ body);
+        Loggers.logInfo("Set body as string: " + body);
     }
 
     public void setBodyAsObject(Object body) {
         requestSpecBuilder.setBody(body);
-        Loggers.logInfo("Set body as current object "+ body);
+        Loggers.logInfo("Set body as current object " + body);
     }
 
     public void addFormParams(Map<String, String> header) {
