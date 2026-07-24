@@ -4,6 +4,7 @@ import engine.actions.BrowserActions;
 import engine.actions.ElementActions;
 import engine.actions.JSActions;
 import engine.actions.Waits;
+import engine.enums.WaitTypes;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -62,11 +63,11 @@ private final By minWaitTime= By.id("min_wait");
     public void handleWaitForAlert(int maxTime){
         Waits.waitToBeVisible(driver,h3Headers("Wait for alert to be present"));
         ElementActions.clickElement(driver,alertTrigger);
-        Waits.waitForAlert(driver,maxTime);
+        Waits.waitForAlert(maxTime);
         BrowserActions.acceptAlert(driver);
         Assert.assertTrue(ElementActions.getText(driver,assertion("alert_handled_badge")).contains("Alert handled"));
         ElementActions.clickElement(driver,promptTrigger);
-        Waits.waitForAlert(driver,maxTime);
+        Waits.waitForAlert(maxTime);
         BrowserActions.acceptAlert(driver);
         Assert.assertTrue(ElementActions.getText(driver,assertion("confirm_ok")).contains("Confirm"));
     }
@@ -94,7 +95,7 @@ private final By minWaitTime= By.id("min_wait");
     @Step("Handling wait for enabled")
     public void handleWaitForEnabled(){
         ElementActions.clickElement(driver, enabledTrigger);
-        Waits.waitToBeClickable(driver,enabledTarget);
+        Waits.waitToBeClickable(enabledTarget);
         Assert.assertTrue(ElementActions.getText(driver,enabledTarget)
                 .contains("Enabled Button"));
     }
@@ -102,15 +103,15 @@ private final By minWaitTime= By.id("min_wait");
     @Step("Handling wait for title")
     public void handleWaitForTitle(){
         ElementActions.clickElement(driver,titleTrigger);
-        Waits.explicitWaitShortTime(driver).until(ExpectedConditions.titleContains("My New Title"));
+        Waits.customWait(WaitTypes.ShortWait,"Wait element to contain text",ExpectedConditions.titleContains("My New Title"));
         Assert.assertEquals(driver.getTitle(), ("My New Title!"));
     }
 
     @Step("Handling wait for text")
     public void handleWaitForText(){
         ElementActions.clickElement(driver, textTrigger);
-        Waits.explicitWaitShortTime(driver).until
-                (ExpectedConditions.textToBePresentInElementValue(textTarget,"Dennis"));
+        Waits.customWait(WaitTypes.ShortWait,"wait for element to have text",ExpectedConditions.textToBePresentInElementValue(textTarget,"Dennis"));
+
     }
 
     @Step("Handling wait for frame")
@@ -120,7 +121,7 @@ private final By minWaitTime= By.id("min_wait");
                 (ExpectedConditions.frameToBeAvailableAndSwitchToIt(frame));
         String innerText=ElementActions.getText(driver, frameButtonTarget);
         JSActions.clickUsingJavaScript(driver, frameButtonTarget);
-        Waits.waitForTextToChange(driver,frameButtonTarget,innerText);
+        Waits.waitForTextToChange(frameButtonTarget,innerText);
         Assert.assertTrue(ElementActions.getText(driver, frameButtonTarget)
                 .contains("Clicked"));
     }

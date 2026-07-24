@@ -12,6 +12,7 @@
         <parameter name="os" value="Windows"/>
         <classes>
             <class name="tests.AutomationPlaygroundTests"/>
+            <class name="tests.ExpandTests"></class>
         </classes>
     </test> <!-- Test -->
     <test name="firefox tests">
@@ -21,6 +22,7 @@
         <parameter name="os" value="Windows"/>
         <classes>
             <class name="tests.AutomationPlaygroundTests"/>
+            <class name="tests.ExpandTests"></class>
         </classes>
     </test> <!-- Test -->
     <test name="chrome tests ">
@@ -30,6 +32,7 @@
         <parameter name="os" value="Windows"/>
         <classes>
             <class name="tests.AutomationPlaygroundTests"/>
+            <class name="tests.ExpandTests"></class>
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->

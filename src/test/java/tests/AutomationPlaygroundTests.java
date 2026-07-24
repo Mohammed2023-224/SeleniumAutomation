@@ -1,5 +1,6 @@
 package tests;
 
+import engine.driver.DriverFactory;
 import pages.appUATPg.*;
 import tests.baseTest.BaseTestClass;
 import org.testng.annotations.BeforeClass;
@@ -87,14 +88,14 @@ public void navigateToHomePage(){
 
     @BeforeClass
     private void initClasses(){
-        popUpWindows=new PopUpWindows(driver);
-        homePage=new HomePage(driver);
-        waitActionsPage=new WaitActionsPage(driver);
-        frames=new Frames(driver);
-        mouseActions=new MouseActions(driver);
-        keyboardActions=new KeyboardActions(driver);
-        formPage=new FormPage(driver);
-        samplePage=new SamplePage(driver);
-        advancedUI=new AdvancedUI(driver);
+        popUpWindows=new PopUpWindows(DriverFactory.getDriver());
+        homePage=new HomePage(DriverFactory.getDriver());
+        waitActionsPage=new WaitActionsPage(DriverFactory.getDriver());
+        frames=new Frames(DriverFactory.getDriver());
+        mouseActions=new MouseActions(DriverFactory.getDriver());
+        keyboardActions=new KeyboardActions(DriverFactory.getDriver());
+        formPage=new FormPage(DriverFactory.getDriver());
+        samplePage=new SamplePage(DriverFactory.getDriver());
+        advancedUI=new AdvancedUI(DriverFactory.getDriver());
     }
 }

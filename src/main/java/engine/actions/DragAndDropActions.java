@@ -1,5 +1,6 @@
 package engine.actions;
 
+import engine.enums.WaitTypes;
 import engine.reporters.Loggers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -20,8 +21,8 @@ public class DragAndDropActions {
 
     public static void dragAndDropByMouse(WebDriver driver, By locatorSource, By locatorTarget){
         try{
-        Waits.explicitWaitLongTime(driver).until(ExpectedConditions.elementToBeClickable(locatorSource));
-        Waits.explicitWaitShortTime(driver).until(ExpectedConditions.elementToBeClickable(locatorTarget));
+        Waits.customWait(WaitTypes.ShortWait,"Wait element "+locatorSource+" to be clickable ",ExpectedConditions.elementToBeClickable(locatorSource));
+        Waits.customWait(WaitTypes.ShortWait,"Wait element "+locatorTarget+" to be clickable ",ExpectedConditions.elementToBeClickable(locatorTarget));
         WebElement source=driver.findElement(locatorSource);
         WebElement target=driver.findElement(locatorTarget);
         new Actions(driver).scrollToElement(source)
@@ -38,7 +39,7 @@ public class DragAndDropActions {
 
     public static void dragAndDropByLocation(WebDriver driver, By locatorSource ,int horizontal, int vertical){
         try {
-            Waits.explicitWaitShortTime(driver).until(ExpectedConditions.visibilityOfElementLocated(locatorSource));
+            Waits.customWait(WaitTypes.ShortWait,"Wait element "+locatorSource+" to be visible ",ExpectedConditions.visibilityOfElementLocated(locatorSource));
             new Actions(driver).dragAndDropBy(driver.findElement(locatorSource), horizontal, vertical).perform();
             Loggers.logInfo(" drag element from " + locatorSource + " to " + horizontal + " , " + vertical);
         }catch (Exception e) {
@@ -99,7 +100,7 @@ public class DragAndDropActions {
     public static void dragAndDrop(WebDriver driver, By locator,By position) {
         try {
             String log = logMovement(locator, position);
-            Waits.waitToBeClickable(driver, locator);
+            Waits.waitToBeClickable( locator);
             new Actions(driver).dragAndDrop(driver.findElement(locator), driver.findElement(position)).perform();
             Loggers.logInfo(log);
         }catch (Exception e) {
@@ -111,7 +112,7 @@ public class DragAndDropActions {
     public static void manualDragAndDrop(WebDriver driver, By locator,By position) {
         try {
             String log = logMovement(locator, position);
-            Waits.waitToBeClickable(driver, locator);
+            Waits.waitToBeClickable( locator);
             new Actions(driver).moveToElement(driver.findElement(locator))
                     .pause(Duration.ofMillis(200))
                     .clickAndHold(driver.findElement(locator))

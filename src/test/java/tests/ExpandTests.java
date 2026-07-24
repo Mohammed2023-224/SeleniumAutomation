@@ -1,5 +1,6 @@
 package tests;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import engine.driver.DriverFactory;
 import pages.expand.*;
 import tests.baseTest.BaseTestClass;
@@ -11,7 +12,9 @@ import engine.utils.ExcelReader;
 
 import java.util.LinkedHashMap;
 
-public class ExpandTests extends BaseTestClass {
+import static tests.baseTest.BaseTestClass.testDataPath;
+
+public class ExpandTests  extends BaseTestClass {
 
     HomePage homePage;
     WebInputs webInputs;

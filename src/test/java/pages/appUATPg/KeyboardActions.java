@@ -35,7 +35,7 @@ public void handleKeyboard(){
     Assert.assertTrue(ElementActions.getText(driver,keyCode).contains("Digit5"));
     ElementActions.clearField(driver,typingArea);
     ElementActions.typeInElement(driver,typingArea,"  ");
-    Waits.waitElementToContainText(driver,keyCode,"Space");
+    Waits.waitElementToContainText(keyCode,"Space");
     Assert.assertTrue(ElementActions.getText(driver,currentKey).contains(""));
     Assert.assertTrue(ElementActions.getText(driver,keyCode).contains("Space"));
     ElementActions.clearField(driver,typingArea);

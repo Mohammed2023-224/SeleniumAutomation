@@ -1,10 +1,13 @@
 package engine.actions;
 
+import engine.enums.WaitTypes;
 import engine.reporters.Loggers;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+
+import static engine.actions.Waits.customWait;
 import static engine.actions.Waits.fluentWaitShortTime;
 
 public class ElementActions {
@@ -78,16 +81,16 @@ public class ElementActions {
 
     public static void selectDDLOptionText(WebDriver driver, By locator,String option){
         try {
-            Waits.explicitWaitShortTime(driver).until(x -> {
-                Select dynamicSelect = new Select(driver.findElement(locator));
-                if (dynamicSelect.getOptions().isEmpty()) {
-                    return false;
-                } else {
-                    dynamicSelect.selectByVisibleText(option);
-                    return true;
-                }
-            });
-            Loggers.logInfo("Select option with text " + option + " from locator " + locator);
+            customWait(WaitTypes.ShortWait,"wait and Select option with text " + option + " from locator " + locator,
+                    x -> {
+                        Select dynamicSelect = new Select(driver.findElement(locator));
+                        if (dynamicSelect.getOptions().isEmpty()) {
+                            return false;
+                        } else {
+                            dynamicSelect.selectByVisibleText(option);
+                            return true;
+                        }
+                    }    );
         }catch (Exception e) {
             Loggers.logError("Couldn't select the option with option: "+ option);
             throw e;
@@ -96,7 +99,7 @@ public class ElementActions {
 
     public static void typeInElement(WebDriver driver, By locator, String text) {
         try{
-        Waits.waitToBeClickable(driver,locator);
+        Waits.waitToBeClickable(locator);
         driver.findElement(locator).sendKeys(text);
         Loggers.logInfo("type " + text + " in element located at:" + locator);
         }catch (Exception e) {
@@ -107,7 +110,7 @@ public class ElementActions {
 
     public static void clearField(WebDriver driver, By locator) {
         try {
-            Waits.waitToBeClickable(driver, locator);
+            Waits.waitToBeClickable( locator);
             driver.findElement(locator).clear();
             Loggers.logInfo("clear field located at " + locator);
         }
@@ -119,7 +122,7 @@ public class ElementActions {
 
     public static void clearFieldUsingKeyBoard(WebDriver driver, By locator) {
         try {
-            Waits.waitToBeClickable(driver, locator);
+            Waits.waitToBeClickable( locator);
             clickElement(driver, locator);
             driver.findElement(locator).sendKeys(Keys.chord(Keys.CONTROL, "a"));
             driver.findElement(locator).sendKeys(Keys.DELETE);
@@ -138,8 +141,8 @@ public class ElementActions {
 
     public static String getText(WebDriver driver, By locator) {
         try {
-            Waits.fluentWaitCustomTime(driver, 2)
-                    .until(ExpectedConditions.visibilityOfElementLocated(locator));
+            Waits.customWait(driver,"Wait for element visibility: "+locator,
+                    ExpectedConditions.visibilityOfElementLocated(locator),2);
         } catch (Exception e) {
             Loggers.logWarn("Element isn't visible");
         }
@@ -172,7 +175,7 @@ public class ElementActions {
 
     public static void scrollToElement(WebDriver driver, By locator) {
         try{
-        Waits.waitToBeClickable(driver,locator);
+        Waits.waitToBeClickable(locator);
         actions(driver).scrollToElement(driver.findElement(locator)).perform();
         Loggers.logInfo("scroll to element located at: " + locator);
         }
@@ -184,7 +187,7 @@ public class ElementActions {
 
     public static void doubleClickElement(WebDriver driver, By locator) {
         try {
-            Waits.waitToBeClickable(driver, locator);
+            Waits.waitToBeClickable(locator);
             actions(driver).doubleClick(driver.findElement(locator)).perform();
             Loggers.logInfo("double click element located at: " + locator);
         }
@@ -208,7 +211,7 @@ public class ElementActions {
 
     public static void pressKeyboardKeys(WebDriver driver, By locator, Keys key) {
         try {
-            Waits.waitToBeClickable(driver, locator);
+            Waits.waitToBeClickable( locator);
             driver.findElement(locator).sendKeys(key);
             Loggers.logInfo("press keyboard key: " + key + " in element located at " + locator);
         }catch (Exception e) {

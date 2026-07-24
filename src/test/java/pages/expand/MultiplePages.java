@@ -1,6 +1,7 @@
 package pages.expand;
 
 import engine.actions.*;
+import engine.enums.WaitTypes;
 import engine.reporters.Loggers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -25,7 +26,7 @@ public class MultiplePages extends HomePage {
         Waits.waitToBeVisible(driver,selection);
         ElementActions.clickElement(driver,selection);
         ElementActions.clickElement(driver,submitButton);
-        Waits.waitElementToContainText(driver,assertion,country);
+        Waits.waitElementToContainText(assertion,country);
         Assert.assertTrue(ElementActions.getText(driver,assertion).contains(country));
     }
 
@@ -82,12 +83,13 @@ public class MultiplePages extends HomePage {
                 // Scroll to bottom
                 JSActions.executeScript(driver,"window.scrollTo(0, document.body.scrollHeight);");
                 try {
-                    Waits.explicitWaitShortTime(driver).until(x -> {
-                        Number newHeightObj = (Number)
-                                JSActions.executeScript(driver,"return document.body.scrollHeight");
-                        newHeight.set(newHeightObj != null ? newHeightObj.longValue() : 0);
-                        return lastHeight != newHeight.get();
-                    });
+                    Waits.customWait(WaitTypes.ShortWait,"wait for scrolling",
+                            x -> {
+                                Number newHeightObj = (Number)
+                                        JSActions.executeScript(driver,"return document.body.scrollHeight");
+                                newHeight.set(newHeightObj != null ? newHeightObj.longValue() : 0);
+                                return lastHeight != newHeight.get();
+                            });
                 } catch (Exception e) {
                  Loggers.logInfo("Reached the end of the page");
                 }
@@ -109,12 +111,13 @@ public class MultiplePages extends HomePage {
                 // Scroll to bottom
                 JSActions.executeScript(driver,"arguments[0].scrollTo(0, arguments[0].scrollHeight);",driver.findElement(scrollingElement));
                 try {
-                    Waits.explicitWaitShortTime(driver).until(x -> {
-                        Number newHeightObj = (Number)
-                                JSActions.executeScript(driver,"return arguments[0].scrollHeight",driver.findElement(scrollingElement));
-                        newHeight.set(newHeightObj != null ? newHeightObj.longValue() : 0);
-                        return lastHeight != newHeight.get();
-                    });
+                    Waits.customWait(WaitTypes.ShortWait,"wait for scrolling",
+                            x -> {
+                                Number newHeightObj = (Number)
+                                        JSActions.executeScript(driver,"return arguments[0].scrollHeight",driver.findElement(scrollingElement));
+                                newHeight.set(newHeightObj != null ? newHeightObj.longValue() : 0);
+                                return lastHeight != newHeight.get();
+                            });
                 } catch (Exception e) {
                  Loggers.logWarn("Reached the end of the page");
                 }

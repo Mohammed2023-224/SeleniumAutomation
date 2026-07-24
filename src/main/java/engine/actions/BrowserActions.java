@@ -91,8 +91,8 @@ public class BrowserActions {
 
     public static void switchToWindowByTitle(WebDriver driver, String title) {
         ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
-        if (windows.size() <= 1) {
-            Loggers.logError("Couldn't find more that the current window");
+        if (windows.isEmpty()) {
+            Loggers.logError("Couldn't find windows ");
             return;
         }
         for (String t : windows) {
@@ -112,8 +112,8 @@ public class BrowserActions {
 
     public static void switchToWindowByURL(WebDriver driver, String url) {
         ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
-        if (windows.size() <= 1) {
-            Loggers.logError("Couldn't find more that the current window");
+        if (windows.isEmpty()) {
+            Loggers.logError("Couldn't find windows ");
             return;
         }
         for (String u : windows) {

@@ -25,7 +25,7 @@ public class LoginPage extends HomePage{
     }
 
     public void typeUserName(String num){
-        Waits.waitToBeClickable(driver,userName);
+        Waits.waitToBeClickable(userName);
         ElementActions.scrollToElement(driver,userName);
         ElementActions.typeInElement(driver,userName,num);
     }

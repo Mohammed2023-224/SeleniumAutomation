@@ -1,6 +1,8 @@
 package tests.baseTest;
 
+import engine.actions.BrowserActions;
 import engine.actions.JSActions;
+import engine.actions.WaitsFactory;
 import engine.constants.FrameworkConfigs;
 import engine.driver.DriverFactory;
 import engine.driver.DriverOptions;
@@ -27,62 +29,40 @@ import java.util.Objects;
 
 @Listeners({TestNgListener.class, TransformListener.class})
 public class BaseTestClass {
-    public WebDriver driver;
-    public String testDataPath= Objects.requireNonNull(ClassPathLoading.getResourceAsPath("testData/data.xlsx", false)).toString();
+//    public WebDriver driver;
+    public static String testDataPath= Objects.requireNonNull(ClassPathLoading.getResourceAsPath("testData/data.xlsx", false)).toString();
 
     @Parameters({"browser","osVersion","browserVersion","os"})
     @BeforeClass
     protected void InitDriver(ITestContext con, @Optional() String browser,
                               @Optional("Windows") String osVersion,@Optional("latest") String browserVersion
             ,@Optional("11") String os) {
-            driver = new SetupDriver().startDriver(browser, FrameworkConfigs.localExecution(), osVersion, browserVersion, os);
+            WebDriver driver = new SetupDriver().startDriver(browser, FrameworkConfigs.localExecution(), osVersion, browserVersion, os);
         DriverOptions.maximizeWindow(driver,FrameworkConfigs.maximized());
         DriverFactory.setDriver(driver);
         con.setAttribute("driver", driver);
+        WaitsFactory.setWaits(driver);
     }
 
     @AfterClass
     protected void tearDriver() {
-        driver.quit();
+        DriverFactory.getDriver().quit();
+        WaitsFactory.removeWaits();
     }
 
     @AfterMethod
     protected void attachLogsAndScreenshot(ITestResult result) {
-        if(driver ==null) return;
+        if(DriverFactory.getDriver() ==null) return;
         if(FrameworkConfigs.perTestLog())AllureAttachments.saveTextLog(ThreadContext.get("testLogFileName") + ".log",
                 System.getProperty("user.dir")+"/"+FrameworkConfigs.reportsPath() + ThreadContext.get("testLogFileName") + ".log");
-        if(!result.isSuccess()) AllureAttachments.saveScreensShot(driver,"test");
+        if(!result.isSuccess()) AllureAttachments.saveScreensShot(DriverFactory.getDriver(),"test");
         ThreadContext.remove("testLogFileName");
     }
     @AfterMethod
     protected void startNewTab() {
-        if (driver==null) return;
-        JSActions.executeScript(driver,"window.open();");
-        List<String> handles = new ArrayList<>(driver.getWindowHandles());
-        String validTab = null;
-        for (String handle : handles) {
-            try {
-                driver.switchTo().window(handle);
-                String url = driver.getCurrentUrl();
-                Assert.assertNotNull(url);
-                boolean isEdgeDownloader = url.toLowerCase().contains("edge://");
-                boolean isBlank = url.equals("about:blank");
-                if ( isBlank) {
-                    validTab = handle;
-                } else if (isEdgeDownloader) {
-                 Loggers.logInfo("edge download tab can't be closed");
-                } else {
-                    driver.close();
-                }
-
-            } catch (Exception e) {
-             Loggers.logInfo("Error handling tab: " + e.getMessage());
-            }
-        }
-        Assert.assertNotNull(validTab);
-        driver.switchTo().window(validTab);
-
+        BrowserActions.startNewTab(DriverFactory.getDriver());
     }
+
     @BeforeSuite
     public void publishAllureEnvironment() {
 //        String environment= PropertyReader.get("environment", String.class);
