@@ -45,7 +45,6 @@ public class ElementActions {
                     Thread.sleep(100);
                     return ElementActions.checkIfElementVisible(d, nextElement);
                 } catch (Exception e) {
-                    Thread.currentThread().interrupt();
                     return false;
                 }
             });

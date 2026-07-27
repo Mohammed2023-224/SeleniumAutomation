@@ -20,7 +20,6 @@ public class DriverHelper {
                 Thread.sleep(1000);
             }
             catch (InterruptedException ignored) {
-                Thread.currentThread().interrupt();
             }
             catch (Exception e)
             {Loggers.logError("Not handled error: "+e);}

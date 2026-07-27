@@ -39,6 +39,25 @@ public class ApiRequestFactory {
     public Response executeWithRetry(Function<APIRequestBuilder, Response> fn, int expectedStatusCode) {
         APIRequestBuilder req = newRequest();
         Response res = null;
+            res = fn.apply(req);
+            if (res.getStatusCode() != expectedStatusCode) {
+                Loggers.logInfo("Failed first request. refreshing session and trying again");
+                tokenProvider.refreshSession();
+                req = newRequest();
+                res = fn.apply(req);
+                if(res.getStatusCode() != expectedStatusCode){
+                    Loggers.logError("\nThe response received is: ");
+                    Loggers.logError(req.getLastResponseLog());
+                    Loggers.logError("\nThe request sent is: ");
+                    Loggers.logError(req.getLastRequestLog());
+                }
+            }
+        return res;
+    }
+
+    public Response executeWithRetry(Function<APIRequestBuilder, Response> fn, int expectedStatusCode,Boolean assertion) {
+        APIRequestBuilder req = newRequest();
+        Response res = null;
         try {
             res = fn.apply(req);
             if (res.getStatusCode() != expectedStatusCode) {

@@ -72,7 +72,6 @@ public class APIHelpers {
 
         catch (InterruptedException | ExecutionException e) {
                 Loggers.logWarn(" Interrupted thread");
-                Thread.currentThread().interrupt();
         }
         return response;
     }

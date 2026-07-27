@@ -63,8 +63,6 @@ public class SystemMethods {
         try {
             return future.get();
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            Loggers.logError("Interrupted while starting process " + e);
             return null;
         } catch (ExecutionException e) {
             Loggers.logError("Failed to start process: " + batPath + "  " + e);
@@ -94,8 +92,6 @@ public class SystemMethods {
                 process.waitFor();
             }
         } catch (InterruptedException ee) {
-            Loggers.logWarn("Interrupted thread");
-            Thread.currentThread().interrupt();
         } catch (Exception e) {
             Loggers.logError("Error killing processes by port: " + e.getMessage());
         }
@@ -121,7 +117,6 @@ public class SystemMethods {
                 Loggers.logWarn("File isn't executed: " + path);
             } catch (InterruptedException ee) {
                 Loggers.logWarn("Interrupted thread");
-                Thread.currentThread().interrupt();
             }
         } else {
             Loggers.logInfo("File " + path + " isn't executable type");

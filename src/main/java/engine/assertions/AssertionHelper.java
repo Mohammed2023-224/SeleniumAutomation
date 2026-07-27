@@ -18,8 +18,6 @@ public class AssertionHelper {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                Loggers.logError("Issue with thread couldn't sleep: "+ e);
             }
             boolean flag=  fn.getAsBoolean();
             if (flag) {
@@ -43,7 +41,6 @@ public class AssertionHelper {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
                 Loggers.logError("Issue with thread couldn't sleep: "+e);
             }
            boolean flag=  fn.getAsBoolean();
