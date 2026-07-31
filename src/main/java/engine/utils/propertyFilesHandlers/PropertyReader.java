@@ -14,6 +14,11 @@ public class PropertyReader {
        return PropertyParser.parseValue(key,value,type);
     }
 
+    public static <T> T get(String key, Class<T> type,Map<String, String> variables) {
+        String value = resolve(key,variables);
+       return PropertyParser.parseValue(key,value,type);
+    }
+
     /**
      *
      * @param key: Key to search for
@@ -33,6 +38,34 @@ public class PropertyReader {
             }
             return fileValue.trim();
         });
+    }
+
+    private static String resolve(String key,Map<String, String> variables) {
+        return CACHE.computeIfAbsent(key, k -> {
+            String sysValue = System.getProperty(k);
+            if (sysValue != null && !sysValue.isBlank()) {
+                return sysValue;
+            }
+            String fileValue = PropertyLoader.getAllProperties().getProperty(k);
+            if (fileValue == null) {
+                throw new IllegalStateException(
+                        "Missing configuration key: " + k
+                );
+            }
+            return replaceVariables(fileValue.trim(),variables);
+        });
+    }
+
+    private static String replaceVariables(
+            String value,
+            Map<String, String> variables) {
+        for (Map.Entry<String, String> entry : variables.entrySet()) {
+            value = value.replace(
+                    "${" + entry.getKey() + "}",
+                    entry.getValue()
+            );
+        }
+        return value;
     }
 
     public static void clearCache() {

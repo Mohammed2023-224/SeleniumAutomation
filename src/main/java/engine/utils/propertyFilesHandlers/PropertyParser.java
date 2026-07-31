@@ -2,8 +2,7 @@ package engine.utils.propertyFilesHandlers;
 
 import engine.exceptions.CustomExceptions;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class PropertyParser {
 
@@ -46,6 +45,22 @@ public class PropertyParser {
                 return type.cast(Arrays.stream(value.split(","))
                         .map(String::trim)
                         .toList());
+            }
+            if (type == Map.class) {
+                Map<String, String> map = new LinkedHashMap<>();
+                Arrays.stream(value.split(","))
+                        .forEach(entry -> {
+                            String[] pair = entry.split("=", 2);
+                            if (pair.length != 2) {
+                                throw new IllegalArgumentException(
+                                        "Invalid map entry: " + entry);
+                            }
+                            map.put(
+                                    pair[0].trim(),
+                                    pair[1].trim()
+                            );
+                        });
+                return (T) map;
             }
         } catch (Exception e) {
             throw new IllegalArgumentException(

@@ -27,6 +27,14 @@ public class Helpers {
         return null;
     }
 
+    public static String extractTextUsingRegex(String text, String regex, int group) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            return matcher.group(group);
+        }
+        return null;
+    }
 
     public static <T> boolean isSorted(List<T> list, Comparator<T> comparator) {
         for (int i = 1; i < list.size(); i++) {
