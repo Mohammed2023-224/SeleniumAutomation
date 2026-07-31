@@ -19,6 +19,10 @@ public class PropertyLoader {
 
     private static final Properties PROPERTIES = loadProperties();
 
+    /**
+     *  reads all property files from target output that exists in folders properties or properties/environment passed or default folder
+     * @return properties
+     */
     private static Properties loadProperties() {
         Properties properties = new Properties();
         String env = System.getProperty("env", "default");
@@ -45,6 +49,11 @@ public class PropertyLoader {
         return PROPERTIES;
     }
 
+    /**
+     *
+     * @param filePath: File path as a string
+     * @return map of all the file data
+     */
     public static Map<String, String> loadAsMap(String filePath) {
         Path path = ClassPathLoading.getResourceAsPath(filePath, false);
         if (path == null) {

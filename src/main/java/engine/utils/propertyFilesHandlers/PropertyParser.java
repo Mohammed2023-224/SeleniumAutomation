@@ -9,6 +9,14 @@ public class PropertyParser {
 
     private PropertyParser(){}
 
+    /**
+     *
+     * @param key: Current key
+     * @param value: Current value for the key
+     * @param type: Type to cast data into
+     * @return the data casted into the tupe passed
+     * @param <T>
+     */
     static <T> T parseValue(String key, String value, Class<T> type) {
         if (value == null) {
             throw new IllegalStateException("Missing config key: " + key);

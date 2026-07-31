@@ -14,6 +14,11 @@ public class PropertyReader {
        return PropertyParser.parseValue(key,value,type);
     }
 
+    /**
+     *
+     * @param key: Key to search for
+     * @return the value of the key requested saving the key value combination into the cache for faster retrieving next calls
+     */
     private static String resolve(String key) {
         return CACHE.computeIfAbsent(key, k -> {
             String sysValue = System.getProperty(k);
