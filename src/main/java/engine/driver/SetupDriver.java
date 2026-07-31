@@ -6,7 +6,7 @@ import engine.driver.browsers.Edge;
 import engine.driver.browsers.FireFox;
 import engine.enums.Browsers;
 import engine.reporters.Loggers;
-import engine.utils.PropertyReader;
+import engine.utils.propertyFilesHandlers.PropertyReader;
 import org.openqa.selenium.WebDriver;
 
 import java.util.HashMap;

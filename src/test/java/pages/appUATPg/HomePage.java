@@ -2,7 +2,7 @@ package pages.appUATPg;
 
 import engine.actions.BrowserActions;
 import engine.actions.ElementActions;
-import engine.utils.PropertyReader;
+import engine.utils.propertyFilesHandlers.PropertyReader;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

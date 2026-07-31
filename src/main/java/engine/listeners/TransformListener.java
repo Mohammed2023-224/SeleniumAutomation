@@ -1,7 +1,7 @@
 package engine.listeners;
 
 import engine.reporters.Loggers;
-import engine.utils.PropertyReader;
+import engine.utils.propertyFilesHandlers.PropertyReader;
 import engine.utils.ReadExecutionFlow;
 import org.testng.IAnnotationTransformer;
 import org.testng.annotations.ITestAnnotation;

@@ -18,6 +18,7 @@ import com.google.api.services.gmail.model.MessagePart;
 import engine.constants.FrameworkConfigs;
 import engine.exceptions.CustomExceptions;
 import engine.reporters.Loggers;
+import engine.utils.propertyFilesHandlers.PropertyReader;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

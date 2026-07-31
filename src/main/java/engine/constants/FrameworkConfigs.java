@@ -1,6 +1,6 @@
 package engine.constants;
 
-import engine.utils.PropertyReader;
+import engine.utils.propertyFilesHandlers.PropertyReader;
 
 
 public class FrameworkConfigs {

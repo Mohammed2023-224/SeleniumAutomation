@@ -2,7 +2,7 @@ package engine.reporters;
 
 import engine.constants.FrameworkConfigs;
 import engine.utils.ClassPathLoading;
-import engine.utils.PropertyReader;
+import engine.utils.propertyFilesHandlers.PropertyReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.core.Logger;

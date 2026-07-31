@@ -5,7 +5,7 @@ import engine.constants.FrameworkConfigs;
 import engine.reporters.DynamicLoggers;
 import engine.reporters.Loggers;
 import engine.utils.ClassPathLoading;
-import engine.utils.PropertyReader;
+import engine.utils.propertyFilesHandlers.PropertyReader;
 import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;

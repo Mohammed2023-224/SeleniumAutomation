@@ -1,7 +1,6 @@
 package tests.baseTest;
 
 import engine.actions.BrowserActions;
-import engine.actions.JSActions;
 import engine.actions.WaitsFactory;
 import engine.constants.FrameworkConfigs;
 import engine.driver.DriverFactory;
@@ -10,20 +9,16 @@ import engine.driver.SetupDriver;
 import engine.listeners.AllureAttachments;
 import engine.listeners.TestNgListener;
 import engine.listeners.TransformListener;
-import engine.reporters.Loggers;
 import engine.utils.ClassPathLoading;
 import engine.utils.PropertyFileCreation;
-import engine.utils.PropertyReader;
+import engine.utils.propertyFilesHandlers.PropertyReader;
 import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Objects;
 
 

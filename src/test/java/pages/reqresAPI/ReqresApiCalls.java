@@ -3,7 +3,7 @@ package pages.reqresAPI;
 import engine.api.ApiRequestFactory;
 import engine.api.HttpMethods;
 import engine.utils.ClassPathLoading;
-import engine.utils.PropertyReader;
+import engine.utils.propertyFilesHandlers.PropertyReader;
 import io.restassured.response.Response;
 
 import java.util.List;

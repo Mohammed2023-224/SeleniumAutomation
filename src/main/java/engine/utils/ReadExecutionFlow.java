@@ -1,5 +1,7 @@
 package engine.utils;
 
+import engine.utils.propertyFilesHandlers.PropertyReader;
+
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Set;

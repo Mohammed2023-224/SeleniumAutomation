@@ -4,13 +4,12 @@ import pages.reqresAPI.tokenProviders.AddedHeaderTokenProvider;
 import engine.assertions.HardAssertions;
 import engine.api.ApiRequestFactory;
 import engine.api.ResponseActions;
-import engine.utils.PropertyReader;
+import engine.utils.propertyFilesHandlers.PropertyReader;
 import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import pages.reqresAPI.ReqresApiCalls;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ReqresTests {

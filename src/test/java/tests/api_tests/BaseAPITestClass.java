@@ -7,7 +7,7 @@ import engine.listeners.TestNgListener;
 import engine.listeners.TransformListener;
 import engine.utils.ClassPathLoading;
 import engine.utils.PropertyFileCreation;
-import engine.utils.PropertyReader;
+import engine.utils.propertyFilesHandlers.PropertyReader;
 import org.apache.logging.log4j.ThreadContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
