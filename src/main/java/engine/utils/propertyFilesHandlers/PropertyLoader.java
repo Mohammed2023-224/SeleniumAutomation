@@ -8,10 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class PropertyLoader {
 
@@ -54,23 +51,26 @@ public class PropertyLoader {
      * @param filePath: File path as a string
      * @return map of all the file data
      */
-    public static Map<String, String> loadAsMap(String filePath) {
+    public static Map<String, Object> loadAsMap(String filePath) {
         Path path = ClassPathLoading.getResourceAsPath(filePath, false);
         if (path == null) {
             throw new IllegalArgumentException("Properties file not found: " + filePath);
         }
-
         Properties properties = new Properties();
         try (InputStream is = Files.newInputStream(path)) {
             properties.load(is);
         } catch (IOException e) {
             throw new CustomExceptions("Failed to load properties: " + filePath, e);
         }
-
-        Map<String, String> propertyMap = new LinkedHashMap<>();
-        properties.stringPropertyNames().forEach(key ->
-                propertyMap.put(key, properties.getProperty(key))
-        );
+        Map<String, Object> propertyMap = new LinkedHashMap<>();
+        properties.stringPropertyNames().forEach(key -> {
+            String mpValue=properties.getProperty(key);
+            Map<String,String> mpMap=new HashMap<>();
+            if (mpValue.contains("=")) {
+               mpMap= PropertyParser.parseValue(key,mpValue,Map.class);
+            }
+            propertyMap.put(key, mpMap);
+        });
 
         return propertyMap;
     }
