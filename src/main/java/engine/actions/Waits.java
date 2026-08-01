@@ -1,22 +1,17 @@
 package engine.actions;
 
 import engine.constants.FrameworkConfigs;
-import engine.driver.DriverFactory;
 import engine.enums.WaitTypes;
 import engine.reporters.Loggers;
 import org.apache.poi.ss.formula.functions.T;
-import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.time.Duration;
-import java.util.function.BooleanSupplier;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class Waits {
     private Waits() {
@@ -61,14 +56,18 @@ public class Waits {
                 ,ExpectedConditions.elementToBeClickable(locator));
     }
 
+    public static void waitToBeVisible( By locator) {
+        customWait(WaitTypes.ShortWait,"wait for element: "+locator+" to be visible for "+ FrameworkConfigs.shortWait()
+                ,ExpectedConditions.visibilityOfElementLocated(locator));
+    }
 
-    public static void waitElementToContainText(By locator, String text) {
-        WaitsFactory.getShortWait().until(x -> x.findElement(locator).getText().contains(text));
+        public static void waitElementToContainText(By locator, String text) {
+        WaitsManager.getShortWait().until(x -> x.findElement(locator).getText().contains(text));
         Loggers.logInfo("wait for element located at " + locator + " to contain text " + text + " for " + FrameworkConfigs.longWait());
     }
 
     public static void waitForTextToChange(By locator, String text) {
-        WaitsFactory.getShortWait().until(x -> !x.findElement(locator).getText().contains(text));
+        WaitsManager.getShortWait().until(x -> !x.findElement(locator).getText().contains(text));
         Loggers.logInfo("wait for element located at " + locator + " to not have text " + text + " for " + FrameworkConfigs.longWait());
     }
 
@@ -108,16 +107,16 @@ public class Waits {
     private static FluentWait<WebDriver> waitSelector(WaitTypes waitType) {
         switch (waitType) {
             case ShortWait -> {
-                return WaitsFactory.getShortWait();
+                return WaitsManager.getShortWait();
             }
             case LongWait -> {
-                return WaitsFactory.getLongWait();
+                return WaitsManager.getLongWait();
             }
             case FluentWaitLong -> {
-                return WaitsFactory.getLongFluentWait();
+                return WaitsManager.getLongFluentWait();
             }
             case FluentWaitShort -> {
-                return WaitsFactory.getShortFluentWait();
+                return WaitsManager.getShortFluentWait();
             }
         }
 

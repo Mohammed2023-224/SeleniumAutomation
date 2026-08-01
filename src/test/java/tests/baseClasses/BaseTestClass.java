@@ -1,7 +1,7 @@
 package tests.baseClasses;
 
 import engine.actions.BrowserActions;
-import engine.actions.WaitsFactory;
+import engine.actions.WaitsManager;
 import engine.constants.FrameworkConfigs;
 import engine.driver.DriverFactory;
 import engine.driver.DriverOptions;
@@ -36,13 +36,13 @@ public class BaseTestClass {
         DriverOptions.maximizeWindow(driver,FrameworkConfigs.maximized());
         DriverFactory.setDriver(driver);
         con.setAttribute("driver", driver);
-        WaitsFactory.setWaits(driver);
+        WaitsManager.setWaits(driver);
     }
 
     @AfterClass
     protected void tearDriver() {
         DriverFactory.getDriver().quit();
-        WaitsFactory.removeWaits();
+        WaitsManager.removeWaits();
         DriverFactory.unload();
     }
 

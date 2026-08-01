@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class WaitsFactory {
+public class WaitsManager {
     private static final ThreadLocal<WebDriverWait> longWait = new ThreadLocal<>();
     private static final ThreadLocal<FluentWait<WebDriver>> fluentLongWait = new ThreadLocal<>();
     private static final ThreadLocal<WebDriverWait> shortWait = new ThreadLocal<>();

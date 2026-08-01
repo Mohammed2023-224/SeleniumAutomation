@@ -1,6 +1,6 @@
 package tests.baseClasses;
 
-import engine.actions.WaitsFactory;
+import engine.actions.WaitsManager;
 import engine.constants.FrameworkConfigs;
 import engine.driver.SetupDriver;
 import engine.driver.androidDriver.AndroidDriverFactory;
@@ -21,13 +21,13 @@ public class BaseMobileTestClass {
         AppiumDriver driver = new SetupDriver().startMobileDriver();
         AndroidDriverFactory.setDriver(driver);
         con.setAttribute("driver", driver);
-        WaitsFactory.setWaits(driver);
+        WaitsManager.setWaits(driver);
     }
 
     @AfterClass
     protected void tearDriver() {
         AndroidDriverFactory.getDriver().quit();
-        WaitsFactory.removeWaits();
+        WaitsManager.removeWaits();
         AndroidDriverFactory.unload();
     }
 
