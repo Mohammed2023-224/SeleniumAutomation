@@ -5,10 +5,16 @@ import engine.driver.browsers.Chrome;
 import engine.driver.browsers.Edge;
 import engine.driver.browsers.FireFox;
 import engine.enums.Browsers;
+import engine.exceptions.CustomExceptions;
 import engine.reporters.Loggers;
+import engine.utils.propertyFilesHandlers.PropertyLoader;
 import engine.utils.propertyFilesHandlers.PropertyReader;
+import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,5 +45,21 @@ public class SetupDriver {
             Loggers.logError("Couldn't initiate the driver");
             throw e;
         }
+    }
+
+    public AppiumDriver startMobileDriver(){
+        DesiredCapabilities desiredCapabilities=new DesiredCapabilities();
+        (PropertyLoader.loadAsMap(PropertyReader.get("desiredCapabilityPath", String.class))).forEach(
+                desiredCapabilities::setCapability);
+        String urlString=PropertyReader.get("appiumURL",String.class);
+        Loggers.logInfo("Add the following capacilities: "+ desiredCapabilities);
+        Loggers.logInfo("add the following url: "+ urlString);
+        URL url;
+        try {
+             url =new URL(urlString);
+        } catch (MalformedURLException e) {
+            throw new CustomExceptions("Couldn't navigate to the url provided : "+ urlString + e.getMessage());
+        }
+        return new AppiumDriver(url,desiredCapabilities);
     }
 }

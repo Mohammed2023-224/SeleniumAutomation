@@ -45,7 +45,7 @@
     </distributionManagement>
 
     <properties>
-        <selenium.version>4.38.0</selenium.version>
+        <selenium.version>4.45.0</selenium.version>
         <testng.version>7.11.0</testng.version>
         <log4j2API.version>3.0.0-beta2</log4j2API.version>
         <log4j2Core.version>3.0.0-beta2</log4j2Core.version>
@@ -53,6 +53,7 @@
         <jackson.version>2.15.2</jackson.version>
         <lombok.version>1.18.38</lombok.version>
         <RestAssured.version>5.3.0</RestAssured.version>
+        <appium.version>10.1.1</appium.version>
         <aspectJ.version>1.9.22</aspectJ.version>
         <allure.version>2.32.0</allure.version>
         <!--    <allureMavenPlugin.version>2.11.2</allureMavenPlugin.version>-->
@@ -202,7 +203,12 @@
       <artifactId>jsoup</artifactId>
       <version>1.17.2</version> <!-- or latest -->
     </dependency>
-
+      <!-- Source: https://mvnrepository.com/artifact/io.appium/java-client -->
+      <dependency>
+          <groupId>io.appium</groupId>
+          <artifactId>java-client</artifactId>
+          <version>${appium.version}</version>
+      </dependency>
     <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
