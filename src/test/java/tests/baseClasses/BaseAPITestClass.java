@@ -1,4 +1,4 @@
-package tests.api_tests;
+package tests.baseClasses;
 
 import engine.assertions.SoftAssertManager;
 import engine.constants.FrameworkConfigs;

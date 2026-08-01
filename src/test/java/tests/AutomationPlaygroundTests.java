@@ -2,7 +2,7 @@ package tests;
 
 import engine.driver.DriverFactory;
 import pages.appUATPg.*;
-import tests.baseTest.BaseTestClass;
+import tests.baseClasses.BaseTestClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

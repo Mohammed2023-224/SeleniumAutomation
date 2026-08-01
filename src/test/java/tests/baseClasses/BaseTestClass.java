@@ -1,4 +1,4 @@
-package tests.baseTest;
+package tests.baseClasses;
 
 import engine.actions.BrowserActions;
 import engine.actions.WaitsFactory;
@@ -43,6 +43,7 @@ public class BaseTestClass {
     protected void tearDriver() {
         DriverFactory.getDriver().quit();
         WaitsFactory.removeWaits();
+        DriverFactory.unload();
     }
 
     @AfterMethod

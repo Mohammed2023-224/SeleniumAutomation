@@ -1,9 +1,8 @@
 package tests;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import engine.driver.DriverFactory;
 import pages.expand.*;
-import tests.baseTest.BaseTestClass;
+import tests.baseClasses.BaseTestClass;
 import engine.actions.BrowserActions;
 import engine.actions.DevToolsActions;
 import engine.utils.Faker;
@@ -11,8 +10,6 @@ import org.testng.annotations.*;
 import engine.utils.ExcelReader;
 
 import java.util.LinkedHashMap;
-
-import static tests.baseTest.BaseTestClass.testDataPath;
 
 public class ExpandTests  extends BaseTestClass {
 
