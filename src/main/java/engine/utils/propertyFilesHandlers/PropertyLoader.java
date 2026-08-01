@@ -68,8 +68,11 @@ public class PropertyLoader {
             Map<String,String> mpMap=new HashMap<>();
             if (mpValue.contains("=")) {
                mpMap= PropertyParser.parseValue(key,mpValue,Map.class);
+                propertyMap.put(key, mpMap);
             }
-            propertyMap.put(key, mpMap);
+            else {
+                propertyMap.put(key, mpValue);
+            }
         });
 
         return propertyMap;
