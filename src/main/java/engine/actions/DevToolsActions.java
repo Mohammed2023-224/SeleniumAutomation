@@ -4,9 +4,9 @@ import engine.reporters.Loggers;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v141.network.Network;
-import org.openqa.selenium.devtools.v141.network.model.Headers;
-import org.openqa.selenium.devtools.v141.page.Page;
+import org.openqa.selenium.devtools.v149.network.Network;
+import org.openqa.selenium.devtools.v149.network.model.Headers;
+import org.openqa.selenium.devtools.v149.page.Page;
 import org.openqa.selenium.edge.EdgeDriver;
 
 import java.util.Base64;
