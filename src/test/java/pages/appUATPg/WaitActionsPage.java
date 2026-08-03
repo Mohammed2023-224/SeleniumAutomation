@@ -64,11 +64,11 @@ private final By minWaitTime= By.id("min_wait");
         Waits.waitToBeVisible(driver,h3Headers("Wait for alert to be present"));
         ElementActions.clickElement(driver,alertTrigger);
         Waits.waitForAlert(maxTime);
-        BrowserActions.acceptAlert(driver);
+        BrowserActions.switchAndAcceptAlert(driver);
         Assert.assertTrue(ElementActions.getText(driver,assertion("alert_handled_badge")).contains("Alert handled"));
         ElementActions.clickElement(driver,promptTrigger);
         Waits.waitForAlert(maxTime);
-        BrowserActions.acceptAlert(driver);
+        BrowserActions.switchAndAcceptAlert(driver);
         Assert.assertTrue(ElementActions.getText(driver,assertion("confirm_ok")).contains("Confirm"));
     }
 

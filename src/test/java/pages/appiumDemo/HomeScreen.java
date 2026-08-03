@@ -1,5 +1,6 @@
 package pages.appiumDemo;
 
+import engine.actions.AndroidActions;
 import engine.actions.ElementActions;
 import engine.actions.Waits;
 import io.appium.java_client.AppiumDriver;
@@ -22,5 +23,16 @@ public class HomeScreen {
         Waits.waitToBeVisible(appTitle);
         ElementActions.clickElement(driver,getLinkButton(homePageLinks));
     }
+
+    public void longClickLink(HomePageLinks homePageLinks){
+        Waits.waitToBeVisible(appTitle);
+        AndroidActions.longClick(driver,getLinkButton(homePageLinks),2);
+    }
+
+    public void waitLinkVisibility(HomePageLinks homePageLinks){
+        Waits.waitToBeVisible(getLinkButton(homePageLinks));
+    }
+
+
 
 }
