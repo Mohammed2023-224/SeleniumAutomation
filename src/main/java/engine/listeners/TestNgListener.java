@@ -113,6 +113,9 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
     }
     @Override
     public void onExecutionStart() {
+        SystemMethods.killProcess("msedgedriver.exe");
+        SystemMethods.killProcess("chromedriver.exe");
+        SystemMethods.killProcess("geckodriver.exe");
         publishAllure();
         if(!FrameworkConfigs.localExecution()&&FrameworkConfigs.gridEnabled()){
             SystemMethods.startBatAsync(ClassPathLoading.getResourceAsPath("grid/startHub.bat",true).toString());
@@ -135,7 +138,6 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
 
 
     private static void publishAllure(){
-        SystemMethods.killProcess("msedgedriver.exe");
         String environment = System.getProperty("env", PropertyReader.get("environment", String.class));
         String testsType = System.getProperty("groups", "No specific tests selected");
         Set<String> scopes = new LinkedHashSet<>();
