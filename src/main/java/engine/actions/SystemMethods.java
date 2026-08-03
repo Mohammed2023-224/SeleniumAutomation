@@ -165,6 +165,16 @@ public class SystemMethods {
         }
     }
 
+    public static void  killProcess(String  process){
+        try {
+            Runtime.getRuntime().exec("taskkill /F /IM "+process);
+            Loggers.logInfo(process+" process termination command sent successfully.");
+        } catch (IOException e) {
+            Loggers.logError("Failed to execute taskkill command.");
+            e.printStackTrace();
+        }
+    }
+
     public static void waitForPort(String host,
                                    int port,
                                    int timeoutSeconds) {
