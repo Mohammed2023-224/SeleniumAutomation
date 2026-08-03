@@ -2,6 +2,7 @@ package engine.actions;
 
 import engine.exceptions.CustomExceptions;
 import engine.reporters.Loggers;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -143,12 +144,51 @@ public class BrowserActions {
         }
     }
 
-    public static void acceptAlert(WebDriver driver) {
+    public static void switchAndAcceptAlert(WebDriver driver) {
         try {
             driver.switchTo().alert().accept();
             Loggers.logInfo("Accept existing alert");
         } catch (Exception e) {
             Loggers.logError("Couldn't accept the alert");
+            throw e;
+        }
+    }
+
+    public static Alert switchAlert(WebDriver driver) {
+        try {
+            return driver.switchTo().alert();
+        } catch (Exception e) {
+            Loggers.logError("Couldn't switch to the alert");
+            throw e;
+        }
+    }
+
+    public static void fillAlert(Alert alert,String text) {
+        try {
+            alert.sendKeys(text);
+            Loggers.logInfo("Filled alert with text: "+text);
+        } catch (Exception e) {
+            Loggers.logError("Couldn't accept the alert");
+            throw e;
+        }
+    }
+
+    public static String getAlertText(Alert alert) {
+        try {
+            Loggers.logInfo("Get alert text");
+            return alert.getText();
+        } catch (Exception e) {
+            Loggers.logError("Couldn't get alert text");
+            throw e;
+        }
+    }
+
+    public static void acceptAlert(Alert alert) {
+        try {
+            Loggers.logInfo("accept alert");
+             alert.accept();
+        } catch (Exception e) {
+            Loggers.logError("Couldn't accept alert");
             throw e;
         }
     }

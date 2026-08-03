@@ -26,7 +26,7 @@ public class BaseMobileTestClass {
 
     @AfterClass
     protected void tearDriver() {
-        AndroidDriverFactory.getDriver().quit();
+//        AndroidDriverFactory.getDriver().quit();
         WaitsManager.removeWaits();
         AndroidDriverFactory.unload();
     }
@@ -38,20 +38,5 @@ public class BaseMobileTestClass {
                 System.getProperty("user.dir")+"/"+FrameworkConfigs.reportsPath() + ThreadContext.get("testLogFileName") + ".log");
         if(!result.isSuccess()) AllureAttachments.saveScreensShot(AndroidDriverFactory.getDriver(),"test");
         ThreadContext.remove("testLogFileName");
-    }
-
-    @BeforeSuite
-    public void publishAllureEnvironment() {
-////        String environment= PropertyReader.get("environment", String.class);
-//        LinkedHashMap<String, String> env = new LinkedHashMap<>();
-////        env.put("Environment", environment);
-////        env.put("Base URL", EnvSelector.envSelector(false));
-////        env.put("Run Type", PropertyReader.get("runType", String.class));
-//        env.put("Local Execution",
-//                PropertyReader.get("local_execution", String.class));
-//        env.put("Java", System.getProperty("java.version"));
-//
-//        PropertyFileCreation.createPropertyFile(env,"allure-results","environment"
-//                ,"Allure Environment");
     }
 }

@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -148,6 +149,44 @@ public class SystemMethods {
                     .forEach(ProcessHandle::destroyForcibly);
             handle.destroyForcibly();
         }
+    }
+
+    public static void  killProcess(Process process){
+        if( process.isAlive()) {
+            try {
+                process.destroy();
+                Loggers.logInfo("Killed process "+process);
+            }
+            catch (Exception e){
+                Loggers.logError("Failed to kill process ");
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public static void waitForPort(String host,
+                                   int port,
+                                   int timeoutSeconds) {
+
+        long endTime = System.currentTimeMillis() + timeoutSeconds * 1000L;
+        while (System.currentTimeMillis() < endTime) {
+            try (Socket socket = new Socket(host, port)) {
+                Loggers.logInfo("Port " + port + " is ready");
+                return;
+            } catch (Exception ignored) {
+            }
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException(e);
+            }
+        }
+
+        throw new RuntimeException(
+                "Port " + port + " did not become available");
     }
 
     public static void killProcessWithDescendantsUsingShutDownHook(Process process) {

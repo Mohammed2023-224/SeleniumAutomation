@@ -5,6 +5,8 @@ import engine.constants.FrameworkConfigs;
 import engine.reporters.DynamicLoggers;
 import engine.reporters.Loggers;
 import engine.utils.ClassPathLoading;
+import engine.utils.EnvSelector;
+import engine.utils.propertyFilesHandlers.PropertyFileCreation;
 import engine.utils.propertyFilesHandlers.PropertyReader;
 import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
@@ -111,6 +113,7 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
     }
     @Override
     public void onExecutionStart() {
+        publishAllure();
         if(!FrameworkConfigs.localExecution()&&FrameworkConfigs.gridEnabled()){
             SystemMethods.startBatAsync(ClassPathLoading.getResourceAsPath("grid/startHub.bat",true).toString());
             SystemMethods.startBatAsync(ClassPathLoading.getResourceAsPath("grid/startNode.bat",true).toString());
@@ -118,6 +121,7 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
         if ("true".equalsIgnoreCase(PropertyReader.get("local_python_proxy", String.class))){
             proxyProcess=SystemMethods.startBatAsync(ClassPathLoading.getResourceAsPath("batFiles/run_local_proxy.bat",true).toString());
             assert proxyProcess != null;
+            SystemMethods.waitForPort(PropertyReader.get("ProxyHost", String.class),PropertyReader.get("ProxyPort", Integer.class),10 );
             SystemMethods.killProcessWithDescendantsUsingShutDownHook(proxyProcess);
         }
     }
@@ -127,5 +131,35 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
             return remoteWebDriver.getCapabilities().getBrowserName().toLowerCase();
         }
         return "unknown";
+    }
+
+
+    private static void publishAllure(){
+        SystemMethods.killProcess("msedgedriver.exe");
+        String environment = System.getProperty("env", PropertyReader.get("environment", String.class));
+        String testsType = System.getProperty("groups", "No specific tests selected");
+        Set<String> scopes = new LinkedHashSet<>();
+        String[] groupArray = testsType.split(",");
+
+        for (String group : groupArray) {
+            String trimmedGroup = group.trim().toUpperCase();
+            if (trimmedGroup.contains("UI") || trimmedGroup.contains("GUI")) {
+                scopes.add("UI");
+            } else if (trimmedGroup.contains("API")) {
+                scopes.add("API");
+            }
+        }
+        String finalScope = !scopes.isEmpty() ? String.join(", ", scopes):!PropertyReader.get("runType", String.class).isEmpty()?
+                PropertyReader.get("runType", String.class):"Unknown run type" ;
+        LinkedHashMap<String, String> env = new LinkedHashMap<>();
+        env.put("Environment", environment);
+        env.put("Base URL", EnvSelector.envSelector(false));
+        env.put("Run Type (Group)", testsType);
+        env.put("Scope", finalScope);
+        env.put("Local Execution",
+                PropertyReader.get("local_execution", String.class));
+        env.put("Java", System.getProperty("java.version"));
+        PropertyFileCreation.createPropertyFile(env, "allure-results", "environment"
+                , "Allure Environment");
     }
 }

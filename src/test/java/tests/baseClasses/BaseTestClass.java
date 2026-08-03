@@ -10,15 +10,13 @@ import engine.listeners.AllureAttachments;
 import engine.listeners.TestNgListener;
 import engine.listeners.TransformListener;
 import engine.utils.ClassPathLoading;
-import engine.utils.PropertyFileCreation;
+import engine.utils.propertyFilesHandlers.PropertyFileCreation;
 import engine.utils.propertyFilesHandlers.PropertyReader;
 import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
-
-import java.util.LinkedHashMap;
 import java.util.Objects;
 
 
@@ -58,21 +56,5 @@ public class BaseTestClass {
     protected void startNewTab() {
         BrowserActions.startNewTab(DriverFactory.getDriver());
     }
-
-    @BeforeSuite
-    public void publishAllureEnvironment() {
-//        String environment= PropertyReader.get("environment", String.class);
-        LinkedHashMap<String, String> env = new LinkedHashMap<>();
-//        env.put("Environment", environment);
-//        env.put("Base URL", EnvSelector.envSelector(false));
-//        env.put("Run Type", PropertyReader.get("runType", String.class));
-        env.put("Local Execution",
-                PropertyReader.get("local_execution", String.class));
-        env.put("Java", System.getProperty("java.version"));
-
-        PropertyFileCreation.createPropertyFile(env,"allure-results","environment"
-                ,"Allure Environment");
-    }
-
 
 }
