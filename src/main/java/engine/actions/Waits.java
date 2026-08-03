@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.File;
 import java.time.Duration;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class Waits {
     private Waits() {
@@ -121,6 +122,25 @@ public class Waits {
         }
 
         return null;
+    }
+
+    public static void waitUntil(String log,
+                                 Supplier<Boolean> condition,
+                                 int timeoutSeconds) {
+        long endTime = System.currentTimeMillis() + (timeoutSeconds * 1000L);
+        while (System.currentTimeMillis() < endTime) {
+            try {
+                if (condition.get()) {
+                    Loggers.logInfo(log);
+                    return;
+                }
+                Thread.sleep(500);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        throw new RuntimeException(
+                "Timeout after " + timeoutSeconds + " seconds. " + log);
     }
 }
 
