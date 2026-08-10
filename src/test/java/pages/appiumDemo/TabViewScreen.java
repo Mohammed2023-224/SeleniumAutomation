@@ -4,13 +4,13 @@ import engine.actions.BrowserActions;
 import engine.actions.ElementActions;
 import engine.actions.Waits;
 import engine.assertions.HardAssertions;
-import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.By;
 
 public class TabViewScreen {
-    private AppiumDriver driver;
+    private AndroidDriver driver;
 
-    public TabViewScreen(AppiumDriver driver){
+    public TabViewScreen(AndroidDriver driver){
         this.driver=driver;
     }
     By screenTitle=By.xpath("//android.widget.TextView[@text=\"Tab View\"]");

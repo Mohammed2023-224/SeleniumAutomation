@@ -2,6 +2,7 @@ package tests.baseClasses;
 
 import engine.actions.WaitsManager;
 import engine.constants.FrameworkConfigs;
+import engine.driver.DriverFactory;
 import engine.driver.SetupDriver;
 import engine.driver.androidDriver.AndroidDriverFactory;
 import engine.listeners.AllureAttachments;
@@ -26,7 +27,7 @@ public class BaseMobileTestClass {
 
     @AfterClass
     protected void tearDriver() {
-//        AndroidDriverFactory.getDriver().quit();
+        AndroidDriverFactory.getDriver().quit();
         WaitsManager.removeWaits();
         AndroidDriverFactory.unload();
     }

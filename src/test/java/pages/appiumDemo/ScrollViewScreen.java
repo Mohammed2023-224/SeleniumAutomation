@@ -4,13 +4,13 @@ import engine.actions.AndroidActions;
 import engine.actions.BrowserActions;
 import engine.actions.ElementActions;
 import engine.actions.Waits;
-import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.By;
 
 public class ScrollViewScreen {
-    private AppiumDriver driver;
+    private AndroidDriver driver;
 
-    public ScrollViewScreen(AppiumDriver driver){
+    public ScrollViewScreen(AndroidDriver driver){
         this.driver=driver;
     }
     By screenTitle=By.xpath("//android.widget.TextView[@text=\"ScrollView\"]");

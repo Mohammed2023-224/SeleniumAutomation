@@ -9,7 +9,7 @@ import engine.exceptions.CustomExceptions;
 import engine.reporters.Loggers;
 import engine.utils.propertyFilesHandlers.PropertyLoader;
 import engine.utils.propertyFilesHandlers.PropertyReader;
-import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -47,7 +47,7 @@ public class SetupDriver {
         }
     }
 
-    public AppiumDriver startMobileDriver(){
+    public AndroidDriver startMobileDriver(){
         DesiredCapabilities desiredCapabilities=new DesiredCapabilities();
         (PropertyLoader.loadAsMap(PropertyReader.get("desiredCapabilityPath", String.class))).forEach(
                 desiredCapabilities::setCapability);
@@ -60,6 +60,6 @@ public class SetupDriver {
         } catch (MalformedURLException e) {
             throw new CustomExceptions("Couldn't navigate to the url provided : "+ urlString + e.getMessage());
         }
-        return new AppiumDriver(url,desiredCapabilities);
+        return new AndroidDriver(url,desiredCapabilities);
     }
 }

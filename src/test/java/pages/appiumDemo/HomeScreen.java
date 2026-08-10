@@ -3,13 +3,13 @@ package pages.appiumDemo;
 import engine.actions.AndroidActions;
 import engine.actions.ElementActions;
 import engine.actions.Waits;
-import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.By;
 
 public class HomeScreen {
-    private AppiumDriver driver;
+    private AndroidDriver driver;
 
-    public HomeScreen(AppiumDriver driver){
+    public HomeScreen(AndroidDriver driver){
         this.driver=driver;
     }
 
@@ -21,6 +21,7 @@ public class HomeScreen {
 
     public void clickOnLink(HomePageLinks homePageLinks){
         Waits.waitToBeVisible(appTitle);
+        AndroidActions.scrollToElement(driver,getLinkButton(homePageLinks));
         ElementActions.clickElement(driver,getLinkButton(homePageLinks));
     }
 

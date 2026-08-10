@@ -1,11 +1,12 @@
 package tests.mobileTests;
 
 import engine.driver.androidDriver.AndroidDriverFactory;
-import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import pages.appiumDemo.*;
 import tests.baseClasses.BaseMobileTestClass;
+
 
 public class AndroidTutorialTests extends BaseMobileTestClass {
 HomeScreen homeScreen;
@@ -15,6 +16,9 @@ ScrollViewScreen scrollViewScreen;
 TabViewScreen tabViewScreen;
 LoginScreen loginScreen;
 LongClickScreen longClickScreen;
+TimeScreen timeScreen;
+AutoSuggesstionScreen autoSuggesstionScreen;
+DragAndDropScreen dragAndDropScreen;
 
     @Test
     public void enterValueTest(){
@@ -70,9 +74,41 @@ LongClickScreen longClickScreen;
         longClickScreen.typeEmailInAlert();
     }
 
+    @Test
+    public void timeTest(){
+        homeScreen.clickOnLink(HomePageLinks.Time);
+        timeScreen.selectHours();
+        timeScreen.selectTime("5");
+        timeScreen.selectMinutes();
+        timeScreen.selectTime("45");
+        timeScreen.assertTime("5","45");
+    }
+
+    @Test
+    public void autoSuggesstion(){
+        homeScreen.clickOnLink(HomePageLinks.AutoComplete);
+        autoSuggesstionScreen.typeText("SQL");
+        autoSuggesstionScreen.clickSubmitButton();
+        autoSuggesstionScreen.assertPreview("SQL");
+    }
+
+    @Test
+    public void dragAndDropTest(){
+        homeScreen.clickOnLink(HomePageLinks.Drag);
+        dragAndDropScreen.handleText();
+        dragAndDropScreen.handleBtn();
+        dragAndDropScreen.handleImg();
+    }
+
+    @Test
+    public void pinchInOut(){
+        homeScreen.clickOnLink(HomePageLinks.Pinch);
+        dragAndDropScreen.handlePinching();
+    }
+
     @BeforeClass
     private void initClasses(){
-        AppiumDriver driver=AndroidDriverFactory.getDriver();
+        AndroidDriver driver=AndroidDriverFactory.getDriver();
         enterSomeValueScreen=new EnterSomeValueScreen(AndroidDriverFactory.getDriver());
         homeScreen=new HomeScreen(AndroidDriverFactory.getDriver());
         contacUsScreen=new ContacUsScreen(AndroidDriverFactory.getDriver());
@@ -80,5 +116,8 @@ LongClickScreen longClickScreen;
         tabViewScreen=new TabViewScreen(driver);
         loginScreen=new LoginScreen(driver);
         longClickScreen=new LongClickScreen(driver);
+        timeScreen=new TimeScreen(driver);
+        autoSuggesstionScreen=new AutoSuggesstionScreen(driver);
+        dragAndDropScreen=new DragAndDropScreen(driver);
     }
 }
