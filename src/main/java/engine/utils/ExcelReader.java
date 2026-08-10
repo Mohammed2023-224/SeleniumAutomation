@@ -11,8 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ExcelReader {
-    private static XSSFWorkbook workbook;
-    private static XSSFSheet sheet;
+    private  XSSFWorkbook workbook;
+    private  XSSFSheet sheet;
 
     public  String readSingleCell(String filePath,String sheetName, int rowNum,int colNum) {
         readExcel(filePath);
@@ -97,7 +97,7 @@ public class ExcelReader {
         return dataObj;
     }
 
-    private static void readExcel(String path) {
+    private  void readExcel(String path) {
         try (
                 FileInputStream file = new FileInputStream(path)) {
             workbook = new XSSFWorkbook(file);
@@ -107,7 +107,7 @@ public class ExcelReader {
         }
     }
 
-    private static void changeSheet(String sheetName) {
+    private  void changeSheet(String sheetName) {
         if (workbook != null) {
             sheet = workbook.getSheet(sheetName);
         Loggers.logInfo("found  sheet "+sheetName+" and changed to it");
@@ -116,7 +116,7 @@ public class ExcelReader {
         }
     }
 
-    private static String getCellByColumnNameAndRowNum(int rowNum, String colName) {
+    private  String getCellByColumnNameAndRowNum(int rowNum, String colName) {
         int colNum = getColumnNumFromHeaderName(colName);
         XSSFRow targetRow = sheet.getRow(rowNum);
         if (targetRow == null) {
@@ -132,7 +132,7 @@ public class ExcelReader {
         return  getCellData(targetCell);
     }
 
-    private static String getCellByColumnNumAndRowNum(int rowNum, int colNum) {
+    private  String getCellByColumnNumAndRowNum(int rowNum, int colNum) {
         XSSFRow targetRow = sheet.getRow(rowNum);
         if (targetRow == null) {
         Loggers.logError("Row "+rowNum+" not found in sheet "+ sheet.getSheetName());
@@ -147,7 +147,7 @@ public class ExcelReader {
         return getCellData(targetCell);
     }
 
-    private static int getColumnNumFromHeaderName(String columnName) {
+    private  int getColumnNumFromHeaderName(String columnName) {
         for (int i = 0; i < getNumberOfColumnsByHeaders(); i++) {
             if (getCellData(sheet.getRow(0).getCell(i)).equals(columnName)) {
                 return i;
@@ -157,15 +157,15 @@ public class ExcelReader {
         return -1;
     }
 
-    private static int getNumberOfColumnsByHeaders() {
+    private  int getNumberOfColumnsByHeaders() {
         return sheet.getRow(0).getLastCellNum();
     }
 
-    private static int getNumberOfRows() {
+    private  int getNumberOfRows() {
         return sheet.getPhysicalNumberOfRows();
     }
 
-    private static String getCellData(XSSFCell cel) {
+    private  String getCellData(XSSFCell cel) {
         String data="";
         if((cel==null)) {
            return "";
