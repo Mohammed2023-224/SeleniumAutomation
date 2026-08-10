@@ -1,6 +1,6 @@
 package pages.appiumDemo;
 
-import engine.actions.AndroidActions;
+import engine.actions.android.AndroidActions;
 import engine.actions.ElementActions;
 import engine.actions.Waits;
 import io.appium.java_client.android.AndroidDriver;

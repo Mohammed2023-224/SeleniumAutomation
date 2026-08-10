@@ -1,9 +1,7 @@
 package pages.appiumDemo;
 
-import engine.actions.AndroidActions;
-import engine.actions.ElementActions;
+import engine.actions.android.AndroidActions;
 import engine.actions.Waits;
-import engine.assertions.HardAssertions;
 import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.By;
 

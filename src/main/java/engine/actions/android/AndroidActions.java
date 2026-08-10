@@ -1,12 +1,12 @@
-package engine.actions;
+package engine.actions.android;
 
+import engine.actions.Waits;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Pause;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
-import org.openqa.selenium.remote.RemoteWebElement;
 
 import java.time.Duration;
 import java.util.HashMap;
