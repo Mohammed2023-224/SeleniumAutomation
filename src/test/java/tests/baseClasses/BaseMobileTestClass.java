@@ -8,6 +8,7 @@ import engine.driver.androidDriver.AndroidDriverFactory;
 import engine.listeners.AllureAttachments;
 import engine.listeners.TestNgListener;
 import engine.listeners.TransformListener;
+import engine.utils.propertyFilesHandlers.PropertyReader;
 import io.appium.java_client.AppiumDriver;
 import org.apache.logging.log4j.ThreadContext;
 import org.testng.ITestContext;
@@ -39,5 +40,7 @@ public class BaseMobileTestClass {
                 System.getProperty("user.dir")+"/"+FrameworkConfigs.reportsPath() + ThreadContext.get("testLogFileName") + ".log");
         if(!result.isSuccess()) AllureAttachments.saveScreensShot(AndroidDriverFactory.getDriver(),"test");
         ThreadContext.remove("testLogFileName");
+        AndroidDriverFactory.getDriver().terminateApp(PropertyReader.get("appium:appPackage",String.class));
+        AndroidDriverFactory.getDriver().activateApp(PropertyReader.get("appium:appPackage",String.class));
     }
 }

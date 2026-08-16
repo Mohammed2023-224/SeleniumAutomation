@@ -1,9 +1,10 @@
 package pages.appiumDemo;
 
-import engine.actions.android.AndroidActions;
+import engine.actions.android.*;
 import engine.actions.Waits;
 import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Point;
 
 public class DragAndDropScreen {
     private AndroidDriver driver;
@@ -23,24 +24,24 @@ public class DragAndDropScreen {
 
     public void handleText(){
         Waits.waitToBeVisible(driver,draggableText);
-        AndroidActions.dragAndDrop(driver,draggableText,greenField,1);
+        TouchActions.dragAndDrop(driver,draggableText,greenField);
     }
 
     public void handleImg(){
         Waits.waitToBeVisible(driver,draggableImg);
-        AndroidActions.dragAndDrop(driver,draggableImg,blueField,1);
+        TouchActions.dragAndDrop(driver,draggableImg,blueField);
     }
 
     public void handleBtn(){
         Waits.waitToBeVisible(driver,draggableBtn);
-        AndroidActions.dragAndDrop(driver,draggableBtn,redField,1);
+        TouchActions.dragAndDrop(driver,draggableBtn,redField);
     }
 
 
     public void handlePinching(){
         Waits.waitToBeVisible(driver,pinchImg);
-        AndroidActions.pinchIn(driver);
-        AndroidActions.pinchOut(driver);
+        TouchActions.pinchInOrOutHorizontally(driver,400,50,800);
+        TouchActions.pinchInOrOutHorizontally(driver,50,400,800);
     }
 
 

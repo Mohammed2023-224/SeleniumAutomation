@@ -3,6 +3,7 @@ package pages.appiumDemo;
 import engine.actions.android.AndroidActions;
 import engine.actions.ElementActions;
 import engine.actions.Waits;
+import engine.actions.android.TouchActions;
 import engine.assertions.HardAssertions;
 import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.By;
@@ -21,7 +22,7 @@ public class AutoSuggesstionScreen {
     public void typeText(String text){
         Waits.waitToBeVisible(driver,textFiled);
         ElementActions.typeInElement(driver,textFiled,text);
-        AndroidActions.touchCoordinates(driver,204,521);
+        TouchActions.touchCoordinate(driver,204,521);
     }
 
     public void clickSubmitButton(){
