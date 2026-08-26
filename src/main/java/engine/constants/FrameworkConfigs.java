@@ -27,9 +27,11 @@ private FrameworkConfigs(){}
         public static boolean headless() {
             return PropertyReader.get("headless", Boolean.class);
         }
+
         public static boolean popupBlocker() {
-            return PropertyReader.get("headless", Boolean.class);
+            return PropertyReader.get("popup_blocker", Boolean.class);
         }
+
     public static boolean openAllure() {
         return PropertyReader.get("openAllureAfterTest", Boolean.class);
     }

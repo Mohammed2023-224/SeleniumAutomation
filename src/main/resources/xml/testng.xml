@@ -4,6 +4,7 @@
     <listeners>
         <listener class-name="engine.listeners.TestNgListener"/>
         <listener class-name="engine.listeners.TransformListener"/>
+        <listener class-name="engine.listeners.InvocationListeners"></listener>
     </listeners>
     <test name="edge tests">
         <parameter name="browser" value="edge"/>
