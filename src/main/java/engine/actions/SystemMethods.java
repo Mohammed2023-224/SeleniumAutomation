@@ -76,7 +76,8 @@ public class SystemMethods {
             for (int port : ports) {
                 ProcessBuilder findPid = new ProcessBuilder(
                         "cmd.exe", "/c",
-                        "netstat -ano | findstr :" + port + " | findstr LISTENING"
+                        "netstat -ano | findstr LISTENING | findstr /R \":"
+                                + port + " \""
                 );
                 Process process = findPid.start();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -128,18 +129,6 @@ public class SystemMethods {
         File file = new File(path);
         Loggers.logInfo("Check if file exists " + file.exists());
         return file.exists();
-    }
-
-    public static String readFileContent(String path) {
-        Path pth = Paths.get(path);
-        String lines = "";
-        try {
-            lines = String.valueOf(Files.readAllLines(pth));
-        } catch (IOException ex) {
-            Loggers.logError("Error reading file: " + ex.getMessage());
-        }
-        Loggers.logInfo("Get file contents: " + lines);
-        return lines;
     }
 
     public static void killProcessWithDescendants(Process process) {

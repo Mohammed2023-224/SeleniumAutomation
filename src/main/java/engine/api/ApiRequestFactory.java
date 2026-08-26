@@ -23,7 +23,6 @@ public class ApiRequestFactory {
     public Response executeWithoutRetry(Function<APIRequestBuilder, Response> fn) {
         APIRequestBuilder req = newRequest();
         try {
-             req = newRequest();
             return fn.apply(req);
         } catch (AssertionError e) {
             Loggers.logError("\nCurrent Exception is: " + e.getMessage());
@@ -35,27 +34,7 @@ public class ApiRequestFactory {
         }
     }
 
-
     public Response executeWithRetry(Function<APIRequestBuilder, Response> fn, int expectedStatusCode) {
-        APIRequestBuilder req = newRequest();
-        Response res = null;
-            res = fn.apply(req);
-            if (res.getStatusCode() != expectedStatusCode) {
-                Loggers.logInfo("Failed first request. refreshing session and trying again");
-                tokenProvider.refreshSession();
-                req = newRequest();
-                res = fn.apply(req);
-                if(res.getStatusCode() != expectedStatusCode){
-                    Loggers.logError("\nThe response received is: ");
-                    Loggers.logError(req.getLastResponseLog());
-                    Loggers.logError("\nThe request sent is: ");
-                    Loggers.logError(req.getLastRequestLog());
-                }
-            }
-        return res;
-    }
-
-    public Response executeWithRetry(Function<APIRequestBuilder, Response> fn, int expectedStatusCode,Boolean assertion) {
         APIRequestBuilder req = newRequest();
         Response res = null;
         try {
@@ -63,7 +42,6 @@ public class ApiRequestFactory {
             if (res.getStatusCode() != expectedStatusCode) {
                 Loggers.logInfo("Failed first request. refreshing session and trying again");
                 tokenProvider.refreshSession();
-                req = newRequest();
                 res = fn.apply(req);
             }
             ResponseActions.checkResponseStatus(res, expectedStatusCode);

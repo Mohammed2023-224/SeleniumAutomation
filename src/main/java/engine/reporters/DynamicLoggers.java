@@ -92,7 +92,7 @@ public class DynamicLoggers {
                 LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
                 Configuration config = ctx.getConfiguration();
                 config.getLoggerConfig(testLoggerConfig.getName());
-                config.removeLogger(testLoggerConfig.getName());
+//                config.removeLogger(testLoggerConfig.getName());
                 for (Appender appender : testLoggerConfig.getAppenders().values()) {
                     appender.stop();
                     config.getAppenders().remove(appender.getName());

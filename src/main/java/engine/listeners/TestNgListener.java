@@ -101,7 +101,6 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
         }
         if ("true".equalsIgnoreCase(PropertyReader.get("local_python_proxy", String.class))) {
             SystemMethods.killProcessWithDescendants(proxyProcess);
-//            SystemMethods.killProcessesByName("python.exe");
         }
         if (Boolean.TRUE.equals(PropertyReader.get("kill_processes", Boolean.class))) {
             Loggers.logInfo("Test execution finished. cleaning up proccesses...");
