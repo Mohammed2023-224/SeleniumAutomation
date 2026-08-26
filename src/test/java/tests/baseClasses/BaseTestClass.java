@@ -7,6 +7,7 @@ import engine.driver.DriverFactory;
 import engine.driver.DriverOptions;
 import engine.driver.SetupDriver;
 import engine.listeners.AllureAttachments;
+import engine.listeners.InvocationListeners;
 import engine.listeners.TestNgListener;
 import engine.listeners.TransformListener;
 import engine.utils.ClassPathLoading;
@@ -20,7 +21,7 @@ import org.testng.annotations.*;
 import java.util.Objects;
 
 
-@Listeners({TestNgListener.class, TransformListener.class})
+@Listeners({TestNgListener.class, TransformListener.class, InvocationListeners.class})
 public class BaseTestClass {
 //    public WebDriver driver;
     public static String testDataPath= Objects.requireNonNull(ClassPathLoading.getResourceAsPath("testData/data.xlsx", false)).toString();
@@ -39,9 +40,11 @@ public class BaseTestClass {
 
     @AfterClass
     protected void tearDriver() {
-        DriverFactory.getDriver().quit();
-        WaitsManager.removeWaits();
-        DriverFactory.unload();
+        if(DriverFactory.getDriver()!=null) {
+            DriverFactory.getDriver().quit();
+            WaitsManager.removeWaits();
+            DriverFactory.unload();
+        }
     }
 
     @AfterMethod

@@ -6,6 +6,7 @@ import engine.driver.DriverFactory;
 import engine.driver.SetupDriver;
 import engine.driver.androidDriver.AndroidDriverFactory;
 import engine.listeners.AllureAttachments;
+import engine.listeners.InvocationListeners;
 import engine.listeners.TestNgListener;
 import engine.listeners.TransformListener;
 import engine.utils.propertyFilesHandlers.PropertyReader;
@@ -15,7 +16,7 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
-@Listeners({TestNgListener.class, TransformListener.class})
+@Listeners({TestNgListener.class, TransformListener.class, InvocationListeners.class})
 
 public class BaseMobileTestClass {
     @BeforeClass

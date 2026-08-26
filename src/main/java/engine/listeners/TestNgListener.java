@@ -47,27 +47,32 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
 
     @Override
     public void onTestSuccess(ITestResult result) {
+        String browserName = getBrowserName((WebDriver) result.getTestContext().getAttribute("driver"));
         Loggers.logInfo("Test succeeded: "+ result.getName());
         numberOfSuccessTest.incrementAndGet();
-        successfulTests.add(result.getName());
+        successfulTests.add(result.getName()+"-"+ browserName);
         String fileName = ThreadContext.get("testLogFileName");
         Loggers.cleanupPerTestAppender(fileName);
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
+        String browserName = getBrowserName((WebDriver) result.getTestContext().getAttribute("driver"));
         Loggers.logInfo("Test failed: "+ result.getName());
         numberOfFailedTests.incrementAndGet();
-        failedTests.add(result.getName());
+        failedTests.add(result.getName()+"-"+ browserName);
         String fileName = ThreadContext.get("testLogFileName");
         Loggers.cleanupPerTestAppender(fileName);
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
+        String browserName = getBrowserName((WebDriver) result.getTestContext().getAttribute("driver"));
         Loggers.logInfo("Test skipped: "+ result.getName());
         numberOfSkippedTests.incrementAndGet();
-        skippedTests.add(result.getName());
+        skippedTests.add(result.getName()+"-"+ browserName);
+        String fileName = ThreadContext.get("testLogFileName");
+        Loggers.cleanupPerTestAppender(fileName);
     }
 
     @Override
@@ -77,11 +82,13 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
 
     @Override
     public void onFinish(ITestContext context) {
-        Loggers.logInfo("finished Execution");
+        String browserName = getBrowserName((WebDriver) context.getAttribute("driver"));
+        Loggers.logInfo("finished Execution for current suite on browser "+browserName+" on thread "+Thread.currentThread().getName());
     }
 
     @Override
     public void onExecutionFinish() {
+        Loggers.logInfo("Finished full execution");
         Loggers.logInfo("Number of all tests: " + (numberOfSuccessTest.get() + numberOfFailedTests.get() + numberOfSkippedTests.get()));
         Loggers.logInfo("Number of successful tests: " + numberOfSuccessTest.get());
         Loggers.logInfo("Name of successful tests: " + successfulTests);

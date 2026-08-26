@@ -3,6 +3,7 @@ package tests.baseClasses;
 import engine.assertions.SoftAssertManager;
 import engine.constants.FrameworkConfigs;
 import engine.listeners.AllureAttachments;
+import engine.listeners.InvocationListeners;
 import engine.listeners.TestNgListener;
 import engine.listeners.TransformListener;
 import engine.utils.ClassPathLoading;
@@ -14,7 +15,7 @@ import org.testng.annotations.*;
 import java.util.LinkedHashMap;
 import java.util.Objects;
 
-@Listeners({TestNgListener.class, TransformListener.class})
+@Listeners({TestNgListener.class, TransformListener.class, InvocationListeners.class})
 public class BaseAPITestClass {
     public String testDataPath= Objects.requireNonNull(ClassPathLoading.getResourceAsPath("testData/data.xlsx", false)).toString();
 
