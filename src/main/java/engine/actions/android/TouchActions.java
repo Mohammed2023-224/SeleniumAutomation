@@ -41,6 +41,7 @@ public class TouchActions {
         ||center.getX()+startDistance >center.getX()*2  ||center.getX() - endDistance< 0
         ){
             Loggers.logError("x coordinates bypass the screenSize which is "+center.getX());
+            throw new CustomExceptions("Coordinates bypass screen size");
         }
 
         w3CTouchActions1.moveTo(0,center.getX()-startDistance, center.getY());

@@ -40,20 +40,22 @@ public class PropertyReader {
         });
     }
 
-    private static String resolve(String key,Map<String, String> variables) {
-        return CACHE.computeIfAbsent(key, k -> {
+    private static String resolve(String key, Map<String, String> variables) {
+        String value = CACHE.computeIfAbsent(key, k -> {
             String sysValue = System.getProperty(k);
             if (sysValue != null && !sysValue.isBlank()) {
                 return sysValue;
             }
-            String fileValue = PropertyLoader.getAllProperties().getProperty(k);
+            String fileValue =
+                    PropertyLoader.getAllProperties().getProperty(k);
             if (fileValue == null) {
                 throw new IllegalStateException(
                         "Missing configuration key: " + k
                 );
             }
-            return replaceVariables(fileValue.trim(),variables);
+            return fileValue.trim();
         });
+        return replaceVariables(value, variables);
     }
 
     private static String replaceVariables(

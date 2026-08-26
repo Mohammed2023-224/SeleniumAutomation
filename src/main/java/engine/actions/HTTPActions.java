@@ -1,5 +1,6 @@
 package engine.actions;
 
+import engine.exceptions.CustomExceptions;
 import engine.reporters.Loggers;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class HTTPActions {
             this.connection = (HttpURLConnection) this.url.openConnection();
         } catch (Exception e) {
             Loggers.logError("Failed to create HTTP connection");
+            throw new CustomExceptions("Couldn't create connection "+ e.getMessage());
         }
     }
 
