@@ -54,7 +54,7 @@ public class FireFox implements  BrowserDriver{
     private void setLocalDriver() {
         String webDriverPropertyPath="webdriver.firefox.driver";
         if (FrameworkConfigs.localPathDriver()) {
-            if(FrameworkConfigs.chromeLocalDriverPath().isEmpty()) {
+            if(FrameworkConfigs.fireFoxLocalDriverPath().isEmpty()) {
                 Path path = ClassPathLoading.getResourceAsPath("driver/geckodriver.exe", true);
                 assert path != null;
                 System.setProperty(webDriverPropertyPath, path.toString());

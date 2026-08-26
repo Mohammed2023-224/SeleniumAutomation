@@ -66,6 +66,9 @@ private FrameworkConfigs(){}
         public static String chromeLocalDriverPath() {
             return PropertyReader.get("chrome_driver_path", String.class);
         }
+        public static String fireFoxLocalDriverPath() {
+            return PropertyReader.get("fireFoxDriverPath", String.class);
+        }
 
         public static String proxy() {
             return PropertyReader.get("proxy", String.class);

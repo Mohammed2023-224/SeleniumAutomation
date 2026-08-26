@@ -2,7 +2,6 @@ package engine.assertions;
 
 import engine.listeners.AllureAttachments;
 import engine.reporters.Loggers;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;

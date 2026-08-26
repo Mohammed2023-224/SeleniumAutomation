@@ -221,7 +221,7 @@ public class ElementActions {
 
     public static void holdKeyboardKey(WebDriver driver, Keys key) {
         try {
-            actions(driver).keyDown(key);
+            actions(driver).keyDown(key).perform();
             Loggers.logInfo("hold keyboard key: " + key);
         }
         catch (Exception e) {
@@ -232,7 +232,7 @@ public class ElementActions {
 
     public static void unholdKeyboardKey(WebDriver driver, Keys key) {
         try {
-            actions(driver).keyUp(key);
+            actions(driver).keyUp(key).perform();
             Loggers.logInfo("unhold keyboard key: " + key);
         }
         catch (Exception e) {
