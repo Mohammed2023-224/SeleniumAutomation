@@ -32,9 +32,9 @@ public class SetupDriver {
                     new Capabilities().browserStackCapabilities(enumBrowser.toString(), osVersion, browserVersion, os) : new HashMap<>();
             String resolvedPort = (port == null || port.isEmpty()) ? FrameworkConfigs.proxy() : port;
             port = local ? "" : resolvedPort;
-            if (!local) waitForRemoteUrl(port, 10);
             if (!local && (port == null || port.isEmpty()))
                 throw new IllegalStateException("Port or grid URL must be specified for remote execution");
+            if (!local) waitForRemoteUrl(port, 10);
             return switch (enumBrowser) {
                 case EDGE -> local ? new Edge().initiateDriver() : new Edge().initiateRemoteDriver(port, caps);
                 case CHROME -> local ? new Chrome().initiateDriver() : new Chrome().initiateRemoteDriver(port, caps);
