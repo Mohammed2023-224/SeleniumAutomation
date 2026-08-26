@@ -1,6 +1,7 @@
 package engine.actions;
 
 import engine.enums.WaitTypes;
+import engine.exceptions.CustomExceptions;
 import engine.reporters.Loggers;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -44,7 +45,10 @@ public class ElementActions {
                     d.findElement(locator).click();
                     Thread.sleep(100);
                     return ElementActions.checkIfElementVisible(d, nextElement);
-                } catch (Exception e) {
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw new CustomExceptions("Interrupted while waiting");
+                }catch (Exception e) {
                     return false;
                 }
             });
@@ -75,6 +79,7 @@ public class ElementActions {
         }
         catch (Exception e) {
             Loggers.logError("Couldn't select the option with value: " + text);
+            throw e;
         }
             }
 

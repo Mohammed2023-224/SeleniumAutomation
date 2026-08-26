@@ -47,8 +47,8 @@ public class ExpandTests  extends BaseTestClass {
 
         @Test
     public void registerTest(){
-        String newUserName= Faker.USERNAME;
-        String pass= Faker.PASS;
+        String newUserName= new Faker().userName;
+        String pass= new Faker().pass;
         homePage.navigateHomePage();
         homePage.clickOnSubLink("Test Register Page");
         loginPage.typeUserName(newUserName);
