@@ -325,10 +325,10 @@ public class ElementActions {
     }
 
     public static Boolean checkIfElementInVisible(WebDriver driver, By locator) {
-        boolean flag = true;
+        boolean flag = false;
         try {
             if (!driver.findElement(locator).isDisplayed()) {
-                flag = false;
+                flag = true;
                 Loggers.logInfo(ELEMENT_LOCATED_TEXT +": "+locator+" is invisible");
             }
         } catch (Exception e) {

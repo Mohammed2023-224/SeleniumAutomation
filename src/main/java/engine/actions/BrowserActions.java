@@ -108,6 +108,7 @@ public class BrowserActions {
                 Loggers.logWarn("Couldn't inspect window: " + e.getMessage());
             }
         }
+        driver.switchTo().defaultContent();
         throw new CustomExceptions("No windows was found with title " + title);
     }
 
