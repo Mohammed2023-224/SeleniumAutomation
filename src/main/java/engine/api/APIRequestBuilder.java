@@ -175,7 +175,7 @@ public class APIRequestBuilder {
     }
 
     public void setCookies(String cookies, String value) {
-        this.headers.put(cookies, value);
+        this.cookies.put(cookies, value);
         requestSpecBuilder.addCookie(cookies, value);
     }
 

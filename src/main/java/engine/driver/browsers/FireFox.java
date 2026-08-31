@@ -60,7 +60,7 @@ public class FireFox implements  BrowserDriver{
                 System.setProperty(webDriverPropertyPath, path.toString());
             }
             else {
-                System.setProperty(webDriverPropertyPath, FrameworkConfigs.chromeLocalDriverPath());
+                System.setProperty(webDriverPropertyPath, FrameworkConfigs.fireFoxLocalDriverPath());
             }
             Loggers.logInfo("gecko driver is found at path: {}" +
                     (System.getProperty(webDriverPropertyPath).isEmpty()?"test log":System.getProperty(webDriverPropertyPath)));

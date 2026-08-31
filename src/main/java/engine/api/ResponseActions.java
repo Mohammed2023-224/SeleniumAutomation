@@ -6,7 +6,6 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.util.Collections;
 import java.util.List;
@@ -317,9 +316,13 @@ public class ResponseActions {
      * @return object of the value for the key known as return the first value found
      * where that json object has the criteria and search criteria met
      */
-    public static Object getResponseItemWithACertainValue(
-            JsonPath jsonPath, String path, String criteria, String searchCriteria,
-            String returnValue, Class<T> returnType) {
+    public static <T> T getResponseItemWithACertainValue(
+            JsonPath jsonPath,
+            String path,
+            String criteria,
+            String searchCriteria,
+            String returnValue,
+            Class<T> returnType) {
         Object result = jsonPath.param("searchCriteria", searchCriteria)
                 .param("criteria", criteria)
                 .param("returnValue", returnValue)
@@ -330,6 +333,7 @@ public class ResponseActions {
             Loggers.logError("No matching item found for criteria: " + searchCriteria);
             return null;
         }
+
         try {
             return returnType.cast(result);
         } catch (ClassCastException e) {
@@ -345,8 +349,10 @@ public class ResponseActions {
      * @return object of the first value found with this groovy expression
      * Example for groovy expression: path.find { it.criteria == searchCriteria }.returnValue
      */
-    public static Object getResponseItemWithACertainValue(JsonPath jsonPath, String groovyExpression,
-                                                          Class<T> returnType) {
+    public static <T> T getResponseItemWithACertainValue(
+            JsonPath jsonPath,
+            String groovyExpression,
+            Class<T> returnType) {
         Object result = jsonPath.getString(groovyExpression);
         if (result == null) {
             Loggers.logError("No matching item found for the expression: " + groovyExpression);

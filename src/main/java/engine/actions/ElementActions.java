@@ -144,12 +144,6 @@ public class ElementActions {
     }
 
     public static String getText(WebDriver driver, By locator) {
-        try {
-            Waits.customWait(driver,"Wait for element visibility: "+locator,
-                    ExpectedConditions.visibilityOfElementLocated(locator),2);
-        } catch (Exception e) {
-            Loggers.logWarn("Element isn't visible");
-        }
         return Waits.fluentWaitShortTime(driver).until(d -> {
             try {
                 String text=d.findElement(locator).getText();
@@ -331,10 +325,10 @@ public class ElementActions {
     }
 
     public static Boolean checkIfElementInVisible(WebDriver driver, By locator) {
-        boolean flag = false;
+        boolean flag = true;
         try {
             if (!driver.findElement(locator).isDisplayed()) {
-                flag = true;
+                flag = false;
                 Loggers.logInfo(ELEMENT_LOCATED_TEXT +": "+locator+" is invisible");
             }
         } catch (Exception e) {

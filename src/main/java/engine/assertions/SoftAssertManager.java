@@ -15,8 +15,7 @@ public class SoftAssertManager {
     public static SoftAssert get() {
         SoftAssert softAssert = SOFT_ASSERT.get();
         if (softAssert == null) {
-            softAssert = new SoftAssert();
-            SOFT_ASSERT.set(softAssert);
+            throw new IllegalStateException( "SoftAssert has not been initialized. Call init() first.");
         }
         return softAssert;
     }

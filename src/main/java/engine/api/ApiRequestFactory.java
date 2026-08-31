@@ -42,6 +42,7 @@ public class ApiRequestFactory {
             if (res.getStatusCode() != expectedStatusCode) {
                 Loggers.logInfo("Failed first request. refreshing session and trying again");
                 tokenProvider.refreshSession();
+                req = newRequest();
                 res = fn.apply(req);
             }
             ResponseActions.checkResponseStatus(res, expectedStatusCode);
