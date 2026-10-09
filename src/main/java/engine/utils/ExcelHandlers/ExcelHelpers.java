@@ -4,6 +4,7 @@ import engine.enums.SortingTypes;
 import engine.reporters.Loggers;
 import engine.utils.DataTypes;
 
+import java.nio.file.Path;
 import java.util.*;
 public class ExcelHelpers {
 
@@ -71,28 +72,55 @@ public class ExcelHelpers {
         }
     }
 
+
     public static void compareRows(
             List<DataTypes.ExcelRow> file1,
-            List<DataTypes.ExcelRow> file2 ,
+            List<DataTypes.ExcelRow> file2,
             List<DataTypes.SortConfig> firstFileConfigs,
-            List<DataTypes.SortConfig> secondFileConfigs) {
+            List<DataTypes.SortConfig> secondFileConfigs,String resultsPath) {
+
         List<DataTypes.ExcelRow> sorted1 =
-                sortRows(file1, firstFileConfigs.toArray(DataTypes.SortConfig[]::new));
+                sortRows(file1,
+                        firstFileConfigs.toArray(DataTypes.SortConfig[]::new));
+
         List<DataTypes.ExcelRow> sorted2 =
-                sortRows(file2, secondFileConfigs.toArray(DataTypes.SortConfig[]::new));
+                sortRows(file2,
+                        secondFileConfigs.toArray(DataTypes.SortConfig[]::new));
+
+        List<String[]> csvRows = new ArrayList<>();
+
+        csvRows.add(new String[]{
+                "File 1 Excel Row",
+                "File 2 Excel Row",
+                "Column",
+                "File 1 Value",
+                "File 2 Value",
+                "Mismatch Type"
+        });
 
         int maxRows = Math.max(sorted1.size(), sorted2.size());
-
         boolean hasDifferences = false;
 
         for (int i = 0; i < maxRows; i++) {
+
             if (i >= sorted1.size()) {
                 DataTypes.ExcelRow row2 = sorted2.get(i);
+
                 Loggers.logError(
                         "Extra row in File 2: Excel row "
                                 + row2.rowNumber()
                                 + ", values=" + row2.values()
                 );
+
+                csvRows.add(new String[]{
+                        "",
+                        String.valueOf(row2.rowNumber()),
+                        "",
+                        "",
+                        row2.values().toString(),
+                        "Extra row in File 2"
+                });
+
                 hasDifferences = true;
                 continue;
             }
@@ -105,6 +133,16 @@ public class ExcelHelpers {
                                 + row1.rowNumber()
                                 + ", values=" + row1.values()
                 );
+
+                csvRows.add(new String[]{
+                        String.valueOf(row1.rowNumber()),
+                        "",
+                        "",
+                        row1.values().toString(),
+                        "",
+                        "Extra row in File 1"
+                });
+
                 hasDifferences = true;
                 continue;
             }
@@ -117,11 +155,11 @@ public class ExcelHelpers {
             columns.addAll(row2.values().keySet());
 
             for (String column : columns) {
-
                 String value1 = row1.values().get(column);
                 String value2 = row2.values().get(column);
 
                 if (!Objects.equals(value1, value2)) {
+
                     Loggers.logError(
                             "Mismatch in column '" + column + "'"
                                     + " | File 1 Excel row " + row1.rowNumber()
@@ -130,13 +168,33 @@ public class ExcelHelpers {
                                     + ", value='" + value2 + "'"
                     );
 
+                    csvRows.add(new String[]{
+                            String.valueOf(row1.rowNumber()),
+                            String.valueOf(row2.rowNumber()),
+                            column,
+                            value1,
+                            value2,
+                            "Value mismatch"
+                    });
+
                     hasDifferences = true;
                 }
             }
         }
 
+        Path reportPath =
+                Path.of(resultsPath);
+
+        CsvWriter.writeCsv(reportPath, csvRows);
+
+        Loggers.logInfo(
+                "CSV comparison report saved to: "
+                        + reportPath.toAbsolutePath()
+        );
+
         if (!hasDifferences) {
             Loggers.logInfo("Excel files match.");
         }
     }
+
 }
