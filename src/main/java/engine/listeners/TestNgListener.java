@@ -2,6 +2,7 @@ package engine.listeners;
 
 import engine.actions.SystemMethods;
 import engine.constants.FrameworkConfigs;
+import engine.driver.DriverFactory;
 import engine.reporters.DynamicLoggers;
 import engine.reporters.Loggers;
 import engine.utils.ClassPathLoading;
@@ -34,7 +35,7 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
 
     @Override
     public void onTestStart(ITestResult result) {
-        String browserName = getBrowserName((WebDriver) result.getTestContext().getAttribute("driver"));
+        String browserName =getBrowserName(DriverFactory.getDriver());
         String timestamp = LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy_MM_dd-HH_mm_ss"));
         String name = result.getMethod().getMethodName();
@@ -47,7 +48,7 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        String browserName = getBrowserName((WebDriver) result.getTestContext().getAttribute("driver"));
+        String browserName =getBrowserName(DriverFactory.getDriver());
         Loggers.logInfo("Test succeeded: "+ result.getName());
         numberOfSuccessTest.incrementAndGet();
         successfulTests.add(result.getName()+"-"+ browserName);
@@ -57,7 +58,7 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
 
     @Override
     public void onTestFailure(ITestResult result) {
-        String browserName = getBrowserName((WebDriver) result.getTestContext().getAttribute("driver"));
+        String browserName =getBrowserName(DriverFactory.getDriver());
         Loggers.logInfo("Test failed: "+ result.getName());
         numberOfFailedTests.incrementAndGet();
         failedTests.add(result.getName()+"-"+ browserName);
@@ -67,7 +68,7 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        String browserName = getBrowserName((WebDriver) result.getTestContext().getAttribute("driver"));
+        String browserName =getBrowserName(DriverFactory.getDriver());
         Loggers.logInfo("Test skipped: "+ result.getName());
         numberOfSkippedTests.incrementAndGet();
         skippedTests.add(result.getName()+"-"+ browserName);

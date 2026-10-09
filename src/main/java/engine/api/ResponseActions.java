@@ -1,6 +1,7 @@
 package engine.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import engine.exceptions.CustomExceptions;
 import engine.reporters.Loggers;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.path.json.JsonPath;
@@ -175,7 +176,7 @@ public class ResponseActions {
             return response.jsonPath().getObject(path, type);
         } catch (Exception e) {
             Loggers.logError("Failed to get value by path '" + path + "': " + e.getMessage());
-            return null;
+            throw new CustomExceptions("Cannot get the value in path: "+path);
         }
     }
 
@@ -184,7 +185,7 @@ public class ResponseActions {
             return response.jsonPath().getObject(path, typeRef);
         } catch (Exception e) {
             Loggers.logError("Failed to get value by path '" + path + "': " + e.getMessage());
-            return null;
+            throw new CustomExceptions("Cannot get the value in path: "+path);
         }
     }
 
