@@ -4,6 +4,7 @@ import engine.exceptions.CustomExceptions;
 import engine.reporters.Loggers;
 import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.http.HttpResponse;
 
 public class DriverHelper {
     private DriverHelper(){}
@@ -18,7 +19,16 @@ public class DriverHelper {
 
                 con.setConnectTimeout(1000);
                 con.setReadTimeout(1000);
-                if (con.getResponseCode() == 200) {
+                int responseCode = con.getResponseCode();
+
+                String body = new String(
+                        con.getInputStream().readAllBytes(),
+                        java.nio.charset.StandardCharsets.UTF_8
+                );
+                Loggers.logInfo("Current code: " + responseCode);
+                Loggers.logInfo("Current body: " + body);
+                if (responseCode == 200 && body.matches(
+                        "(?s).*\"ready\"\\s*:\\s*true.*")) {
                     Loggers.logInfo("Remote URL is available: " + url);
                     return;
                 }
