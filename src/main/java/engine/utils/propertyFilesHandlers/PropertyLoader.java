@@ -77,4 +77,32 @@ public class PropertyLoader {
 
         return propertyMap;
     }
+
+    public static Map<String, Object> loadAsMapReplacingValuesInMapIfFound(String filePath,Map<String,String> lhm) {
+        Path path = ClassPathLoading.getResourceAsPath(filePath, false);
+        if (path == null) {
+            throw new IllegalArgumentException("Properties file not found: " + filePath);
+        }
+        Properties properties = new Properties();
+        try (InputStream is = Files.newInputStream(path)) {
+            properties.load(is);
+        } catch (IOException e) {
+            throw new CustomExceptions("Failed to load properties: " + filePath, e);
+        }
+        Map<String, Object> propertyMap = new LinkedHashMap<>();
+        properties.stringPropertyNames().forEach(key -> {
+            String mpValue=properties.getProperty(key);
+            mpValue=PropertyHelpers.replaceVariablesInPropertyFile(mpValue, lhm);
+            Map<String,String> mpMap=new HashMap<>();
+            if (mpValue.contains("=")) {
+               mpMap= PropertyParser.parseValue(key,mpValue,Map.class);
+                propertyMap.put(key, mpMap);
+            }
+            else {
+                propertyMap.put(key, mpValue);
+            }
+        });
+
+        return propertyMap;
+    }
 }

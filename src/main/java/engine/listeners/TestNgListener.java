@@ -8,6 +8,7 @@ import engine.reporters.Loggers;
 import engine.utils.ClassPathLoading;
 import engine.utils.EnvSelector;
 import engine.utils.propertyFilesHandlers.PropertyFileCreation;
+import engine.utils.propertyFilesHandlers.PropertyLoader;
 import engine.utils.propertyFilesHandlers.PropertyReader;
 import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
@@ -120,6 +121,7 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
     }
     @Override
     public void onExecutionStart() {
+        SystemMethods.runFile(ClassPathLoading.getResourceAsPath("batFiles/rootFinder.bat", true).toString());
         SystemMethods.killProcess("msedgedriver.exe");
         SystemMethods.killProcess("chromedriver.exe");
         SystemMethods.killProcess("geckodriver.exe");
@@ -160,14 +162,15 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
         }
         String finalScope = !scopes.isEmpty() ? String.join(", ", scopes):!PropertyReader.get("runType", String.class).isEmpty()?
                 PropertyReader.get("runType", String.class):"Unknown run type" ;
-        LinkedHashMap<String, String> env = new LinkedHashMap<>();
-        env.put("Environment", environment);
-        env.put("Base URL", EnvSelector.envSelector(false));
-        env.put("Run Type (Group)", testsType);
-        env.put("Scope", finalScope);
-        env.put("Local Execution",
-                PropertyReader.get("local_execution", String.class));
-        env.put("Java", System.getProperty("java.version"));
+
+        Map<String, Object> env = PropertyLoader.loadAsMapReplacingValuesInMapIfFound(
+                PropertyReader.get("allurePropertiesPath", String.class),
+                Map.of("env",environment,"url",EnvSelector.envSelector(false)
+                        ,"type",testsType,"scope",finalScope,"execution",
+                        PropertyReader.get("local_execution", String.class)
+                ,"javaVersion",System.getProperty("java.version"))
+                );
+                new LinkedHashMap<>();
         PropertyFileCreation.createPropertyFile(env, "allure-results", "environment"
                 , "Allure Environment");
     }

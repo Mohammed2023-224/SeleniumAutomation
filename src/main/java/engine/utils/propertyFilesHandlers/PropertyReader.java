@@ -55,19 +55,7 @@ public class PropertyReader {
             }
             return fileValue.trim();
         });
-        return replaceVariables(value, variables);
-    }
-
-    private static String replaceVariables(
-            String value,
-            Map<String, String> variables) {
-        for (Map.Entry<String, String> entry : variables.entrySet()) {
-            value = value.replace(
-                    "${" + entry.getKey() + "}",
-                    entry.getValue()
-            );
-        }
-        return value;
+        return PropertyHelpers.replaceVariablesInPropertyFile(value, variables);
     }
 
     public static void clearCache() {

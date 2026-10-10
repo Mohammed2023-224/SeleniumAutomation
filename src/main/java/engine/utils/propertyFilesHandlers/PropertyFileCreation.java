@@ -6,11 +6,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class PropertyFileCreation {
-    public static void createPropertyFile(LinkedHashMap<String,String> map ,
-                                          String path,String fileName, String header){
+    public static void createPropertyFile(Map<String,Object> map ,
+                                          String path, String fileName, String header){
         Properties props = new Properties();
         props.putAll(map);
         Path dir = Paths.get(path);
