@@ -7,7 +7,7 @@ import engine.actions.BrowserActions;
 import engine.actions.DevToolsActions;
 import engine.utils.Faker;
 import org.testng.annotations.*;
-import engine.utils.ExcelReader;
+import engine.utils.ExcelHandlers.ExcelReader;
 
 import java.util.LinkedHashMap;
 
@@ -174,14 +174,14 @@ public class ExpandTests  extends BaseTestClass {
 
     @DataProvider(name = "webInputsData")
     private Object[][]  webInputsData(){
-return new ExcelReader().
-        readRowAsLinkedHashMapThroughCondition(testDataPath,"Web Inputs","run","true");
+return new ExcelReader(testDataPath,"Web Inputs").
+        readRowAsLinkedHashMapThroughCondition("run","true");
     }
 
     @DataProvider(name = "loginData")
     private Object[][]  loginData(){
-return new ExcelReader().
-        readRowAsLinkedHashMapThroughCondition(testDataPath,"Login Page","run","true");
+return new ExcelReader(testDataPath,"Login Page").
+        readRowAsLinkedHashMapThroughCondition("run","true");
     }
 
 

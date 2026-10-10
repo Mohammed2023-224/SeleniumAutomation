@@ -1,5 +1,6 @@
 package engine.utils;
 
+import engine.utils.ExcelHandlers.ExcelReader;
 import engine.utils.propertyFilesHandlers.PropertyReader;
 
 import java.util.HashSet;
@@ -28,11 +29,9 @@ public class ReadExecutionFlow {
 
     private static Set<String> loadFromExcel() {
         Object[][] obj =
-                new ExcelReader().readRowAsLinkedHashMapThroughCondition(
-                        CONTROL_FILE, SHEET_NAME, "Run", "TRUE");
-
+                new ExcelReader(CONTROL_FILE, SHEET_NAME).readRowAsLinkedHashMapThroughCondition(
+                         "Run", "TRUE");
         Set<String> allowedTests = new HashSet<>();
-
         for (Object[] row : obj) {
             @SuppressWarnings("unchecked")
             LinkedHashMap<String, String> rowMap =
