@@ -1,4 +1,4 @@
-package engine.utils;
+package engine.utils.EmailHandlers;
 
 import com.mailosaur.MailosaurClient;
 import com.mailosaur.MailosaurException;

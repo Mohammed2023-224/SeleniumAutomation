@@ -1,4 +1,4 @@
-package engine.utils;
+package engine.utils.EmailHandlers;
 
 import javax.activation.CommandMap;
 import javax.activation.MailcapCommandMap;

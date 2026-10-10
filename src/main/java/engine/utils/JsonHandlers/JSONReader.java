@@ -1,4 +1,4 @@
-package engine.utils;
+package engine.utils.JsonHandlers;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
