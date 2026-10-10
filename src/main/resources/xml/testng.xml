@@ -2,20 +2,11 @@
  <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Practice Suite" parallel="tests" thread-count="4">
     <listeners>
+        <listener class-name="engine.listeners.TransformListener"></listener>
     </listeners>
     <test name="edge tests">
         <parameter name="browser" value="edge"/>
         <parameter name="osVersion" value="11"/>
-        <parameter name="browserVersion" value="latest"/>
-        <parameter name="os" value="Windows"/>
-        <classes>
-            <class name="tests.AutomationPlaygroundTests"/>
-            <class name="tests.ExpandTests"></class>
-        </classes>
-    </test> <!-- Test -->
-    <test name="firefox tests">
-        <parameter name="browser" value="firefox"/>
-        <parameter name="osVersion" value="10"/>
         <parameter name="browserVersion" value="latest"/>
         <parameter name="os" value="Windows"/>
         <classes>

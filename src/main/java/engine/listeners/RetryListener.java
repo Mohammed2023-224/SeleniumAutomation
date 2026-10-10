@@ -10,6 +10,10 @@ import org.testng.ITestResult;
      @Override
      public boolean retry(ITestResult result) {
          Throwable t = result.getThrowable();
+         Loggers.logInfo("Retry analyzer called for: " + result.getName());
+         Loggers.logInfo("Failure: " + t);
+         Loggers.logInfo("Retry count: " + retryCount);
+         Loggers.logInfo("Max retries: " + maxRetry);
          if (t instanceof AssertionError) {
              return false;
          }
