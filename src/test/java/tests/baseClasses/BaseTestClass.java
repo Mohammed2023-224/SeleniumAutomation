@@ -53,7 +53,6 @@ public class BaseTestClass {
         if(FrameworkConfigs.perTestLog())AllureAttachments.saveTextLog(ThreadContext.get("testLogFileName") + ".log",
                 System.getProperty("user.dir")+"/"+FrameworkConfigs.reportsPath() + ThreadContext.get("testLogFileName") + ".log");
         if(!result.isSuccess()) AllureAttachments.saveScreensShot(DriverFactory.getDriver(),"test");
-        ThreadContext.remove("testLogFileName");
     }
     @AfterMethod
     protected void startNewTab() {

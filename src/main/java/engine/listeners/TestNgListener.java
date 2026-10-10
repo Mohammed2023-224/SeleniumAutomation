@@ -53,8 +53,6 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
         Loggers.logInfo("Test succeeded: "+ result.getName());
         numberOfSuccessTest.incrementAndGet();
         successfulTests.add(result.getName()+"-"+ browserName);
-        String fileName = ThreadContext.get("testLogFileName");
-        Loggers.cleanupPerTestAppender(fileName);
     }
 
     @Override
@@ -63,8 +61,6 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
         Loggers.logInfo("Test failed: "+ result.getName());
         numberOfFailedTests.incrementAndGet();
         failedTests.add(result.getName()+"-"+ browserName);
-        String fileName = ThreadContext.get("testLogFileName");
-        Loggers.cleanupPerTestAppender(fileName);
     }
 
     @Override
@@ -73,8 +69,6 @@ public class TestNgListener implements ITestListener , IExecutionListener ,IInvo
         Loggers.logInfo("Test skipped: "+ result.getName());
         numberOfSkippedTests.incrementAndGet();
         skippedTests.add(result.getName()+"-"+ browserName);
-        String fileName = ThreadContext.get("testLogFileName");
-        Loggers.cleanupPerTestAppender(fileName);
     }
 
     @Override
