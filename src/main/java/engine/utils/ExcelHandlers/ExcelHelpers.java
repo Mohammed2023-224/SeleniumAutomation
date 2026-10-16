@@ -3,6 +3,9 @@ package engine.utils.ExcelHandlers;
 import engine.enums.SortingTypes;
 import engine.reporters.Loggers;
 import engine.utils.DataTypes;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -74,6 +77,7 @@ public class ExcelHelpers {
 
 
     public static void compareRows(
+            String file1Name,String file2Name,
             List<DataTypes.ExcelRow> file1,
             List<DataTypes.ExcelRow> file2,
             List<DataTypes.SortConfig> firstFileConfigs,
@@ -90,11 +94,11 @@ public class ExcelHelpers {
         List<String[]> csvRows = new ArrayList<>();
 
         csvRows.add(new String[]{
-                "File 1 Excel Row",
-                "File 2 Excel Row",
+                file1Name+" Excel Row",
+                file2Name+" Excel Row",
                 "Column",
-                "File 1 Value",
-                "File 2 Value",
+                file1Name+" Value",
+                file2Name+" Value",
                 "Mismatch Type"
         });
 
@@ -102,16 +106,13 @@ public class ExcelHelpers {
         boolean hasDifferences = false;
 
         for (int i = 0; i < maxRows; i++) {
-
             if (i >= sorted1.size()) {
                 DataTypes.ExcelRow row2 = sorted2.get(i);
-
                 Loggers.logError(
                         "Extra row in File 2: Excel row "
                                 + row2.rowNumber()
                                 + ", values=" + row2.values()
                 );
-
                 csvRows.add(new String[]{
                         "",
                         String.valueOf(row2.rowNumber()),
@@ -120,14 +121,12 @@ public class ExcelHelpers {
                         row2.values().toString(),
                         "Extra row in File 2"
                 });
-
                 hasDifferences = true;
                 continue;
             }
 
             if (i >= sorted2.size()) {
                 DataTypes.ExcelRow row1 = sorted1.get(i);
-
                 Loggers.logError(
                         "Extra row in File 1: Excel row "
                                 + row1.rowNumber()
@@ -146,20 +145,24 @@ public class ExcelHelpers {
                 hasDifferences = true;
                 continue;
             }
-
             DataTypes.ExcelRow row1 = sorted1.get(i);
             DataTypes.ExcelRow row2 = sorted2.get(i);
 
+            Map<String, String> normalizedRow1 =
+                    normalizeRowHeaders(row1.values());
+
+            Map<String, String> normalizedRow2 =
+                    normalizeRowHeaders(row2.values());
+
             Set<String> columns = new TreeSet<>();
-            columns.addAll(row1.values().keySet());
-            columns.addAll(row2.values().keySet());
+            columns.addAll(normalizedRow1.keySet());
+            columns.addAll(normalizedRow2.keySet());
 
             for (String column : columns) {
-                String value1 = row1.values().get(column);
-                String value2 = row2.values().get(column);
 
+                String value1 = normalizedRow1.get(column);
+                String value2 = normalizedRow2.get(column);
                 if (!Objects.equals(value1, value2)) {
-
                     Loggers.logError(
                             "Mismatch in column '" + column + "'"
                                     + " | File 1 Excel row " + row1.rowNumber()
@@ -167,7 +170,6 @@ public class ExcelHelpers {
                                     + " | File 2 Excel row " + row2.rowNumber()
                                     + ", value='" + value2 + "'"
                     );
-
                     csvRows.add(new String[]{
                             String.valueOf(row1.rowNumber()),
                             String.valueOf(row2.rowNumber()),
@@ -195,6 +197,79 @@ public class ExcelHelpers {
         if (!hasDifferences) {
             Loggers.logInfo("Excel files match.");
         }
+    }
+
+    private static List<String> normalizeHeaders(Collection<String> headers) {
+
+        List<String> output = new ArrayList<>();
+
+        for (String header : headers) {
+
+            String normalized = header
+                    .trim()
+                    .replaceAll("\\s+", "_")
+                    .replace("-", "_");
+
+            output.add(normalized);
+        }
+
+        return output;
+    }
+
+        private boolean isRowEmpty(Row row) {
+        for (Cell cell : row) {
+            if (cell != null &&
+                    cell.getCellType() != CellType.BLANK &&
+                    !cell.toString().trim().isEmpty()) {
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static Map<String, String> normalizeRowHeaders(
+            Map<String, String> originalRow) {
+
+        Map<String, String> normalizedRow = new LinkedHashMap<>();
+
+        for (Map.Entry<String, String> entry : originalRow.entrySet()) {
+
+            String normalizedHeader =
+                    normalizeHeader(entry.getKey());
+
+            if (normalizedRow.containsKey(normalizedHeader)) {
+                throw new IllegalArgumentException(
+                        "Duplicate header after normalization: '"
+                                + entry.getKey()
+                                + "' becomes '"
+                                + normalizedHeader
+                                + "'"
+                );
+            }
+
+            normalizedRow.put(
+                    normalizedHeader,
+                    entry.getValue()
+            );
+        }
+
+        return normalizedRow;
+    }
+
+    private static String normalizeHeader(String header) {
+
+        if (header == null) {
+            return "";
+        }
+        header= header.trim()
+                .replaceAll("\\s+", "_")
+                .replaceAll("-", "_");
+
+        return header
+                .replaceAll("__","_");
+
     }
 
 }

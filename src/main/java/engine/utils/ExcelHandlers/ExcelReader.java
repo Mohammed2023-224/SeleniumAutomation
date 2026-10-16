@@ -66,7 +66,6 @@ public class ExcelReader  {
     }
 
     public Object[][] readRowAsLinkedHashMapNoColumnCondition() {
-
         Object[][] dataObj = new Object[sheetActions.getNumberOfRows()][1];
         int num = 0;
         for (int i = 1; i < sheetActions.getNumberOfRows(); i++) {
@@ -84,18 +83,26 @@ public class ExcelReader  {
 
     public List<DataTypes.ExcelRow> readListedHashMapNoColumnCondition() {
         List<DataTypes.ExcelRow> rows = new ArrayList<>();
+        int numberOfColumns=sheetActions.getNumberOfColumnsByHeaders();
         for (int i = 1; i < sheetActions.getNumberOfRows(); i++) {
+            boolean hasData=false;
             LinkedHashMap<String, String> row = new LinkedHashMap<>();
             for (int j = 0;
-                 j < sheetActions.getNumberOfColumnsByHeaders();
+                 j < numberOfColumns;
                  j++) {
                 String currentKey =
                         cellActions.getCellByColumnNumAndRowNum(0, j, sheet);
                 String currentValue =
                         cellActions.getCellByColumnNumAndRowNum(i, j, sheet);
+                if(currentValue!= null && !currentValue.trim().isEmpty())
+                {
+                    hasData=true;
+                }
                 row.put(currentKey, currentValue);
             }
-            rows.add(new DataTypes.ExcelRow(i + 1, row));
+            if(hasData) {
+                rows.add(new DataTypes.ExcelRow(i + 1, row));
+            }
         }
         return rows;
     }

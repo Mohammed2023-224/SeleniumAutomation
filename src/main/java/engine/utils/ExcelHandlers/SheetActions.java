@@ -1,6 +1,9 @@
 package engine.utils.ExcelHandlers;
 
 import engine.reporters.Loggers;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -41,7 +44,7 @@ public class SheetActions {
     }
 
     public int getNumberOfRows() {
-        return sheet.getPhysicalNumberOfRows();
+        return sheet.getLastRowNum();
     }
 
 }
