@@ -214,22 +214,6 @@ public class ExcelHelpers {
         }
     }
 
-    private static List<String> normalizeHeaders(Collection<String> cs){
-        if (cs ==null || cs.isEmpty()){
-            return List.of();
-        }
-        List<String> normalizedValues= new ArrayList<>();
-
-        for (String value: cs){
-            normalizedValues.add(
-                    value == null ? null :
-                            value.replaceAll("[_\\/\s]+", "")
-                                    .toLowerCase(Locale.ROOT)
-            );
-        }
-return normalizedValues;
-    }
-
     private String normalizeHeader(String header) {
         return header == null ? null :
                 header.replaceAll("[_\\/\s]+", "")
