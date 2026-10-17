@@ -3,6 +3,7 @@ package engine.utils.ExcelHandlers;
 import engine.enums.SortingTypes;
 import engine.reporters.Loggers;
 import engine.utils.DataTypes;
+import engine.utils.Helpers;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -55,7 +56,7 @@ public class ExcelHelpers {
         try {
             return switch (type) {
                 case STRING ->
-                        a.trim().compareToIgnoreCase(b.trim());
+                        a.trim().compareTo(b.trim());
                 case INTEGER ->
                         new java.math.BigInteger(a.trim())
                                 .compareTo(new java.math.BigInteger(b.trim()));
@@ -63,9 +64,7 @@ public class ExcelHelpers {
                 case DECIMAL ->
                         new java.math.BigDecimal(a.trim())
                                 .compareTo(new java.math.BigDecimal(b.trim()));
-                case DATE ->
-                        java.time.LocalDate.parse(a.trim())
-                                .compareTo(java.time.LocalDate.parse(b.trim()));
+                case DATE -> Helpers.parseDateForComparison(a.trim()) .compareTo(Helpers.parseDateForComparison(b.trim()));
             };
         } catch (RuntimeException e) {
             throw new IllegalArgumentException(
@@ -149,7 +148,6 @@ public class ExcelHelpers {
             DataTypes.ExcelRow row1 = sorted1.get(i);
             DataTypes.ExcelRow row2 = sorted2.get(i);
 
-//            Set<String> columns = new TreeSet<>();
             Map<String, String> headers1 = row1.values().keySet().stream()
                     .collect(Collectors.toMap(
                             this::normalizeHeader,
