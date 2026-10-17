@@ -74,6 +74,8 @@ public class ExcelHelpers {
 
 
     public static void compareRows(
+            String file1Name,
+            String file2Name,
             List<DataTypes.ExcelRow> file1,
             List<DataTypes.ExcelRow> file2,
             List<DataTypes.SortConfig> firstFileConfigs,
@@ -90,11 +92,11 @@ public class ExcelHelpers {
         List<String[]> csvRows = new ArrayList<>();
 
         csvRows.add(new String[]{
-                "File 1 Excel Row",
-                "File 2 Excel Row",
+                file1Name+" Excel Row",
+                file2Name+" Excel Row",
                 "Column",
-                "File 1 Value",
-                "File 2 Value",
+                file1Name+" Value",
+                file2Name+" Value",
                 "Mismatch Type"
         });
 
