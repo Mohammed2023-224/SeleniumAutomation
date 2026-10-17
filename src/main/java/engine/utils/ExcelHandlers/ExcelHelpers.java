@@ -35,7 +35,9 @@ public class ExcelHelpers {
                         valueA, valueB, config.type(), config.column()
                 );
 
-                return config.ascending() ? result : -result;
+                return config.ascending()
+                        ? result
+                        : -Integer.signum(result);
             });
         }
 
