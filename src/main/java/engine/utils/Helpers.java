@@ -137,4 +137,60 @@ public class Helpers {
                 || format.contains("z");
     }
 
+
+    public static LocalDateTime parseDateForComparison(String input) {
+        List<DateTimeFormatter> supportedFormats = List.of(
+                DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH),
+                DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.ENGLISH),
+                DateTimeFormatter.ofPattern(formatPattern, Locale.ENGLISH),
+                DateTimeFormatter.ofPattern("yyyy-MMMM-d", Locale.ENGLISH),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+                DateTimeFormatter.ofPattern("yyyy/MM/dd"),
+                DateTimeFormatter.ofPattern("dd-MM-yyyy"),
+                DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX"),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")
+        );
+
+        String value = input.trim();
+
+        for (DateTimeFormatter formatter : supportedFormats) {
+            try {
+                TemporalAccessor parsed = formatter.parse(value);
+
+                LocalDate date = parsed.query(TemporalQueries.localDate());
+                LocalTime time = parsed.query(TemporalQueries.localTime());
+                ZoneOffset offset = parsed.query(TemporalQueries.offset());
+
+                if (date == null) {
+                    continue;
+                }
+
+                // Treat date-only values as midnight.
+                if (time == null) {
+                    time = LocalTime.MIDNIGHT;
+                }
+
+                LocalDateTime dateTime = LocalDateTime.of(date, time);
+
+                // Convert offset-aware values to UTC for comparison.
+                if (offset != null) {
+                    return OffsetDateTime.of(dateTime, offset)
+                            .withOffsetSameInstant(ZoneOffset.UTC)
+                            .toLocalDateTime();
+                }
+
+                return dateTime;
+
+            } catch (DateTimeParseException ignored) {
+                // Try the next supported format.
+            }
+        }
+
+        throw new IllegalArgumentException(
+                "Unsupported date format: " + input
+        );
+    }
 }
