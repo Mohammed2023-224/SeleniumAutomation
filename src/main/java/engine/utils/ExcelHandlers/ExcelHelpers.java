@@ -77,7 +77,7 @@ public class ExcelHelpers {
     }
 
 
-    public void compareRows(
+    public static void  compareRows(
             String file1Name,
             String file2Name,
             List<DataTypes.ExcelRow> file1,
@@ -150,14 +150,14 @@ public class ExcelHelpers {
 
             Map<String, String> headers1 = row1.values().keySet().stream()
                     .collect(Collectors.toMap(
-                            this::normalizeHeader,
+                            ExcelHelpers::normalizeHeader,
                             Function.identity(),
                             (first, second) -> first
                     ));
 
             Map<String, String> headers2 = row2.values().keySet().stream()
                     .collect(Collectors.toMap(
-                            this::normalizeHeader,
+                            ExcelHelpers::normalizeHeader,
                             Function.identity(),
                             (first, second) -> first
                     ));
@@ -214,9 +214,9 @@ public class ExcelHelpers {
         }
     }
 
-    private String normalizeHeader(String header) {
+    private static String normalizeHeader(String header) {
         return header == null ? null :
-                header.replaceAll("[_\\/\s]+", "")
+                header.replaceAll("[_\\/&\s-]+", "")
                         .toLowerCase(Locale.ROOT);
     }
 
