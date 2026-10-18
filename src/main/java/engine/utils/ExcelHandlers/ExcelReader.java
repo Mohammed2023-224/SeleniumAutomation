@@ -2,13 +2,9 @@ package engine.utils.ExcelHandlers;
 
 import engine.reporters.Loggers;
 import engine.utils.DataTypes;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import java.io.FileInputStream;
-import java.text.SimpleDateFormat;
+
 import java.util.*;
 
 public class ExcelReader  {
@@ -66,6 +62,7 @@ public class ExcelReader  {
     }
 
     public Object[][] readRowAsLinkedHashMapNoColumnCondition() {
+
         Object[][] dataObj = new Object[sheetActions.getNumberOfRows()][1];
         int num = 0;
         for (int i = 1; i < sheetActions.getNumberOfRows(); i++) {
@@ -81,27 +78,34 @@ public class ExcelReader  {
         return dataObj;
     }
 
-    public List<DataTypes.ExcelRow> readListedHashMapNoColumnCondition() {
+    public List<DataTypes.ExcelRow> readListedMapNoColumnCondition() {
         List<DataTypes.ExcelRow> rows = new ArrayList<>();
-        int numberOfColumns=sheetActions.getNumberOfColumnsByHeaders();
+        int numbOfColumns=sheetActions.getNumberOfColumnsByHeaders();
+//        List<DataTypes.ExcelRow> emptyRows = new ArrayList<>();
         for (int i = 1; i < sheetActions.getNumberOfRows(); i++) {
-            boolean hasData=false;
             LinkedHashMap<String, String> row = new LinkedHashMap<>();
+            boolean hasData=false;
             for (int j = 0;
-                 j < numberOfColumns;
+                 j <numbOfColumns ;
                  j++) {
                 String currentKey =
                         cellActions.getCellByColumnNumAndRowNum(0, j, sheet);
                 String currentValue =
                         cellActions.getCellByColumnNumAndRowNum(i, j, sheet);
-                if(currentValue!= null && !currentValue.trim().isEmpty())
-                {
+                if (!currentValue.trim().isEmpty()){
                     hasData=true;
                 }
                 row.put(currentKey, currentValue);
             }
+//            if(!hasData){
+//                emptyRows.add(new DataTypes.ExcelRow(i + 1, row));
+//            }
+//            if(emptyRows.size()>3){
+//                break;
+//            }
             if(hasData) {
                 rows.add(new DataTypes.ExcelRow(i + 1, row));
+//                emptyRows.clear();
             }
         }
         return rows;
