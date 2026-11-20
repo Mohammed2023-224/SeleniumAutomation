@@ -8,9 +8,7 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQueries;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,26 +70,12 @@ public class Helpers {
     }
 
     public static String formatDate(String outFormat, String inputDate) {
-        List<DateTimeFormatter> supportedFormats = List.of(
-                DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH),
-                DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.ENGLISH),
-                DateTimeFormatter.ofPattern(formatPattern, Locale.ENGLISH),
-                DateTimeFormatter.ofPattern("yyyy-MMMM-d", Locale.ENGLISH),
-                DateTimeFormatter.ofPattern("yyyy-MM-dd"),
-                DateTimeFormatter.ofPattern("yyyy/MM/dd"),
-                DateTimeFormatter.ofPattern("dd-MM-yyyy"),
-                DateTimeFormatter.ofPattern("dd/MM/yyyy"),
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"),
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"),
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX"),
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")
-        );
         String value = inputDate.trim();
         DateTimeFormatter outputFormatter =
                 DateTimeFormatter.ofPattern(outFormat);
         boolean outputRequiresTime = requiresTime(outFormat);
         boolean outputRequiresZone = requiresZone(outFormat);
-        for (DateTimeFormatter formatter : supportedFormats) {
+        for (DateTimeFormatter formatter : SUPPORTED_FORMATS) {
             try {
                 TemporalAccessor parsed = formatter.parse(value);
                 LocalDate date = parsed.query(TemporalQueries.localDate());
@@ -116,65 +100,189 @@ public class Helpers {
                 return LocalDateTime.of(date, time).format(outputFormatter);
 
             } catch (DateTimeParseException e) {
-                Loggers.logError(String.valueOf(e));
+//                Loggers.logError(String.valueOf(e));
             }
         }
         throw new IllegalArgumentException("Unsupported date format: " + inputDate);
     }
 
-    private static boolean requiresTime(String format) {
-        return format.contains("H")
-                || format.contains("h")
-                || format.contains("m")
-                || format.contains("s")
-                || format.contains("S");
+
+    private static final List<DateTimeFormatter> SUPPORTED_FORMATS = List.of(
+
+            // ISO date-time formats
+            DateTimeFormatter.ISO_OFFSET_DATE_TIME,
+            DateTimeFormatter.ISO_LOCAL_DATE_TIME,
+
+            // Excel-style date-time strings
+            DateTimeFormatter.ofPattern("M/d/yyyy h:mm:ss a", Locale.ENGLISH),
+            DateTimeFormatter.ofPattern("M/d/yyyy h:mm a", Locale.ENGLISH),
+            DateTimeFormatter.ofPattern("M/d/yyyy H:mm:ss", Locale.ENGLISH),
+            DateTimeFormatter.ofPattern("M/d/yyyy H:mm", Locale.ENGLISH),
+
+            // Text-based dates
+            DateTimeFormatter.ofPattern("MMMM d, uuuu", Locale.ENGLISH),
+            DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.ENGLISH),
+            DateTimeFormatter.ofPattern("d MMM uuuu", Locale.ENGLISH),
+            DateTimeFormatter.ofPattern("uuuu-MMMM-d", Locale.ENGLISH),
+
+            // Date-only formats
+            DateTimeFormatter.ISO_LOCAL_DATE,
+            DateTimeFormatter.ofPattern("uuuu/MM/dd"),
+            DateTimeFormatter.ofPattern("M/d/uuuu"),
+            DateTimeFormatter.ofPattern("MM/dd/uuuu"),
+            DateTimeFormatter.ofPattern("dd-MM-uuuu"),
+            DateTimeFormatter.ofPattern("dd/MM/uuuu"),
+
+            DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH),
+            DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.ENGLISH),
+            DateTimeFormatter.ofPattern(formatPattern, Locale.ENGLISH),
+            DateTimeFormatter.ofPattern("yyyy-MMMM-d", Locale.ENGLISH),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+            DateTimeFormatter.ofPattern("yyyy/MM/dd"),
+            DateTimeFormatter.ofPattern("dd-MM-yyyy"),
+            DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+            DateTimeFormatter.ofPattern("d/M/yyyy"),
+            DateTimeFormatter.ofPattern("d/M/yy"),
+            DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+            DateTimeFormatter.ofPattern("dd/MM/yy"),
+            DateTimeFormatter.ofPattern("d/MM/yyyy"),
+            DateTimeFormatter.ofPattern("d/MM/yy"),
+            DateTimeFormatter.ofPattern("dd/M/yyyy"),
+            DateTimeFormatter.ofPattern("dd/M/yy"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX"),
+            DateTimeFormatter.ofPattern("M/d/yy H:mm"),
+            DateTimeFormatter.ofPattern("d/M/yy HH:mm"),
+            DateTimeFormatter.ofPattern("M/d/yy H:mm:ss"),
+            DateTimeFormatter.ofPattern("M/d/yy H:mm"),
+            DateTimeFormatter.ofPattern("M/d/yy"),
+            DateTimeFormatter.ofPattern("M/d/yyyy"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"),
+            DateTimeFormatter.ofPattern("d/MM/yy HH:mm")
+    );
+
+
+    public static String formatDates(String outFormat, String inputDate) {
+
+        if (inputDate == null || inputDate.isBlank()) {
+            return "";
+        }
+
+        String value = inputDate.trim();
+
+        DateTimeFormatter outputFormatter =
+                DateTimeFormatter.ofPattern(outFormat, Locale.ENGLISH);
+
+        boolean outputRequiresTime = requiresTime(outFormat);
+        boolean outputRequiresZone = requiresZone(outFormat);
+
+        for (DateTimeFormatter inputFormatter : SUPPORTED_FORMATS) {
+            try {
+                TemporalAccessor parsed = inputFormatter.parse(value);
+
+                LocalDate date = parsed.query(TemporalQueries.localDate());
+
+                if (date == null) {
+                    continue;
+                }
+
+                LocalTime time = parsed.query(TemporalQueries.localTime());
+                ZoneOffset offset = parsed.query(TemporalQueries.offset());
+
+                if (time == null && outputRequiresTime) {
+                    time = LocalTime.MIDNIGHT;
+                }
+
+                if (time == null) {
+                    return date.format(outputFormatter);
+                }
+
+                if (outputRequiresZone) {
+                    ZoneOffset effectiveOffset =
+                            offset != null ? offset : ZoneOffset.UTC;
+
+                    return OffsetDateTime.of(
+                            date,
+                            time,
+                            effectiveOffset
+                    ).format(outputFormatter);
+                }
+
+                return LocalDateTime.of(date, time)
+                        .format(outputFormatter);
+
+            } catch (DateTimeParseException ignored) {
+                // Expected: try the next supported input format
+            }
+        }
+
+        throw new IllegalArgumentException(
+                "Unsupported date format: " + inputDate
+        );
     }
 
-    private static boolean requiresZone(String format) {
-        return format.contains("X")
-                || format.contains("x")
-                || format.contains("Z")
-                || format.contains("z");
+    public static Optional<LocalDate> tryParseDate(String input) {
+        if (input == null || input.isBlank()) {
+            return Optional.empty();
+        }
+        String value = input.trim();
+        for (DateTimeFormatter formatter : SUPPORTED_FORMATS) {
+            try {
+                TemporalAccessor parsed = formatter.parse(value);
+                LocalDate date = parsed.query(TemporalQueries.localDate());
+                if (date != null) {
+                    return Optional.of(date);
+                }
+            } catch (DateTimeParseException ignored) {
+                // Expected when probing candidate formats—do not log as an error
+            }
+        }
+        return Optional.empty();
+    }
+
+    public static boolean isDate(String input) {
+        return tryParseDate(input).isPresent();
+    }
+
+    public static boolean isSameCell(String cell1, String cell2) {
+        Optional<LocalDate> date1 = tryParseDate(cell1);
+        Optional<LocalDate> date2 = tryParseDate(cell2);
+
+        if (date1.isPresent() && date2.isPresent()) {
+            return date1.get().getYear() == date2.get().getYear();
+        }
+        return Objects.equals(cell1, cell2);
+    }
+
+
+    private static boolean requiresTime(String pattern) {
+        return pattern.matches(".*[HhKkmsSna].*");
+    }
+
+    private static boolean requiresZone(String pattern) {
+        return pattern.matches(".*[XxZzOV].*");
     }
 
 
     public static LocalDateTime parseDateForComparison(String input) {
-        List<DateTimeFormatter> supportedFormats = List.of(
-                DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH),
-                DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.ENGLISH),
-                DateTimeFormatter.ofPattern(formatPattern, Locale.ENGLISH),
-                DateTimeFormatter.ofPattern("yyyy-MMMM-d", Locale.ENGLISH),
-                DateTimeFormatter.ofPattern("yyyy-MM-dd"),
-                DateTimeFormatter.ofPattern("yyyy/MM/dd"),
-                DateTimeFormatter.ofPattern("dd-MM-yyyy"),
-                DateTimeFormatter.ofPattern("dd/MM/yyyy"),
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"),
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"),
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX"),
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")
-        );
-
         String value = input.trim();
-
-        for (DateTimeFormatter formatter : supportedFormats) {
+        for (DateTimeFormatter formatter : SUPPORTED_FORMATS) {
             try {
                 TemporalAccessor parsed = formatter.parse(value);
 
                 LocalDate date = parsed.query(TemporalQueries.localDate());
                 LocalTime time = parsed.query(TemporalQueries.localTime());
                 ZoneOffset offset = parsed.query(TemporalQueries.offset());
-
                 if (date == null) {
                     continue;
                 }
-
                 // Treat date-only values as midnight.
                 if (time == null) {
                     time = LocalTime.MIDNIGHT;
                 }
-
                 LocalDateTime dateTime = LocalDateTime.of(date, time);
-
                 // Convert offset-aware values to UTC for comparison.
                 if (offset != null) {
                     return OffsetDateTime.of(dateTime, offset)
@@ -188,9 +296,72 @@ public class Helpers {
                 // Try the next supported format.
             }
         }
-
         throw new IllegalArgumentException(
                 "Unsupported date format: " + input
         );
     }
+
+
+    private static final List<DateTimeFormatter> SUPPORTED_DATE_FORMATS = List.of(
+
+            // Excel display formats
+            DateTimeFormatter.ofPattern(
+                    "M/d/uuuu h:mm:ss a",
+                    Locale.ENGLISH
+            ),
+            DateTimeFormatter.ofPattern(
+                    "M/d/uuuu h:mm a",
+                    Locale.ENGLISH
+            ),
+            DateTimeFormatter.ofPattern(
+                    "M/d/uuuu H:mm:ss",
+                    Locale.ENGLISH
+            ),
+            DateTimeFormatter.ofPattern(
+                    "M/d/uuuu H:mm",
+                    Locale.ENGLISH
+            ),
+            DateTimeFormatter.ofPattern(
+                    "M/d/uuuu",
+                    Locale.ENGLISH
+            ),
+
+            // Common normalized date-time formats
+            DateTimeFormatter.ofPattern(
+                    "MM/dd/uuuu HH:mm:ss",
+                    Locale.ENGLISH
+            ),
+            DateTimeFormatter.ofPattern(
+                    "MM/dd/uuuu HH:mm",
+                    Locale.ENGLISH
+            ),
+
+            // ISO date-time formats
+            DateTimeFormatter.ISO_OFFSET_DATE_TIME,
+            DateTimeFormatter.ISO_LOCAL_DATE_TIME,
+
+            // Text date formats
+            DateTimeFormatter.ofPattern(
+                    "MMMM d, uuuu",
+                    Locale.ENGLISH
+            ),
+            DateTimeFormatter.ofPattern(
+                    "d MMMM uuuu",
+                    Locale.ENGLISH
+            ),
+            DateTimeFormatter.ofPattern(
+                    "d MMM uuuu",
+                    Locale.ENGLISH
+            ),
+            DateTimeFormatter.ofPattern(
+                    "uuuu-MMMM-d",
+                    Locale.ENGLISH
+            ),
+
+            // Date-only formats
+            DateTimeFormatter.ISO_LOCAL_DATE,
+            DateTimeFormatter.ofPattern("uuuu/MM/dd"),
+            DateTimeFormatter.ofPattern("dd-MM-uuuu"),
+            DateTimeFormatter.ofPattern("dd/MM/uuuu")
+    );
 }

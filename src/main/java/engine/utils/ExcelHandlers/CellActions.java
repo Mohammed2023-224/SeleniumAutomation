@@ -1,12 +1,18 @@
 package engine.utils.ExcelHandlers;
 
 import engine.reporters.Loggers;
+import engine.utils.Helpers;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import static engine.utils.Helpers.formatDate;
 
 public class CellActions {
 
@@ -42,34 +48,45 @@ public class CellActions {
         return getCellData(targetCell);
     }
 
-    protected String getCellData(XSSFCell cel) {
-        String data = "";
-        if ((cel == null)) {
+    protected String getCellData(XSSFCell cell) {
+        if (cell == null) {
             return "";
-        } else {
-            switch (cel.getCellType()) {
-                case STRING:
-                    data = cel.getStringCellValue();
-                    return data;
-                case NUMERIC, FORMULA:
-                    if (DateUtil.isCellDateFormatted(cel)) {
-                        // Convert date to string
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-                        data = dateFormat.format(cel.getDateCellValue());
-                    } else {
-                        data = String.valueOf(cel.getNumericCellValue());
-                    }
-                    return data;
-                case BLANK, _NONE:
-                    return "";
-                case BOOLEAN:
-                    data = String.valueOf(cel.getBooleanCellValue());
-                    return data;
-                default:
-                    return "unknown cell type";
-            }
+        }
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue().trim();
+            case NUMERIC:
+                    return new DataFormatter().formatCellValue(cell).trim();
+            case FORMULA:
+                return getFormulaCellData(cell);
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+
+            case BLANK:
+            case _NONE:
+                return "";
+
+            default:
+                return "unknown cell type";
         }
     }
 
 
-}
+    private String getFormulaCellData(XSSFCell cell) {
+        switch (cell.getCachedFormulaResultType()) {
+            case STRING:
+                return cell.getStringCellValue().trim();
+            case NUMERIC:
+                return new DataFormatter()
+                        .formatCellValue(cell)
+                        .trim();
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case BLANK:
+            case _NONE:
+                return "";
+            default:
+                return "unknown formula result type";
+        }
+    }
+    }
