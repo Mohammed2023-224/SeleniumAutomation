@@ -25,30 +25,58 @@ public class ClassPathLoading {
        SINGLE RESOURCE (driver, log4j, certs, etc.)
        ========================================================= */
 
-    public static Path getResourceAsPath(String resourcePath,Boolean executable) {
+    public static Path getResourceAsPath(
+            String resourcePath, Boolean executable) {
+
         try {
-            ClassLoader cl = Thread.currentThread().getContextClassLoader();
-            URL url = cl.getResource(resourcePath);
-            if (url == null) {
-               Loggers.logError("resource doesn't exist at path "+resourcePath);
+
+            // Case 1: Absolute filesystem path
+            Path inputPath = Paths.get(resourcePath);
+
+            if (inputPath.isAbsolute()) {
+
+                if (!Files.exists(inputPath)) {
+                    throw new IllegalArgumentException(
+                            "File does not exist: " + inputPath
+                    );
+                }
+
+                return inputPath;
             }
 
-            assert url != null;
+            // Case 2: Classpath resource
+            ClassLoader cl =
+                    Thread.currentThread().getContextClassLoader();
+
+            URL url = cl.getResource(
+                    resourcePath.replace("\\", "/")
+            );
+
+            if (url == null) {
+                throw new IllegalArgumentException(
+                        "Resource not found on classpath: " + resourcePath
+                );
+            }
+
             if ("jar".equals(url.getProtocol())) {
-                return extractFromJar(url, resourcePath,executable);
+                return extractFromJar(url, resourcePath, executable);
             }
 
             if ("file".equals(url.getProtocol())) {
-                return extractFromFilePath(url,executable);
+                return extractFromFilePath(url, executable);
             }
-           Loggers.logError("Unsupported protocol: " + url.getProtocol());
-            return  null;
+
+            throw new IllegalArgumentException(
+                    "Unsupported protocol: " + url.getProtocol()
+            );
+
         } catch (Exception e) {
-           Loggers.logError("Failed to load resource: " + resourcePath+"  "+ e);
-            return  null;
+
+            throw new IllegalArgumentException(
+                    "Failed to load resource: " + resourcePath, e
+            );
         }
     }
-
     private static Path extractFromJar(URL url, String resourcePath,Boolean executable)  {
         String suffix = resourcePath.substring(resourcePath.lastIndexOf('.'));
         Path temp = null;
