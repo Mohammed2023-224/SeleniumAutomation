@@ -21,23 +21,18 @@ public class CsvWriter {
             }
             try (BufferedWriter writer = Files.newBufferedWriter(
                     path, StandardCharsets.UTF_8)) {
-
-                // UTF-8 BOM helps Excel recognize UTF-8, including Arabic text.
                 try {
                     writer.write('\uFEFF');
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-
                 for (String[] row : rows) {
                     for (int i = 0; i < row.length; i++) {
                         if (i > 0) {
                             writer.write(',');
                         }
-
                         writer.write(escapeCsv(row[i]));
                     }
-
                     writer.newLine();
                 }
             } catch (IOException e) {
@@ -55,11 +50,8 @@ public class CsvWriter {
                     || value.contains("\"")
                     || value.contains("\n")
                     || value.contains("\r")) {
-
                 return "\"" + value.replace("\"", "\"\"") + "\"";
             }
-
             return value;
         }
-
 }
