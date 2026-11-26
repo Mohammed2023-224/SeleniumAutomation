@@ -1,8 +1,9 @@
 package engine.utils;
 
-import engine.enums.SortingTypes;
+import engine.enums.ColumnTypes;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public class DataTypes {
 
@@ -11,10 +12,22 @@ public class DataTypes {
             LinkedHashMap<String, String> values
     ) {}
 
+    public record Transformation(
+            String operation,
+            String argument
+    ) {
+    }
+
+    public record SpecialColumnConfig(
+            String column,
+            ColumnTypes type,
+            List<Transformation> transformations
+    ) {
+    }
 
     public record SortConfig(
             String column,
-            SortingTypes type,
+            ColumnTypes type,
             boolean ascending
     ) {}
 }
