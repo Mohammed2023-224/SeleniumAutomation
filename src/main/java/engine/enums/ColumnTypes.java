@@ -1,6 +1,6 @@
 package engine.enums;
 
-public enum SortingTypes {
+public enum ColumnTypes {
         STRING,
         INTEGER,
         DECIMAL,
