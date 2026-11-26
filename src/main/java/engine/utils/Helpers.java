@@ -44,7 +44,7 @@ public class Helpers {
     }
 
     public static int daysBetweenToday(String date) {
-        String formattedDate = formatDate("YYYY-MM-dd", date);
+        String formattedDate = formatDates("YYYY-MM-dd", date);
         LocalDate givenDate = LocalDate.parse(
                 formattedDate,
                 DateTimeFormatter.ISO_LOCAL_DATE
@@ -69,99 +69,75 @@ public class Helpers {
                 .format(DateTimeFormatter.ofPattern(formatPattern));
     }
 
-    public static String formatDate(String outFormat, String inputDate) {
-        String value = inputDate.trim();
-        DateTimeFormatter outputFormatter =
-                DateTimeFormatter.ofPattern(outFormat);
-        boolean outputRequiresTime = requiresTime(outFormat);
-        boolean outputRequiresZone = requiresZone(outFormat);
-        for (DateTimeFormatter formatter : SUPPORTED_FORMATS) {
-            try {
-                TemporalAccessor parsed = formatter.parse(value);
-                LocalDate date = parsed.query(TemporalQueries.localDate());
-                LocalTime time = parsed.query(TemporalQueries.localTime());
-                ZoneOffset offset = parsed.query(TemporalQueries.offset());
-                if (date == null) {
-                    continue;
-                }
-                if (time == null && outputRequiresTime) {
-                    time = LocalTime.MIDNIGHT;
-                }
-                if (time == null) {
-                    return date.format(outputFormatter);
-                }
-                if (outputRequiresZone) {
-                    if (offset == null) {
-                        offset = ZoneOffset.UTC;
-                    }
-                    return OffsetDateTime.of(date, time, offset).format(outputFormatter);
-                }
+    private static final List<DateTimeFormatter> SUPPORTED_FORMATS =
+            List.of(
+                    // ISO formats
+                    DateTimeFormatter.ISO_OFFSET_DATE_TIME,
+                    DateTimeFormatter.ISO_LOCAL_DATE_TIME,
+                    DateTimeFormatter.ISO_LOCAL_DATE,
 
-                return LocalDateTime.of(date, time).format(outputFormatter);
+                    // US Excel date and time: four-digit year
+                    DateTimeFormatter.ofPattern(
+                            "M/d/uuuu h:mm:ss a",
+                            Locale.ENGLISH
+                    ),
+                    DateTimeFormatter.ofPattern(
+                            "M/d/uuuu h:mm a",
+                            Locale.ENGLISH
+                    ),
+                    DateTimeFormatter.ofPattern(
+                            "M/d/uuuu H:mm:ss",
+                            Locale.ENGLISH
+                    ),
+                    DateTimeFormatter.ofPattern(
+                            "M/d/uuuu H:mm",
+                            Locale.ENGLISH
+                    ),
 
-            } catch (DateTimeParseException e) {
-//                Loggers.logError(String.valueOf(e));
-            }
-        }
-        throw new IllegalArgumentException("Unsupported date format: " + inputDate);
-    }
+                    // US Excel date and time: two-digit year
+                    DateTimeFormatter.ofPattern(
+                            "M/d/uu H:mm:ss",
+                            Locale.ENGLISH
+                    ),
+                    DateTimeFormatter.ofPattern(
+                            "M/d/uu H:mm",
+                            Locale.ENGLISH
+                    ),
 
+                    // US Excel date-only
+                    DateTimeFormatter.ofPattern(
+                            "M/d/uuuu",
+                            Locale.ENGLISH
+                    ),
+                    DateTimeFormatter.ofPattern(
+                            "M/d/uu",
+                            Locale.ENGLISH
+                    ),
 
-    private static final List<DateTimeFormatter> SUPPORTED_FORMATS = List.of(
+                    // Text dates
+                    DateTimeFormatter.ofPattern(
+                            "MMMM d, uuuu",
+                            Locale.ENGLISH
+                    ),
+                    DateTimeFormatter.ofPattern(
+                            "d MMMM uuuu",
+                            Locale.ENGLISH
+                    ),
+                    DateTimeFormatter.ofPattern(
+                            "d MMM uuuu",
+                            Locale.ENGLISH
+                    ),
 
-            // ISO date-time formats
-            DateTimeFormatter.ISO_OFFSET_DATE_TIME,
-            DateTimeFormatter.ISO_LOCAL_DATE_TIME,
-
-            // Excel-style date-time strings
-            DateTimeFormatter.ofPattern("M/d/yyyy h:mm:ss a", Locale.ENGLISH),
-            DateTimeFormatter.ofPattern("M/d/yyyy h:mm a", Locale.ENGLISH),
-            DateTimeFormatter.ofPattern("M/d/yyyy H:mm:ss", Locale.ENGLISH),
-            DateTimeFormatter.ofPattern("M/d/yyyy H:mm", Locale.ENGLISH),
-
-            // Text-based dates
-            DateTimeFormatter.ofPattern("MMMM d, uuuu", Locale.ENGLISH),
-            DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.ENGLISH),
-            DateTimeFormatter.ofPattern("d MMM uuuu", Locale.ENGLISH),
-            DateTimeFormatter.ofPattern("uuuu-MMMM-d", Locale.ENGLISH),
-
-            // Date-only formats
-            DateTimeFormatter.ISO_LOCAL_DATE,
-            DateTimeFormatter.ofPattern("uuuu/MM/dd"),
-            DateTimeFormatter.ofPattern("M/d/uuuu"),
-            DateTimeFormatter.ofPattern("MM/dd/uuuu"),
-            DateTimeFormatter.ofPattern("dd-MM-uuuu"),
-            DateTimeFormatter.ofPattern("dd/MM/uuuu"),
-
-            DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH),
-            DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.ENGLISH),
-            DateTimeFormatter.ofPattern(formatPattern, Locale.ENGLISH),
-            DateTimeFormatter.ofPattern("yyyy-MMMM-d", Locale.ENGLISH),
-            DateTimeFormatter.ofPattern("yyyy-MM-dd"),
-            DateTimeFormatter.ofPattern("yyyy/MM/dd"),
-            DateTimeFormatter.ofPattern("dd-MM-yyyy"),
-            DateTimeFormatter.ofPattern("dd/MM/yyyy"),
-            DateTimeFormatter.ofPattern("d/M/yyyy"),
-            DateTimeFormatter.ofPattern("d/M/yy"),
-            DateTimeFormatter.ofPattern("dd/MM/yyyy"),
-            DateTimeFormatter.ofPattern("dd/MM/yy"),
-            DateTimeFormatter.ofPattern("d/MM/yyyy"),
-            DateTimeFormatter.ofPattern("d/MM/yy"),
-            DateTimeFormatter.ofPattern("dd/M/yyyy"),
-            DateTimeFormatter.ofPattern("dd/M/yy"),
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"),
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"),
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX"),
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX"),
-            DateTimeFormatter.ofPattern("M/d/yy H:mm"),
-            DateTimeFormatter.ofPattern("d/M/yy HH:mm"),
-            DateTimeFormatter.ofPattern("M/d/yy H:mm:ss"),
-            DateTimeFormatter.ofPattern("M/d/yy H:mm"),
-            DateTimeFormatter.ofPattern("M/d/yy"),
-            DateTimeFormatter.ofPattern("M/d/yyyy"),
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"),
-            DateTimeFormatter.ofPattern("d/MM/yy HH:mm")
-    );
+                    // Other unambiguous formats
+                    DateTimeFormatter.ofPattern(
+                            "uuuu/MM/dd",
+                            Locale.ENGLISH
+                    ),
+                    DateTimeFormatter.ofPattern(
+                            "uuuu-MMMM-d",
+                            Locale.ENGLISH
+                    )
+            );
 
 
     public static String formatDates(String outFormat, String inputDate) {
